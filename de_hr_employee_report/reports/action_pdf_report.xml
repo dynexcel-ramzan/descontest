@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_contract_expiry" model="ir.actions.report">
+            <field name="name">Contract Expiry</field>
+            <field name="model">contract.expiry.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.contract_pdf_report</field>
+            <field name="report_file">de_hr_employee_report.contract_pdf_report</field>
+        </record>
+        <record id="action_report_cost_center_wise" model="ir.actions.report">
+            <field name="name">Cost Center Wise</field>
+            <field name="model">cost.center.wise</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.cost_center_wise_pdf_report</field>
+            <field name="report_file">de_hr_employee_report.cost_center_wise_pdf_report</field>
+        </record>
+        <record id="action_report_cost_center_distribution" model="ir.actions.report">
+            <field name="name">Cost Center Distribution</field>
+            <field name="model">cost.center.distribution</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.cost_center_distribution_pdf</field>
+            <field name="report_file">de_hr_employee_report.cost_center_distribution_pdf</field>
+        </record>
+        
+        <record id="action_report_employee_age" model="ir.actions.report">
+            <field name="name">Employee Age</field>
+            <field name="model">employee.age</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_age_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_age_pdf</field>
+        </record>
+        
+        <record id="employee_information_pdf" model="ir.actions.report">
+            <field name="name">Employee Information</field>
+            <field name="model">employee.information</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employeeinformation_pdf</field>
+            <field name="report_file">de_hr_employee_report.employeeinformation_pdf</field>
+        </record>
+        
+        <record id="employee_dob" model="ir.actions.report">
+            <field name="name">Employee DOB</field>
+            <field name="model">employee.dob</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_dob_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_dob_pdf</field>
+        </record>
+        
+        <record id="employee_experience" model="ir.actions.report">
+            <field name="name">Employee Experience</field>
+            <field name="model">employee.experience</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_experience_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_experience_pdf</field>
+        </record>
+        
+        <record id="action_report_employee_status" model="ir.actions.report">
+            <field name="name">Employee Status</field>
+            <field name="model">employee.status</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_status_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_status_pdf</field>
+        </record>
+        <record id="action_report_employee_entitled" model="ir.actions.report">
+            <field name="name">Employee Entitled</field>
+            <field name="model">employee.entitled</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_entitled_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_entitled_pdf</field>
+        </record>
+        <record id="action_report_employee_retirement" model="ir.actions.report">
+            <field name="name">Employee Retirement</field>
+            <field name="model">employee.retirement</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_retirement_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_retirement_pdf</field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,12 @@
+<odoo>
+  <data>
+  
+    <menuitem
+        id="hr_payroll_overtime_report_menu"
+        name="LocationWise Overtime Report"
+        parent="hr_payroll.menu_hr_payroll_report"
+        sequence="4"
+        action="open_hr_overtime_report_wizard_action"
+    />
+  </data>
+</odoo>

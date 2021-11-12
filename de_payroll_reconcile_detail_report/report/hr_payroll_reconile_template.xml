@@ -1,0 +1,206 @@
+<odoo>
+    <template id="payroll_report">
+      <t t-call="web.html_container">
+             <t t-foreach="docs" t-as="doc">
+                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-call="de_payroll_reconcile_detail_report.pdf_report_layout"/>
+                <div class="page">
+                    <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>For Period :</td>
+                                             <td><span t-field=" docs.date_from"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td >Location: </td>
+                                              <td>
+                                                <t t-foreach=" docs.location_ids"  t-as="loc">
+                                                  <span t-field="loc.name"/> 
+                                                </t>    
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Department: </td>
+                                              <td>
+                                                  <t t-foreach="docs.department_ids"  t-as="dep">
+                                                  <span t-field="dep.name"/>
+                                                </t>   
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>  
+                        </div>
+                    <br/>
+                    
+                                        <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Cost Center:</td>
+                                             <td>
+                                                 <t t-foreach="docs.cost_center_ids"  t-as="cos">
+                                                  <span t-field="cos.name"/>
+                                                 </t> 
+                                                     </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td >Staff Type:</td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Emp. Type:</td>
+                                             <td><span t-field=" docs.employee_type"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>  
+                    </div>
+                     <t t-set='sr_no' t-value='0'/>
+                    
+                    <div style="color:blue" width="400">
+                  <p1 style="border: 1px solid black;"> Payroll Register wise Salary Comparison</p1>
+                    </div>
+                  <table class="table">
+                            <tr style="color:blue">
+                                <th style="border: 1px solid black;" scope="col" width="50">Sr #</th>
+                                <th style="border: 1px solid black;" scope="col" width="100">Emp. Code</th>
+                                <th  style="border: 1px solid black;" scope="col" width="250">Name:</th>
+                                <th style="border: 1px solid black;" scope="col" width="150">Previous</th>
+                                <th style="border: 1px solid black;" scope="col" width="150">Current</th>
+                                <th style="border: 1px solid black;" scope="col" width="150">Difference :</th>
+                      </tr>
+                                        
+                      
+                    <t t-foreach="request.env['hr.salary.rule'].search([('reconcilation_details','=',True)])"  t-as="rule">
+                         <t t-set='current_amount_total' t-value='0'/>
+                            <t t-set='previs_amount_total' t-value='0'/>
+                        
+                        
+                        <t t-foreach="request.env['hr.employee'].search([('company_id','=',docs.company_id.ids)])"  t-as="emp">
+                           
+
+                                                      
+                                
+                          <t t-foreach="request.env['hr.payslip'].search([('employee_id','=',emp.id),('payslip_month','=',docs.date_from.strftime('%m-%y')),])" t-as="pre_pay">
+                                <t t-foreach="pre_pay.line_ids"  t-as="pre_rule">
+                                      <t t-if='pre_rule.code==rule.code'>   
+                                           <t t-set='previs_amount_total' t-value='previs_amount_total + pre_rule.amount'/>
+                                      </t>                                                                                                                
+                               
+        <t t-foreach="request.env['hr.payslip'].search([('employee_id','=',emp.id),('payslip_month','=',docs.date_to.strftime('%m-%y')),])"  t-as="curr_pay">
+                                     <t t-foreach="curr_pay.line_ids"  t-as="cur_rule">
+                                      <t t-if='cur_rule.code==rule.code'>   
+                                           <t t-set='current_amount_total' t-value='current_amount_total + cur_rule.amount'/>
+                                      </t>     
+                                    </t>     
+                                  </t>
+
+                               
+      
+                     </t>
+                             </t>
+                    
+                     </t> 
+                                                                                                                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <tr>    
+                        <td style="color:blue" ><t t-esc="rule.name"/></td>
+                        <td></td>
+                        <td></td>
+                         <td style="color:blue" ><t t-esc="previs_amount_total"/></td>
+                         <td style="color:blue" ><t t-esc="current_amount_total"/></td>
+                        <td style="color:blue" ><t t-esc="previs_amount_total - current_amount_total"/></td>
+
+                        </tr>
+                       <t t-foreach="request.env['hr.employee'].search([('company_id','=',docs.company_id.ids)])"  t-as="emp">
+                            <t t-set='current_amount' t-value='0'/>
+                            <t t-set='previs_amount' t-value='0'/>
+
+                           
+                           <t t-set='sr_no' t-value='sr_no + 1'/>
+                          
+                            <tr style="color:blue">
+                                <td style="border: 1px solid black;"><t t-esc="sr_no"/></td>
+                                <td style="border: 1px solid black;" scope="col" width="100"> <t t-esc="emp.emp_number"/></td>
+                                <td style="border: 1px solid black;" scope="col" width="150"> <t t-esc="emp.name"/></td>
+                                <td style="border: 1px solid black;" scope="col" width="150"> 
+                 <t t-foreach="request.env['hr.payslip'].search([('employee_id','=',emp.id),('payslip_month','=',docs.date_from.strftime('%m-%y')),])" t-as="pre_pay">
+                                     <t t-foreach="pre_pay.line_ids"  t-as="pre_rule">
+                                      <t t-if='pre_rule.code==rule.code'>   
+                                       <t t-esc="pre_rule.amount"/>
+                                           <t t-set='previs_amount' t-value='previs_amount + pre_rule.amount'/>
+                                      </t>     
+                                    </t>     
+                                  </t>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="150"> 
+                    <t t-foreach="request.env['hr.payslip'].search([('employee_id','=',emp.id),('payslip_month','=',docs.date_to.strftime('%m-%y')),])"  t-as="curr_pay">
+                                     <t t-foreach="curr_pay.line_ids"  t-as="cur_rule">
+                                      <t t-if='cur_rule.code==rule.code'>   
+                                       <t t-esc="cur_rule.amount"/>
+                                           <t t-set='current_amount' t-value='current_amount + cur_rule.amount'/>
+                                      </t>     
+                                    </t>     
+                                  </t>
+
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="150"><t t-esc="previs_amount - current_amount"/></td>
+                            </tr>
+                             </t>
+                    
+                     </t>
+
+                    </table>
+                    
+                </div>
+                 </div>
+                 
+                 
+                 
+                 
+                 
+       </t>
+        </t>
+    
+    </template>
+</odoo>

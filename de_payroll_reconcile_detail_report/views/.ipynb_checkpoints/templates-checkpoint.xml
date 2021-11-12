@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="view_hr_salary_rule_form_inherit_account" model="ir.ui.view">
+            <field name="name">account.hr.salary.rule.form.inherit.account</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='code']" position="after">
+                        <field name="reconcilation_details"/>
+                       
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

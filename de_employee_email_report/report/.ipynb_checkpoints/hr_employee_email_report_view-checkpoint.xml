@@ -1,0 +1,13 @@
+<odoo>
+  <data>
+        <report 
+            id="open_hr_employee_email_report"
+            string="Employee Email Report"
+            model="report.de_employee_email_report.email_report"
+            report_type="qweb-pdf"
+            file="de_employee_email_report.email_report"
+            name="de_employee_email_report.email_report"
+        />
+     
+  </data>
+</odoo>

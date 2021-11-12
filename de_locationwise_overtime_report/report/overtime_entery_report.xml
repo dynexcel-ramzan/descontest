@@ -1,0 +1,10 @@
+<odoo>
+    <report
+            id="open_locationwise_report_data"
+            string="locationwise report (PDF)"
+            model="report.de_locationwise_overtime_report.overtime_entery"
+            report_type="qweb-pdf"
+            file="de_locationwise_overtime_report.locationwise_overtime_report"
+            name="de_locationwise_overtime_report.locationwise_overtime_report"/>
+    
+</odoo>

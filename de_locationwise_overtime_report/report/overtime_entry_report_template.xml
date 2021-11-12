@@ -1,0 +1,85 @@
+<odoo>
+    <template id="locationwise_overtime_report">
+        <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                        <t t-call="de_locationwise_overtime_report.locationwise_report_layout"/>
+                <div class="page">
+                            
+                     <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody>
+                                         <tr style="font-weight: bold;">
+                                             <td>For Period:</td>
+                                             <td><span t-field="o.date_form"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody>
+                                         <tr >
+                                             <td >Location</td>
+                                              <td>
+                                                <t t-foreach="o.location_ids"  t-as="loc">
+                                                  <span t-field="loc.name"/>, 
+                                                </t>    
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody>
+                                         <tr style="font-weight: bold;">
+                                             <td>Department</td>
+                                              <td><span t-field="o.department_ids"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>          
+                        </div>
+                    <br/>
+                    <br/>
+                <div class="col-12">
+                    <table>
+                        <thead style="font-size:12px">
+                            <th width="200">Location Name</th>
+                            <th width="200">S#</th>
+                            <th width="200">Emp #</th>
+                            <th width="200">Name</th>
+                            <th width="200">OT Hrs</th>
+                            <th width="200">OT Arrears</th>
+                            <th width="200">Tot. OT Amt</th>
+                        </thead>
+                        
+                        <tbody>
+                            <t t-foreach="overtime_entries"  t-as="entry">
+                            <tr>
+                                <td><t t-esc="entry['location']"/></td>
+                                <td><t t-esc="entry['sr_no']"/></td>
+                                <td><t t-esc="entry['employee_id']"/></td>
+                                <td><t t-esc="entry['amount']"/></td>
+                                <td><t t-esc="entry['hours_sum']"/></td>
+                                <td><t t-esc="entry['arrears']"/></td>
+                                <td><t t-esc="entry['tot_amount']"/></td>
+
+                            </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    </div>
+                    
+                    </div>
+                          
+                </div>
+               
+                        
+            </t>
+            </t>
+       
+    </template>
+</odoo>

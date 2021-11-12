@@ -1,0 +1,11 @@
+<odoo>
+  <data>
+  <report
+            id="timehseet_attendance_report"
+            string="Print (PDF)"
+            model="hr.timesheet.report"
+            report_type="qweb-pdf"
+            file="de_portal_timesheet.report_timesheet_att_templated"
+            name="de_portal_timesheet.report_timesheet_att_templated" />
+  </data>
+</odoo>

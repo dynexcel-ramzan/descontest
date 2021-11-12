@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Overtime Report Location Wise",
+
+    'summary': """
+         Overtime Report Employee Location Wise
+        """,
+
+    'description': """
+        Overtime Report Employee Location Wise
+        1- Multiple Location
+        2- Department Wise
+    """,
+
+    'author': "Dynexcel",
+    'website': "http://www.dynexce;.com",
+
+    # Categories can be used to filter modules in modules listing
+    # Check https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
+    # for the full list
+    'category': 'Overtime',
+    'version': '14.0.0.1',
+
+    # any module necessary for this one to work correctly
+    'depends': ['base','hr_payroll','de_employee_overtime','hr'],
+
+    # always loaded
+    'data': [
+        'security/ir.model.access.csv',
+        'wizard/overtime_entry_wizard.xml',
+        'report/overtime_entery_report.xml',
+        'report/overtime_entry_report_template.xml', 
+        'report/header.xml',
+    ],
+    # only loaded in demonstration mode
+    'demo': [
+        'demo/demo.xml',
+    ],
+}
