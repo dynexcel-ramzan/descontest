@@ -126,8 +126,7 @@ class CustomerPortal(CustomerPortal):
         domain = []
 
         searchbar_sortings = {
-            'date': {'label': _('Newest'), 'order': 'create_date desc'},
-            'name': {'label': _('Name'), 'order': 'name'},
+        
         }
         if not sortby:
             sortby = 'name'
@@ -141,7 +140,7 @@ class CustomerPortal(CustomerPortal):
         # pager
         pager = portal_pager(
             url="/my/approvals",
-            url_args={'date_begin': date_begin, 'date_end': date_end, 'sortby': sortby},
+            url_args={'date_begin': date_begin, 'date_end': date_end,},
             total=approval_count,
             page=page,
             step=self._items_per_page
