@@ -672,11 +672,11 @@
                                     <td class="text-left">
                                        <t t-if="allocation.holiday_status_id.request_unit == 'hour' " > 
                                         <t t-esc="round((allocation.leaves_taken/8),2)"/> / 
-                                        <t t-esc="round((allocation.max_leaves/8,2)"/>
+                                        <t t-esc="round((allocation.max_leaves/8),2)"/>
                                        </t>  
                                        <t t-if="allocation.holiday_status_id.request_unit != 'hour' " > 
-                                        <t t-esc="round((allocation.leaves_taken,2)"/> / 
-                                        <t t-esc="round((allocation.max_leaves,2)"/>
+                                        <t t-esc="round(allocation.leaves_taken,2)"/> / 
+                                        <t t-esc="round(allocation.max_leaves,2)"/>
                                        </t>    
                                     </td>
                                     <t t-foreach="employees" t-as="employ1">
