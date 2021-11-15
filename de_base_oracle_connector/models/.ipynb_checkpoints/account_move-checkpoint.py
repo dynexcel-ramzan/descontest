@@ -3,7 +3,7 @@
 from odoo import models, fields, api, _
 import logging
 from odoo.exceptions import ValidationError
-
+# import cx_Oracle
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,7 @@ class AccountAccount(models.Model):
             reference1, reference2,
             reference4, reference5, reference6, reference10, group_id, period_name,context,attribute1))
             conn.commit()
+        self.is_posted = True             
     
 
 

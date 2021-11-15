@@ -3,7 +3,7 @@
 from odoo import models, fields, api, _
 import logging
 from odoo.exceptions import ValidationError
-import cx_Oracle
+# import cx_Oracle
 
 logger = logging.getLogger(__name__)
 
