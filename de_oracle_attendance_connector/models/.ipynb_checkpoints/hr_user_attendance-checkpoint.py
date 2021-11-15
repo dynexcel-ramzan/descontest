@@ -5,7 +5,7 @@ from datetime import date, datetime, timedelta
 from odoo import exceptions
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError, ValidationError
-import cx_Oracle
+# import cx_Oracle
 
 class HrUserAttendance(models.Model):
     _name = 'hr.user.attendance'
