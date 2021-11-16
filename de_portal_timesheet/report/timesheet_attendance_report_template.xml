@@ -83,7 +83,7 @@
                                                       <t t-set="var_shift_day" t-value="nrest_day.first_shift_id.id"/>
                                                     </t>
                                                     <t t-foreach="request.env['resource.calendar.leaves'].sudo().search([('calendar_id','=',var_shift_day)])" t-as="gazetted_day">
-                                                      <t t-if="(gazetted_day.date_from +datetime.relativedelta(hours+=5)).strftime('%y-%m-%d')&lt;=docs_start_date.strftime('%y-%m-%d') and (gazetted_day.date_to+datetime.relativedelta(hours+=5)).strftime('%y-%m-%d')&gt;=docs_start_date.strftime('%y-%m-%d')" >
+                                                      <t t-if="(gazetted_day.date_from +datetime.timedelta(hours=3)).strftime('%y-%m-%d')&lt;=docs_start_date.strftime('%y-%m-%d') and (gazetted_day.date_to+datetime.timedelta(hours=3)).strftime('%y-%m-%d')&gt;=docs_start_date.strftime('%y-%m-%d')" >
                                                        <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
                                                          <t t-set="var_gazetted_day" t-value="1"/>
                                                        </t>
