@@ -1,0 +1,134 @@
+<odoo>
+    <template id="overtime_report">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+       <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-call="de_overtime_location_report.locationwise_report_layout"/>
+                <div class="page">
+                     <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody>
+                                         <tr style="font-weight: bold;">
+                                             <td>For Period :</td>
+                                             <td><span t-field=" docs.date_from"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody>
+                                         <tr style="font-weight: bold;" >
+                                             <td >Location: </td>
+                                              <td>
+                                                <t t-foreach=" docs.location_ids"  t-as="loc">
+                                                  <span t-field="loc.name"/> 
+                                                </t>    
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody>
+                                         <tr style="font-weight: bold;">
+                                             <td>Department: </td>
+                                              <td>
+                                                  <t t-foreach="docs.department_ids"  t-as="dep">
+                                                  <span t-field="dep.name"/>
+                                                </t>   
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>  
+                        </div>
+                    <br/>
+                    <br/>
+                <div style="font-size:10px" class="col-12">
+                    <table style="border: 1px solid black;">
+                        <thead style="color:blue">
+                            <th style="border: 1px solid black;" width="170">Location Name</th>
+                            <th style="border: 1px solid black;" width="30">S#</th>
+                            <th style="border: 1px solid black;" width="100">Emp #</th>
+                            <th>Name</th>
+                            <th>Ot amount</th>
+                            <th>OT Hrs</th>
+                            <th >OT Arrears</th>
+                            <th style="border: 1px solid black;" width="80">Tot. OT Amt</th>
+                        </thead>
+                    
+                    <t t-foreach="docs.location_ids"  t-as="loc">
+                        <t t-set='tot_ovt_amount' t-value='0'/>
+                        <t t-set='tot_ovt_hours' t-value='0'/>
+                        <t t-set='tot_grand_ovt' t-value='0'/>
+                        <t t-set='sr_no' t-value='0'/>
+                        <t t-set='loc_count' t-value='0'/>
+                        <t t-foreach="request.env['hr.employee'].search([('work_location_id','=', loc.id)])"  t-as="employee">
+                            <t t-set='ovt_amount' t-value='0'/>
+                            <t t-set='ovt_hours' t-value='0'/>
+                            <t t-set='grand_ovt' t-value='0'/>
+
+                            <t t-foreach="request.env['hr.overtime.entry'].search([('employee_id','=', employee.id)])"  t-as="ovt_entry">
+                                <t t-set='ovt_amount' t-value='ovt_amount + ovt_entry.amount'/>
+                                <t t-set='ovt_hours' t-value='ovt_hours + ovt_entry.overtime_hours'/>
+                                <t t-set='grand_ovt' t-value='grand_ovt + ovt_entry.amount'/>
+                            </t>    
+                          <t t-if='ovt_amount > 0'>  
+                          <t t-set='sr_no' t-value='sr_no + 1'/>
+
+                            <tr>
+                                <td >
+                                    <t t-if='loc_count==0'>
+                                    <t t-esc="loc.name"/>
+                                    </t>     
+                                </td>
+                                <td style="border: 1px solid black;"><t t-esc="sr_no"/></td>
+                                <td style="border: 1px solid black;"><t t-esc="employee.emp_number"/></td>
+                                <td style="border: 1px solid black;" width="170"><t t-esc="employee.name"/></td>
+                                
+                                <td style="border: 1px solid black;" width="70"><t t-esc="round(ovt_amount, 2)"/></td>
+                                <t t-set='tot_ovt_amount' t-value="tot_ovt_amount + round(ovt_amount, 2)"/>
+                                
+                                <td style="border: 1px solid black;" width="70"><t t-esc="ovt_hours"/></td>
+                                <t t-set='tot_ovt_hours' t-value="tot_ovt_hours + round(ovt_hours, 2)"/>
+                                
+                                <td style="border: 1px solid black;" width="70"><t t-esc="arrears"/></td>
+                                
+                                
+                                <td style="border: 1px solid black;" width="80"><t t-esc="round(grand_ovt, 2)"/></td>
+                                 <t t-set='tot_grand_ovt' t-value="tot_grand_ovt + round(grand_ovt, 2)"/>
+                                
+                            
+                            </tr>
+                            <t t-set='loc_count' t-value='loc_count + 1'/>
+                            </t>
+                                
+                              </t>                            
+                                    <tr style="color:blue">
+                                        <td>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td  style="border: 1px solid black;"><t t-esc="round(tot_ovt_amount, 2)"/></td>
+                                        <td  style="border: 1px solid black;"><t t-esc="round(tot_ovt_hours, 2)"/></td>
+                                        <td></td>
+                                        <td style="border: 1px solid black;"><t t-esc="round(tot_grand_ovt, 2)"/></td>
+                                    </tr> 
+                                   
+                        </t>
+                     </table>
+                </div>
+                    
+                    </div>
+                          
+               
+            </div>
+            </t>
+            </t>
+    
+    </template>
+</odoo>
