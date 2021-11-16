@@ -47,6 +47,7 @@ def timeoff_page_content(flag = 0):
     employee_name = employees
     return {
         'leave_type' : leave_type,
+        'allocation_list': allocation_list,
         'employees' : employees,
         'employee_name': employee_name,
         'managers': managers,
