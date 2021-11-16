@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_timesheet_att_templated">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                    <div  style="position: relative; max-width: 400px;">
+                           <table>
+                            <tr >
+                                <th style="border:1px solid black; background-color:LightGreen; width:25px; height: 20px;"  align="center"></th>
+                                <td   align="center">Rest Day</td>
+                            </tr>
+                            <tr style="height: 20px;">
+                                <th style="border:1px solid black; background-color:#C4A484;  width:25px; height: 20px;" align="center"></th>
+                                <td  align="center">Gazetted Day</td>
+                            </tr>
+                         </table>
+                      </div>
+                        <div class="text-center">
+                          <h2>
+                            Attendance Sheet
+                          </h2>
+                        </div>
+                        <table class="table table-condensed">
+                            <tr>
+                                <th>Client</th>
+                                <td><span t-esc="o.partner_id.name" /></td>
+                                <th>Project</th>
+                                <td><span t-esc="o.project_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <th>Date From</th>
+                                <td><span t-esc="o.date_from" t-options='{"widget": "date"}' /></td>
+                                <th>Date To</th>
+                                <td><span t-esc="o.date_to" t-options='{"widget": "date"}' /></td>
+                            </tr>
+                        </table>
+
+                        <div class="row justify-content-end">
+                            <div class="col-12">
+                                <table class="table table-bordered table-condensed" >
+                                    <thead>
+                                        <tr>
+                                            <th style="border: 1px solid black;">Employee Name</th>
+                                            <th style="border: 1px solid black;">Attendance</th>
+                                            <t t-set="todays" t-value="0"/>
+                                            <t t-set="todays" t-value="(o.date_to - o.date_from).days"/>
+                                            <t t-set="datelabel" t-value="[]"/>
+                                                <t t-foreach="todays" t-as="t">
+                                                    <t t-set="datelabel" t-value="datelabel+[t]"/>
+                                            </t>
+                                            <t t-foreach="set(datelabel)" t-as="ta">
+                                                <t t-if="datelabel">
+                                                  <th style="border: 1px solid black;"><span t-esc="(docs.date_from + datetime.timedelta(ta)).strftime('%d')"/></th>
+                                                </t>
+                                            </t>
+                                            <th style="border: 1px solid black;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      <t t-foreach="o.timesheet_attendance_ids" t-as="line">
+                                        <tr>
+                                            <td style="border: 1px solid black;">
+                                                <span t-field="line.employee_id.name" /><br/>(<span t-field="line.employee_id.emp_number" />)
+                                            </td>
+                                            <td style="border: 1px solid black;"></td>
+                                             <t t-set="start_date" t-value="0"/>
+                                             <t t-set="startday" t-value="(line.date_from).strftime('%d')"/>
+                                             <t t-set="start_date" t-value="line.date_from"/>
+                                             <t t-set="docs_start_date" t-value="docs.date_from"/>
+                                              <t t-set="line_total" t-value="0"/>
+                                              <t t-foreach="set(datelabel)" t-as="lineta">
+                                                <t t-if="datelabel">
+
+                                                    <t t-set="var_rest_day" t-value="0"/>
+                                                    <t t-set="var_shift_day" t-value="request.env['resource.calendar'].search([('company_id','=',line.employee_id.company_id.id),('shift_type','=','general')], limit=1).id"/>
+                                                    <t t-set="var_gazetted_day" t-value="0"/>
+                                                    <t t-foreach="request.env['hr.shift.schedule.line'].search([('employee_id','=',line.employee_id.id),('date','=',docs_start_date),('rest_day','=',True)], limit=1)" t-as="rest_day">
+                                                        <t t-set="var_rest_day" t-value="1"/>
+                                                    </t>
+                                                    <t t-foreach="request.env['hr.shift.schedule.line'].search([('employee_id','=',line.employee_id.id),('date','=',docs_start_date)], limit=1)" t-as="nrest_day">
+                                                      <t t-set="var_shift_day" t-value="nrest_day.first_shift_id.id"/>
+                                                    </t>
+                                                    <t t-foreach="request.env['resource.calendar.leaves'].search([('calendar_id','=',var_shift_day)])" t-as="gazetted_day">
+                                                      <t t-if="gazetted_day.date_from.strftime('%y-%m-%d')&lt;=docs_start_date.strftime('%y-%m-%d') and gazetted_day.date_to.strftime('%y-%m-%d')&gt;=docs_start_date.strftime('%y-%m-%d')" >
+                                                       <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
+                                                         <t t-set="var_gazetted_day" t-value="1"/>
+                                                       </t>
+                                                    </t>
+                                                    </t>
+                                                    <t t-set="docs_start_date" t-value="docs_start_date + datetime.timedelta(1)"/>
+                                                        <t t-if="var_rest_day==1" >
+                                                            <td style="border: 1px solid black;background-color:LightGreen;">
+                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
+                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
+                                                                <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
+                                                                      P
+                                                                <t t-set="line_total" t-value="line_total + 1"/>
+                                                                </t>
+                                                                <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
+                                                                <t t-set="startday" t-value="(start_date).strftime('%d')"/>
+                                                               </t>
+                                                              </t>
+                                                            </td>
+                                                        </t>
+
+                                                        <t t-if="var_gazetted_day==1" >
+                                                         <t t-if="not var_rest_day ==1" >
+                                                            <td style="border: 1px solid black;background-color:#C4A484;">
+                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
+                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
+                                                                <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
+                                                                      P
+                                                                <t t-set="line_total" t-value="line_total + 1"/>
+                                                                </t>
+                                                                <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
+                                                                <t t-set="startday" t-value="(start_date).strftime('%d')"/>
+                                                               </t>
+                                                              </t>
+                                                            </td>
+                                                          </t>
+                                                        </t>
+
+                                                        <t t-if="not var_gazetted_day==1" >
+                                                         <t t-if="not var_rest_day ==1" >
+                                                            <td style="border: 1px solid black;">
+                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
+                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
+                                                                <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
+                                                                      P
+                                                                <t t-set="line_total" t-value="line_total + 1"/>
+                                                                </t>
+                                                                <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
+                                                                <t t-set="startday" t-value="(start_date).strftime('%d')"/>
+                                                               </t>
+                                                              </t>
+                                                            </td>
+                                                          </t>
+                                                        </t>
+
+                                                  </t>
+                                                </t>
+
+
+                                            <td style="border: 1px solid black;"><span t-esc="line_total"/></td>
+
+                                        </tr>
+                                      </t>
+
+                                    </tbody>
+                                </table>
+                                <br/>
+                               <table class="table" style="table-layout: fixed">
+                                        <tr>
+                                            <th colspan="3"> <span t-esc="o.incharge_id.company_id.name"/></th>
+                                            <th >Approved By</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <td><u><span t-esc="o.incharge_id.name"/></u></td>
+                                            <th>Signature</th>
+                                            <td>------------</td>
+                                            <th>Name</th>
+                                            <td>------------</td>
+
+                                            <th>Signature</th>
+                                            <td>------------</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <th>Position</th>
+                                            <td><u><span t-esc="o.incharge_id.job_id.name"/></u></td>
+                                            <th>Date</th>
+                                            <td>-----------</td>
+                                            <th>Position</th>
+                                            <td>-----------</td>
+                                            <th>Date</th>
+                                            <td>-----------</td>
+                                        </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

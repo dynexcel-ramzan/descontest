@@ -1,0 +1,507 @@
+<!--  <?xml version="1.0" encoding="utf-8"?>
+ -->
+
+
+<odoo>
+    <template id="portal_layout" name="Portal layout: timesheet menu entry" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'ptimesheet' or ptimesheet" class="col-lg-2" t-attf-class="breadcrumb-item #{'active ' if not timesheet else ''}">
+                <a t-if="ptimesheet" t-attf-href="/project/timesheets?{{ keep_query() }}">Timesheet</a>
+                <t t-else="">Timesheet</t>
+            </li>
+
+        </xpath>
+    </template>
+
+    <template id="portal_my_home" name="Show Timesheet / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry" >
+                <t t-set="title">Timesheet</t>
+                <t t-set="url" t-value="'/project/timesheets'"/>
+                <t t-set="placeholder_count" t-value="'ptimesheet_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_project_timesheets" name="Project Timesheets">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Timesheet</t>
+            </t>
+            <t t-if="not grouped_ptimesheets">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no Timesheet.
+                </div>
+            </t>
+
+            <t t-if="grouped_ptimesheets">
+                <t t-call="portal.portal_table">
+                    <t t-foreach="grouped_ptimesheets" t-as="all_ptimesheets">
+                        <thead>
+                            <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                <th class="text-left">Incharge</th>
+                                <th class="text-left">Client</th>
+                                <th class="text-left">Project</th>
+                                <th class="text-left">Date From</th>
+                                <th class="text-left">Date To</th>
+                               <th class="text-left">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="all_ptimesheets" t-as="ptimesheet">
+                               <t t-if="ptimesheet.incharge_id.user_id.id == uid">
+                                <tr>
+                                     <td>
+                                        <a t-attf-href="/project/timesheet/#{ptimesheet.id}?{{ keep_query() }}"><span t-field="ptimesheet.incharge_id.name"/></a>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="ptimesheet.partner_id.name" />
+                                    </td>
+
+                                    <td class="text-left">
+                                        <span t-esc="ptimesheet.project_id.name" />
+                                    </td>
+                                    <td class="text-left">
+                                        <t t-if="ptimesheet.date_from">
+                                         <span t-esc="ptimesheet.date_from" t-options='{"widget": "date"}'/>
+                                       </t>
+
+                                    </td>
+                                    <td class="text-left">
+                                        <t t-if="ptimesheet.date_to">
+                                         <span t-esc="ptimesheet.date_to" t-options='{"widget": "date"}'/>
+                                       </t>
+
+                                    </td>
+                                    <td class="text-left">
+                                        <t t-if="ptimesheet.state == 'draft'">
+                                            <i class="badge badge-pill badge-info" >Draft</i>
+                                        </t>
+
+                                        <t t-if="ptimesheet.state == 'submitted'">
+                                            <i class="badge badge-pill badge-warning" >To Approve</i>
+                                        </t>
+                                        <t t-if="ptimesheet.state == 'refused'">
+                                            <i class="badge badge-pill badge-danger" >Refused</i>
+                                        </t>
+                                        <t t-if="ptimesheet.state == 'approved'">
+                                            <i class="badge badge-pill badge-info" > Approved</i>
+                                        </t>
+                                    </td>
+                                    <td class="text-left">
+                                         <a t-attf-href="/project/timesheet/print/#{ptimesheet.id}?{{ keep_query() }}" title="Dowload"><i class="fa fa-download"></i></a>
+                                    </td>
+                                </tr>
+                               </t>
+                            </t>
+                            <tr>
+                                <div>
+                                    <t class="col-lg-7 col-md-8" >
+                                        <a href="/timesheet/create/" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Create</div> </a>
+                                    </t>
+                                </div>
+                            </tr>
+                        </tbody>
+                    </t>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+    <template id="portal_project_timesheet" name="Project Timesheet Form">
+        <t t-call="portal.portal_layout">
+
+            <div id="optional_placeholder"></div>
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                  <div id="optional_placeholder"></div>
+                    <div class="container">
+                      <div class="card">
+                        <div class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-12">
+                            <div class="pull-right"><a t-attf-href="/project/timesheet/print/#{ptimesheet.id}?{{ keep_query() }}" title="Dowload"><i class="fa fa-download"></i></a>
+</div>
+                            <h5 class="d-flex mb-1 mb-md-0 row">
+                                <small class="text-muted d-none d-md-inline"> (#<span t-field="ptimesheet.id"/>)</small>
+                                <div class="col-md-3  text-right">
+                                    <small class="text-right">Stage:</small>
+                                    <span t-field="ptimesheet.state" class=" badge badge-pill badge-info" title="Current stage of this Timesheet"/>
+                                </div>
+
+                                    </h5>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </t>
+               <t t-set="card_body">
+
+                        <div class="row">
+                                <div class="col-md-6"> <strong>Clinet : </strong>
+                                        <span t-esc="ptimesheet.partner_id.name"/>
+                                </div>
+
+                                 <div class="col-md-6">
+                                    <strong>Project : </strong>
+                                        <span t-esc="ptimesheet.project_id.name"/>
+                                </div>
+                        </div>
+
+                       <br/>
+                          <div class="row">
+
+                               <div class="col-md-6"> <strong>Date From : </strong>
+                                     <span t-esc="ptimesheet.date_from"   t-options='{"widget": "date"}'/>
+                               </div>
+
+
+                                 <div class="col-md-6"> <strong>Date To: </strong>
+                                    <t t-if="ptimesheet.id">
+                                        <span t-esc="ptimesheet.date_to"    t-options='{"widget": "date"}'/>
+                                    </t>
+                                 </div>
+                           </div>
+                            <br/> 
+                        <div class="row">
+                        <table class="table table-sm table-striped table-bordered"   id="timesheetlineTable">
+
+
+                            <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                <th class="text-left">Employee</th>
+                                <th class="text-left">Date From</th>
+                                <th class="text-left">Date To</th>
+                            </tr>
+
+                            <t t-foreach="ptimesheet.timesheet_attendance_ids" t-as="line">
+                                <tr>
+                                     <td class="employee">
+                                        <span t-esc="line.employee_id.name" />
+                                    </td>
+                                    <td class="date_from">
+                                      <span t-esc="line.date_from"    t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td class="date_to">
+                                      <span t-esc="line.date_to"    t-options='{"widget": "date"}'/>
+                                    </td>
+
+                                </tr>
+
+                            </t>
+
+                  </table>
+                   </div>
+
+
+
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+
+     <template id="project_timesheet_template" name="Project Timesheet Request">
+        <t t-call="portal.portal_layout">
+               <div id="wrap">
+                            <div class="oe_structure" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[1]">
+                                <section class="s_title parallax s_parallax_is_fixed bg-white-100 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+                                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/portal.s_banner_default_image'); background-position: 50% 0;"></span>
+                                    <div class="o_we_bg_filter bg-white-50"></div>
+                                    <div class="container">
+                                        <h1 style="margin-left:10px">Timesheet</h1>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="container mt-4 mb-5">
+                                <div class="row">
+                                    <div class="col-lg-7 col-xl-6 mr-lg-auto">
+                                        <div class="oe_structure" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[2]/div[1]/div[1]/div[1]">
+                                            <section class="s_text_block" data-snippet="s_text_block">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <p>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <span class="hidden" data-for="contactus_form" data-oe-id="2822" data-oe-xpath="/data/xpath/span" data-oe-model="ir.ui.view" data-oe-field="arch" data-values="{'leave_type_id': '', 'employee_id': '', 'date_start': '', 'date_end': '', 'description': ''}"></span>
+            <div id="timesheet_section" data-oe-id="3374" data-oe-xpath="/data/xpath[2]/div" data-oe-model="ir.ui.view" data-oe-field="arch">
+                    <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                        <div class="container">
+                            <form id="timesheetForm"  action="/project/timesheet/next"  method="post"  enctype="multipart/form-data">
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity2">
+                                                <span class="s_website_form_label_content">Client</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select  id="client" class="form-control  s_website_form_input" name="partner_id"  reqquired="1">
+                                                    <t t-foreach="partners" t-as="client">
+                                                            <option t-att-value="client.id">
+                                                                <t t-esc="client.name"/>
+                                                            </option>
+                                                     </t>
+                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity1">
+                                                <span class="s_website_form_label_content">Project</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select  id="project" class="form-control  s_website_form_input" name="project_id"  required="1">
+                                                                    <t t-foreach="projects" t-as="pro">
+                                                                        <option t-att-value="pro.id">
+                                                                            <t t-esc="pro.name"/>
+                                                                        </option>
+                                                                     </t>
+                                                                </select>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div id="day_from" class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date_From">
+                                                <span class="s_website_form_label_content">Date From</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                              <input type="date" class="form-control s_website_form_input" name="date_from"  t-options='{"widget": "date"}' required="1"/>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="day_to" class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date_to">
+                                                <span class="s_website_form_label_content">Date To </span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                              <input type="date" class="form-control s_website_form_input" name="date_to"  t-options='{"widget": "date"}'/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                    <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
+                                        <div style="width: 200px;" class="s_website_form_label"></div>
+                                        <button type="submit" class="btn btn-primary pull-left">Next</button>
+                                        <span id="s_website_form_result"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+			</div>
+                                    <div class="col-lg-4 mt-4 mt-lg-0">
+                                   <div class='section-custom col-md-12'>
+                                                   <a class="mb-5" id="submit-leave" t-attf-href="/project/timesheets">
+                                                        <button t-attf-class="btn btn-primary #{'col-md-10' if multi_type else 'col-md-12'} mb-2">View Project Timesheet</button>
+                                                    </a>
+                                                </div>
+
+
+
+    <address itemscope="itemscope" itemtype="http://schema.org/Organization">
+        <div data-oe-model="res.company" data-oe-id="1" data-oe-field="partner_id" data-oe-type="contact" data-oe-expression="res_company.partner_id" data-oe-many2one-id="1" data-oe-many2one-model="res.partner" data-oe-contact-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;, &quot;address&quot;, &quot;phone&quot;, &quot;mobile&quot;, &quot;email&quot;], &quot;tagName&quot;: &quot;div&quot;, &quot;expression&quot;: &quot;res_company.partner_id&quot;, &quot;type&quot;: &quot;contact&quot;, &quot;inherit_branding&quot;: true, &quot;translate&quot;: false}" data-oe-field-xpath="/t[1]/address[1]/div[1]">
+    <address class="mb-0" itemscope="itemscope" itemtype="http://schema.org/Organization">
+
+
+
+    <div>
+
+
+    </div>
+
+
+        <div itemprop="address" itemscope="itemscope" itemtype="http://schema.org/PostalAddress">
+
+
+
+
+        </div>
+
+
+
+    </address>
+</div>
+
+
+    </address>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="oe_structure mt-2" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[3]"></div>
+                        </div>
+
+        </t>
+    </template>
+
+
+        <template id="portal_create_timesheet_report_lines" name="hr_timesheet_report">
+         <t t-set="foo" t-value="2 + 1"/>
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Project Timesheet</t>
+            </t>
+            <t t-if="not emps">
+                <div class="alert alert-warning mt8" role="alert">
+                    You are not incharge of any employee.
+                </div>
+            </t>
+            <t t-if="emps">
+                <form id="portal_timesheet_report_form_line" data-toggle="validator" action="/project/timesheet/line/save">
+                <table class="table table-sm table-striped table-bordered"   id="datepanel">
+
+                            <tr>
+                                <th class="text-left">Client</th>
+                                <td class="text-left"><span t-esc='partner.name'  /></td>
+                                <th class="text-left">Project</th>
+                                <td class="text-left"><span t-esc='project.name'  /></td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Date From</th>
+                                <td class="text-left"><span t-esc='datefrom'  t-options='{"widget": "date"}' /></td>
+                                <th class="text-left">Date To</th>
+                                <td class="text-left"><span t-esc='dateto' t-options='{"widget": "date"}' /></td>
+                            </tr>
+                </table>
+                <table class="table table-sm table-striped table-bordered"   id="timesheetTable">
+
+
+                            <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                <th class="text-left">Employee</th>
+                                <th class="text-left">Date From</th>
+                                <th class="text-left">Date To</th>
+                            </tr>
+
+                            <t t-foreach="emps" t-as="emp">
+                                <tr>
+                                     <td class="employee">
+                                       <input type="hidden" class="form-control s_website_form_input" name="employee_id" id="employee_id"   t-att-value="emp.id"/>
+                                        <span t-esc="emp.name" />
+                                    </td>
+                                    <td class="date_from">
+                                        <input type="date" class="form-control s_website_form_input" name="date_from" id="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom"/>
+                                    </td>
+                                    <td class="date_to">
+                                        <input type="date" class="form-control s_website_form_input" name="date_to" id="date_to"    t-options='{"widget": "date"}'  t-att-value="dateto"/>
+                                    </td>
+
+                                </tr>
+
+                            </t>
+
+                  </table>
+
+                    <input type="hidden" id="timesheet_attendance_vals" class="form-control s_website_form_input" name="timesheet_attendance_vals"  multiple="true" />
+                       <input type="hidden" id="date_from" class="form-control s_website_form_input" name="date_from" t-att-value="datefrom"  multiple="true" />
+                        <input type="hidden" id="project_id" class="form-control s_website_form_input" name="project_id" t-att-value="project.id"  multiple="true" />
+                        <input type="hidden" id="partner_id" class="form-control s_website_form_input" name="partner_id" t-att-value="partner.id"  multiple="true" />
+                        <input type="hidden" id="date_to" class="form-control s_website_form_input" name="date_to" t-att-value="dateto"  multiple="true" />
+
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+                   <script src="/de_portal_timesheet/src/js/jquery_min.js"></script>
+                      <script type="text/javascript">
+                        $(document).ready(function(){
+                        $("#timesheetreport").on('click',function(){
+                           var timesheet_report=[];
+                           // loop over each table row (tr)
+                           $("#timesheetTable tr").each(function(){
+                                var currentRow=$(this);
+
+                                var col1_value=currentRow.find(".employee input").val();
+                                var col2_value=currentRow.find(".date_from input").val();
+                                var col3_value=currentRow.find(".date_to input").val();
+
+                                var obj={};
+                                obj.employee=col1_value;
+                                obj.datefrom=col2_value;
+                                obj.dateto=col3_value;
+
+                                timesheet_report.push(obj);
+
+                           });
+                         timesheetdictionary = JSON.stringify(timesheet_report);
+                         var lista = document.getElementById("timesheet_attendance_vals")
+                         lista.value = timesheetdictionary
+                         console.log(timesheet_report);
+                         });
+
+                       });
+                      </script>
+
+                     <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
+                            <div style="width: 200px;" class="s_website_form_label"></div>
+                            <button type="submit" id="timesheetreport" class="btn btn-primary pull-left">Submit</button>
+                            <span id="s_website_form_result"></span>
+                        </div>
+
+
+                </form>
+
+            </t>
+
+            <br/>
+            <br/>
+        </t>
+    </template>
+
+
+
+
+
+
+
+      <template id="de_portal_timesheet.ptimesheet_submited" name="timesheet Received">
+        <t t-call="portal.portal_layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container">
+                    <div class="row">
+                        <t t-if="request.session.get('form_builder_model_model', '') == 'hr.timesheet.reprot'">
+                            <t t-set="leave" t-value="request.portal._website_form_last_record().sudo()"/>
+                        </t>
+                        <h1 class="text-center"><i class="fa fa-check-circle fa-2x text-success" role="img" aria-label="Success" title="Success"/></h1>
+                        <t t-if="ptimesheet">
+                            <h1 class="text-center">Your Project Timesheet Request Number is <a t-if="request.session.uid" t-attf-href="/project/timesheet/page/">#<span t-field="ptimesheet.id"/></a><t t-if="not request.session.get('uid')">#<span t-field="ptimesheet.id"/></t>.</h1>
+                        </t>
+                        <h1 class="text-center">Thank you for submitting your project timesheet request!</h1>
+                    </div>
+                </div>
+            </div>
+         </t>
+    </template>
+
+
+</odoo>
+
+

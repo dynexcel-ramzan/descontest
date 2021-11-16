@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<odoo>
+
+         <record id="project_project_form_view_project_timesheet" model="ir.ui.view">
+			<field name="name">project.project.form.view.timesheet</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.edit_project"/>
+			<field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_fetch_oracle_project" string="Fetch Project" type="object" class="oe_highlight"/>
+				</xpath>
+            </field>
+		</record>
+        
+</odoo>
