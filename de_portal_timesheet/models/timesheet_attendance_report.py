@@ -51,6 +51,10 @@ class PortalTimesheet(models.Model):
     category_id = fields.Many2one(related='incharge_id.timesheet_categ_id')
 
 
+    def _get_report_base_filename(self):
+        self.ensure_one()
+        return '%s %s' % (self.partner_id.name, self.project_id.name)
+
 
     @api.depends('timesheet_attendance_ids')
     def _compute_total_days(self):
