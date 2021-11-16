@@ -161,9 +161,9 @@
                                         <a t-attf-href="/hr/site/attendance/#{approval.site_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
                                     </t>
                                  </t>
-                                  <t t-if="approval.timesheet_att_id">
+                                  <t t-if="approval.timesheet_id">
                                     <t class="col-lg-7 col-md-8" >
-                                        <a t-attf-href="/hr/timesheet/#{approval.timesheet_att_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
+                                        <a t-attf-href="/hr/timesheet/#{approval.timesheet_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
                                     </t>
                                  </t> 
                                 <div class="row">
