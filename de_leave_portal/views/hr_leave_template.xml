@@ -656,51 +656,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <t t-set="allocation_type" t-value="0"/>  
-                            <t t-foreach="leave_allocation" t-as="allocation">
-                               <t t-set="balance" t-value="0"/> 
-                               <t t-set="employeeid" t-value="0"/> 
-                               <t t-if="allocation.holiday_status_id.id != allocation_type" >
-                                <t t-if="allocation.max_leaves > 0.0" >  
-                                <t t-if="allocation.max_leaves > allocation.leaves_taken" >     
-                                 <tr>
-
-                                    <td class="text-left">
-                                        <span t-esc="allocation.holiday_status_id.name" />
-                                    </td>
-                                    
-                                    <td class="text-left">
-                                       <t t-if="allocation.holiday_status_id.request_unit == 'hour' " > 
-                                        <t t-esc="round((allocation.leaves_taken/8),2)"/> / 
-                                        <t t-esc="round((allocation.max_leaves/8),2)"/>
-                                       </t>  
-                                       <t t-if="allocation.holiday_status_id.request_unit != 'hour' " > 
-                                        <t t-esc="round(allocation.leaves_taken,2)"/> / 
-                                        <t t-esc="round(allocation.max_leaves,2)"/>
-                                       </t>    
-                                    </td>
-                                    <t t-foreach="employees" t-as="employ1">
-                                        <t t-set="employeeid" t-value="employ1.id"/> 
-                                    </t>  
-                                    <t t-foreach="request.env['hr.leave'].search([('holiday_status_id','=',allocation.holiday_status_id.id),('employee_id','=', employeeid),('state','not in', ['refuse','cancel'])])" t-as="balance1">
-                                       <t t-set="balance" t-value="balance + balance1.number_of_days"/>  
-                                    </t> 
-                                    <td class="text-left">
-                                       <t t-if="allocation.holiday_status_id.request_unit == 'hour' " > 
-                                         <span t-esc="round(((allocation.max_leaves/8) - balance),2)" />
-                                           
-                                       </t>
-                                      <t t-if="allocation.holiday_status_id.request_unit != 'hour' " > 
-                                         <span t-esc="round((allocation.max_leaves - balance),2)" />
-                                           
-                                       </t>  
-                                    </td>  
-                                </tr>
-                               </t>
-                               </t>     
-                               </t>
-                                <t t-set="allocation_type" t-value="allocation.holiday_status_id.id"/> 
-                               </t>     
+                          <t t-foreach="allocation_list" t-as="allocate">
+                                <tr>
+                                    <td><span t-esc='allocate["leave_categ"]'/></td>
+                                    <td><span t-esc='allocate["leave_taken"]'/>/<span t-esc='allocate["leave_max"]'/></td>
+                                    <td><span t-esc='allocate["balance"]'/></td>
+                                </tr>    
+                            </t>    
                             
                         </tbody>
                     </t>
