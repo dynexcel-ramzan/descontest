@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+
+
+<template id="computation_report">
+        <t t-call="web.external_layout">
+            <t t-call="web.html_container" style="text-align: left">
+                <t t-foreach="docs" t-as="doc">
+
+                    <br>
+                        <center>
+                            <div style="float:left; width: 110%">
+                                <h3>Employee's Old Age Benefits Institution</h3>
+                            </div>
+                        </center>
+                    </br>
+                    <br>
+                    <center>
+                        <div style="float:left; width: 40%">
+                            <h3>Government of Pakistan, Ministry of Labour, Manpower   Overseas Pakistanis (Labour Division).</h3>
+                        </div>
+                    </center>
+                    </br>
+
+                     <br>
+                    <center>
+                        <div style="float:left; width: 40%">
+                            <h3>Descon Power Solutions (Pvt) Limited.</h3>
+                        </div>
+                    </center>
+                    </br>
+
+                     <br>
+                    <center>
+                        <div style="float:left; width: 40%">
+                            <h3>E.O.B.I  Contribution Detail</h3>
+                        </div>
+                    </center>
+                    </br>
+
+
+
+                     <br>
+                        <table class="table">
+
+                            <tr>
+
+                                 <th scope="col">Location:
+                                 <td>
+<!--                                     <span t-field="doc.work_location_id.name"/> -->
+                                </td>
+                                </th>
+
+
+                                <th scope="col">Department:
+                                    <td>
+<!--                                         <span t-field="doc.department_id.name"/> -->
+                                    </td>
+                                </th>
+
+
+                           <th scope="col">Section:
+                                <td>
+<!--                                        <span t-field="doc.section.name"/>-->
+                                    </td>
+                                </th>
+
+                            </tr>
+                        </table>
+                    </br>
+
+                    <br>
+                        <table class="table">
+                            <tr>
+
+
+                                <th scope="col">Emp type:
+                                <td>
+<!--                                        <span t-field="dos.emp_type.name"/>-->
+                                    </td>
+                                </th>
+
+                                  <th scope="col">Employee type:
+                                <td>
+<!--                                         <span t-field="dos.emp_type.name"/> -->
+                                    </td>
+                                </th>
+                            </tr>
+                        </table>
+                    </br>
+                </t>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Sr No</th>
+                            <th scope="col">EOBI Registration</th>
+                            <th scope="col">Old CNIC</th>
+                            <th scope="col">CNIC No</th>
+                            <th scope="col">Name ofInsured Person</th>
+                            <th scope="col">Father/Husband Name</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Date of Birth</th>
+                            <th scope="col">EOBI Reg. Date</th>
+                            <th scope="col"> Date of Exit</th>
+                            <th scope="col">Payable Days</th>
+                            <th scope="col">Salary</th>
+                             <th scope="col">EOBIAmount</th>
+                            <th scope="col">Contributions</th>
+                            <th scope="col">Employee</th>
+                            <th scope="col">Employer</th>
+                            <th scope="col">TotalCont</th>
+
+                        </tr>
+                    </thead>
+                     <t t-set='sr_no' t-val="0"/>
+
+                <tbody style="color:black">
+                     <t t-foreach="employees" t-as="emp">
+
+<!--                         <t t-set='sr_no' t-value='sr_no + 1'/>-->
+                    <tr>
+<!--                        <td style="border: 1px solid black;">-->
+<!--                             <t t-esc='sr_no'/></td>-->
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.name"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.department_id.name"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.grade_type.name"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.grade_designation.name"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.emp_number"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.parent_id.name"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.coach_id.name"/></td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.section"/></td>
+                        <td style="border: 1px solid black;">
+                             <t t-esc="emp.company_id.name"/></td>
+
+
+<!--                         <td style="border: 1px solid black;">-->
+<!--                             <t t-esc="emp.grade_designation.name"/></td>-->
+<!--                         <td style="border: 1px solid black;">-->
+<!--                             <t t-esc="emp.grade_type.name"/></td>-->
+<!--                         <td style="border: 1px solid black;">-->
+<!--                             <t t-esc="emp.section"/></td>-->
+                     </tr>
+                     </t>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+
+</odoo>

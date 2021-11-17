@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <report
+            id="open_computation_tax_register_action"
+            string="Computation Tax Register"
+            model="report.de_eobi_report.computation_report"
+            report_type="qweb-pdf"
+            file="de_eobi_report.computation_report"
+            name="de_eobi_report.computation_report"
+        />
+    </data>
+</odoo>

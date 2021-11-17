@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!--Display form view of wizard-->
+        <record id="view_eobi_wizard_form" model="ir.ui.view">
+            <field name="name">eobi.wizard.form</field>
+            <field name="model">eobi.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Employee Eobi wizard">
+                    <group>
+                      <group>
+                          <field name="employee_type" widget='selection'/>
+                           <field name="department_id"/>
+                      </group>
+                      <group>
+                          <field name="location_id"/>
+                           <field name="section_id"/>
+                      </group>
+                    </group>
+                    <footer>
+                        <button string='Print' name="check_report" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Open the wizard on click of menu-->
+        <record id="open_computation_tax_register_action" model="ir.actions.act_window">
+            <field name="name">EOBI Report</field>
+            <field name="res_model">eobi.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_eobi_wizard_form"/>
+        </record>
+
+     <menuitem action="open_computation_tax_register_action" id="new_employee_eobi_report" parent="hr_payroll.menu_hr_payroll_report"
+               sequence="5"/>
+
+</odoo>
+
