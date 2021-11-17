@@ -159,6 +159,7 @@
                           <t t-foreach="docs.department_ids"  t-as="loc">
                               <t t-set='tot_min_system' t-value='0'/>
                               <t t-set='tot_hours_system' t-value='0'/>
+                              <t t-set='tot_feeded_min' t-value='0'/>
                               <t t-set='tot_feeded_hours' t-value='0'/>
                               <t t-set='tot_overtime_min' t-value='0'/>
                               <t t-set='tot_overtime_hours' t-value='0'/>
@@ -205,11 +206,9 @@
                                 </td>
                                         
                                 <t t-set='tot_min_system' t-value="tot_min_system + int(str_hour_mint[1])"/>
-                                
-                                        
-                                        
-                                        
+                            
                                 <td scope="col" width="100"> <span t-esc= "str_hour_mint[0]"/> </td>
+                                <t t-set='tot_hours_system' t-value="tot_hours_system + int(str_hour_mint[0])"/>
                                     </tr>
                                 </table>
                                 </td>
@@ -220,9 +219,11 @@
                                 <td style="border: 1px solid black;" scope="col" width="100">
                                 <table class="table">
                                     <tr style="color:blue">
-                                <td scope="col" width="100"> <span t-esc= "str_hour_feed[1]"/> 
+                                <td scope="col" width="100"> <span t-esc= "str_hour_feed[1]"/>
+                                <t t-set='tot_feeded_min' t-value="tot_feeded_min + int(str_hour_feed[1])"/>
                                 </td>
                                 <td scope="col" width="100"> <span t-esc= "str_hour_feed[0]"/> </td>
+                                <t t-set='tot_feeded_hours' t-value="tot_feeded_hours + int(str_hour_feed[0])"/>
                                     </tr>
                                 </table>
                                 </td>
@@ -245,29 +246,72 @@
                                 
                                 <t t-set='str_hour_difference' t-value='str(system_hours).split(".")'/>
                                 <td  style="border: 1px solid black;" scope="col" width="100"> <span t-esc= "str_hour_difference[1]"/> </td>
-                                
+                                <t t-set='tot_overtime_min' t-value="tot_overtime_min + int(str_hour_difference[1])"/>
+
                                 
                                 <t t-set='str_payable_difference' t-value='str(overtime).split(".")'/>
                                 <td  style="border: 1px solid black;" scope="col" width="100"> <span t-esc= "str_payable_difference[0]"/> </td>
-                                
+                                <t t-set='tot_overtime_hours' t-value="tot_overtime_hours + int(str_payable_difference[0])"/>
+
                           </tr>
                              </t>
                         <tr style="color:blue">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Total</td>
-                                        <td  style="border: 1px solid black;"></td>
-                                        <td  style="border: 1px solid black;"></td>
-                                        <td></td>
                                         <td style="border: 1px solid black;"></td>
+                                        <td style="border: 1px solid black;"></td>
+                                        <td style="border: 1px solid black;"></td>
+                                        <td style="border: 1px solid black;"> </td>
+                                        <td style="border: 1px solid black;">Total</td>
+                           <td style="border: 1px solid black;">
+                               <table>
+                                   <tr>
+                               
+                                        <td><span t-esc= "tot_min_system"/> </td>
+                                       <td><span t-esc= "tot_hours_system"/> </td>
+                                   </tr>
+                               </table>
+                            </td>
+                                
+                            <td style="border: 1px solid black;">
+                               <table>
+                                   <tr>
+                               
+                                        <td><span t-esc= "tot_feeded_min"/> </td>
+                                       <td><span t-esc= "tot_feeded_hours"/> </td>
+                                   </tr>
+                               </table>
+                            </td>
+                            
+                            
+                            <td style="border: 1px solid black;">
+                               <table>
+                                   <tr>
+                               
+                                        <td><span t-esc= "tot_overtime_min"/> </td>
+                                       <td><span t-esc= "tot_overtime_hours"/> </td>
+                                   </tr>
+                               </table>
+                            </td>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                                        <td style="border: 1px solid black;"></td>
+                                        <td style="border: 1px solid black;"></td>
+
                         </tr> 
                          </t>
                     </table>
                     
                     
                     
+                    
+                 
                 </div>
                  </div>
                  
