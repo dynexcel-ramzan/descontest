@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+        <!--Display form view of wizard-->    
+        <record id="view_tax_credit_wizard_form" model="ir.ui.view">
+            <field name="name">tax.credit.form</field>
+            <field name="model">tax.credit</field>
+            <field name="arch" type="xml">
+                <form string="Tax Credit wizard">
+                    <group>
+                        
+                      <group>
+                          <field name="investment_amount"/>
+                      </group>
+                        
+                         <group>
+                   
+                      </group>
+                        
+                    </group>
+              
+                </form>
+            </field>
+        </record>
+
+        <!--Open the wizard on click of menu-->
+        <record id="open_computation_tax_register_action" model="ir.actions.act_window">
+            <field name="name">Tax Credit</field>
+            <field name="res_model">tax.credit</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_tax_credit_wizard_form"/>
+        </record>
+    
+     
+ <menuitem action="open_computation_tax_register_action" id="new_computation_tax_report"  sequence="3"/>
+<!--            parent="open_tax_credit_forms_action"  -->
+          
+
+</odoo>

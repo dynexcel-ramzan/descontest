@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+        <!--Display form view of wizard-->    
+        <record id="view_tax_credit_forms" model="ir.ui.view">
+            <field name="name">tax.credit.forms.form</field>
+            <field name="model">tax.credit.forms</field>
+            <field name="arch" type="xml">
+                <form string="Tax Credit Form">
+                    <group>
+                        
+                      <group>
+                          <field name="company"/>
+                           <field name="tax_period"/>
+                           <field name="emp_code"/>
+                      </group>
+                 
+                    </group>
+                     <footer>
+            <button string='Calculate Tax income' name="tax_income" type="object" default_focus="1" class="oe_highlight"/>
+                        
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Open the wizard on click of menu-->
+        <record id="open_tax_credit_forms_action" model="ir.actions.act_window">
+            <field name="name">Tax Credit Forms</field>
+            <field name="res_model">tax.credit.forms</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_tax_credit_forms"/>
+        </record>
+    
+    
+     <menuitem action="open_tax_credit_forms_action" id="new_tax_credit"  parent="hr_payroll.menu_hr_payroll_employees_root" sequence="3"/>
+
+</odoo>
