@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    
+
+   
+    <template id="computation_report_pdf">
+        <t t-call="web.external_layout">
+            <t t-call="web.html_container" style="text-align: left">
+                <t t-foreach="docs" t-as="doc">
+                    <br>
+                        <center>
+                            <div style="float:left; width: 110%">
+                                <h3>Descon Power Solutions(Private) Limited</h3>
+                            </div>
+                        </center>
+
+                    </br>
+                    <center>
+                        <div style="float:left; width: 40%">
+                            <h3>Income Tax Computation Sheet</h3>
+                        </div>
+                    </center>
+
+
+                    <br>
+                        <table class="table">
+
+                            <tr>
+                                <th scope="col">Emp no : 6134</th>
+                                <th scope="col">Name:
+                                    <td>
+                                        <span t-field="doc.employee_id"/>
+                                    </td>
+                                </th>
+                                <th scope="col">Designation: C3</th>
+                                <th scope="col">Fiscal Year: 2020</th>
+                            </tr>
+                        </table>
+
+                    </br>
+
+                    <br>
+                        <table class="table">
+                            <tr>
+                                <th scope="col">Department: Operation</th>
+                                <th scope="col">Location: RPL Descon solutions</th>
+                                <th scope="col">Emp type: P</th>
+                                <th scope="col">Grade: C3</th>
+                                <th scope="col">Grade Type: M</th>
+                            </tr>
+                        </table>
+                    </br>
+                </t>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Period</th>
+                            <th scope="col">O.T Hours</th>
+                            <th scope="col">Gross Pay</th>
+                            <th scope="col">Car Allow</th>
+                            <th scope="col">Bonus</th>
+                            <th scope="col">Arrears</th>
+                            <th scope="col">Overtime</th>
+                            <th scope="col">Others</th>
+                            <th scope="col">Incentive</th>
+                            <th scope="col">Mobile Allow</th>
+                            <th scope="col">Earned Leaves</th>
+                            <th scope="col">Taxable amount</th>
+                            <th scope="col">Income tax</th>
+                            <th scope="col">Surch.Tax</th>
+                            <th scope="col">Total Inc.Tax</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color:black">
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Tax Rebate Details</th>
+                            <th scope="col">Amount Credit</th>
+                            <th scope="col">Tax Credit</th>
+                            <th scope="col">Loan Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">27-Aug-19
+                            </td>
+                            <td style="border: 1px solid black;">National Bank of pakistan</td>
+                            <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                            <td style="border: 1px solid black;">48,257</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Tax Calculation Performed by Applying Following Rates</th>
+
+                        </tr>
+                    </thead>
+
+                </table>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Taxable Income</th>
+                            <th scope="col">Rate(%)</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style="border: 1px solid black;">27-Aug-19
+                        </td>
+                        <td style="border: 1px solid black;">National Bank of pakistan</td>
+                        <td style="border: 1px solid black;">Shahdara Branch lahore(0452)</td>
+                        <td style="border: 1px solid black;">48,257</td>
+                    </tr>
+                </table>
+
+            </t>
+        </t>
+    </template>
+
+</odoo>
+                    
+         
+                
+<!--                 ('date_from','>=',invoice.date),('date_to','<=',invoice.date)
+                 -->
+                
+                <!--          ('employee_id','=',docs.name.id), -->
+
+
+
+
+
+
