@@ -12,3 +12,4 @@ access_hr_shift_schedule_line_manager,hr.shift.schedule.line,model_hr_shift_sche
 
 access_resource_calendar_manager,access.resource.calendar,model_resource_calendar,de_employee_shift.group_hr_shift_manager,1,1,1,1
 access_resource_calendar_user,access.resource.calendar,model_resource_calendar,de_employee_shift.group_hr_shift_user,1,0,0,0
+access_shift_gazetted_line,access.shift.gazetted.line,model_shift_gazetted_line,,1,1,1,1

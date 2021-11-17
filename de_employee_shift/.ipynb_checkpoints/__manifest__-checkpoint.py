@@ -31,6 +31,7 @@
         'security/ir.model.access.csv',
         'views/hr_employee_views.xml',
         'views/hr_attendance_views.xml',
+        'views/shift_gazetted_line_views.xml',
         'views/hr_generate_shift_view.xml',
         'views/hr_shift_schedule_view.xml',
         'views/shift_week_days_views.xml',

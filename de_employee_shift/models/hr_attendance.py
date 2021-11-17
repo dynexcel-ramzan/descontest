@@ -43,7 +43,7 @@ from odoo.tools import format_datetime
 
 
 class HrAttendance(models.Model):
-    _name = "hr.attendance"
+    _inherit = "hr.attendance"
     _description = "Attendance"
     _order = "check_in desc"
 

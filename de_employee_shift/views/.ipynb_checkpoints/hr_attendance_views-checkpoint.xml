@@ -31,8 +31,8 @@
         </data>
         
         
-        <record id="hr_attendance_tree_view_inherited" model="ir.ui.view">
-            <field name="name">hr.attendance.form.inherit</field>
+<!--         <record id="hr_attendance_tree_view_shift_allot" model="ir.ui.view">
+            <field name="name">hr.attendance.form.shift.allot</field>
             <field name="model">hr.attendance</field>
             <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
             <field name="arch" type="xml">
@@ -44,8 +44,8 @@
                
             </field>
         </record>
-        
-        <record id="resource_calander_form_view_inherited" model="ir.ui.view">
+         -->
+        <record id="resource_calander_form_view_shift_alltt" model="ir.ui.view">
             <field name="name">resource.calendar.form.inherit</field>
             <field name="model">resource.calendar</field>
             <field name="inherit_id" ref="resource.resource_calendar_form"/>
