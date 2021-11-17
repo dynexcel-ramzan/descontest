@@ -161,9 +161,9 @@
                                         <a t-attf-href="/hr/site/attendance/#{approval.site_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
                                     </t>
                                  </t>
-                                  <t t-if="approval.timesheet_att_id">
+                                  <t t-if="approval.timesheet_id">
                                     <t class="col-lg-7 col-md-8" >
-                                        <a t-attf-href="/hr/timesheet/#{approval.timesheet_att_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
+                                        <a t-attf-href="/project/timesheet/#{approval.timesheet_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
                                     </t>
                                  </t> 
                                 <div class="row">
@@ -221,14 +221,24 @@
                     </div> 
                     <br/>
                     <div class="row mb-4">
-                        <div class="col-12 col-md-6 mb-1">
-                            <strong>Phone:</strong> <span t-field="approval.leave_id.employee_id.work_phone" />
-                        </div>
-                        <div class="col-12 col-md-6" t-if="approval.id">
-                            <strong>Email:</strong> <span t-field="approval.leave_id.employee_id.work_email" />
-                        </div>
+                       <t t-if='approval.leave_id'> 
+                            <div class="col-12 col-md-6 mb-1">
+                                <strong>Phone:</strong> <span t-field="approval.leave_id.employee_id.work_phone" />
+                            </div>
+                            <div class="col-12 col-md-6" t-if="approval.id">
+                                <strong>Email:</strong> <span t-field="approval.leave_id.employee_id.work_email" />
+                            </div>
+                       </t>   
+                       <t t-if='approval.timesheet_id'> 
+                            <div class="col-12 col-md-6 mb-1">
+                                <strong>Phone:</strong> <span t-field="approval.timesheet_id.incharge_id.work_phone" />
+                            </div>
+                            <div class="col-12 col-md-6" t-if="approval.id">
+                                <strong>Email:</strong> <span t-field="approval.timesheet_id.incharge_id.work_email" />
+                            </div>
+                       </t>    
                     </div>
-                    
+                   
                    <br/>
                      <div class="row mb-4">
                         <div class="col-12 col-md-6 mb-1">
@@ -239,8 +249,7 @@
                         </div>
                     </div>
                    <br/>
-                   
-                   
+                
                        
                  
                    <t t-if='approval.leave_id'>
@@ -292,6 +301,28 @@
                    <br/>
                    </t>
                    
+                     <t t-if='approval.timesheet_id'>
+                   <h3><p style='color:blue;'>Details</p></h3>
+                       <br/>    
+                      
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Date From:</strong> <span t-field="approval.timesheet_id.date_from"  t-options='{"widget": "date"}' />
+                        </div>
+                        <div class="col-12 col-md-6" >
+                            <strong>Date To:</strong> <span t-field="approval.timesheet_id.date_to"  t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                     <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Client:</strong> <span t-field="approval.timesheet_id.partner_id.name"   />
+                        </div>
+                        <div class="col-12 col-md-6" >
+                            <strong>Project:</strong> <span t-field="approval.timesheet_id.project_id.name"  />
+                        </div>
+                    </div>     
+                   </t>
+                   
                    <t t-if='approval.rectification_id'>
                    <h3><p style='color:blue;'>Details</p></h3>
                        <br/>    
@@ -338,6 +369,7 @@
                   
                  <t t-if=' not approval.leave_id'>
                    <t t-if='not approval.rectification_id'>  
+                   <t t-if='not approval.timesheet_id'>      
                      <h3><p style='color:blue;'>Details</p></h3>
                      <br/>
                      <t t-if='approval.allocation_id'>
@@ -363,7 +395,8 @@
                         </div> 
                     </div>
                    </t> 
-                  </t>    
+                  </t> 
+                   </t>   
                    <div class="row">
                        <t t-foreach="approval.approver_ids" t-as="lines">
                             <t t-if="lines.user_id.id == uid">
