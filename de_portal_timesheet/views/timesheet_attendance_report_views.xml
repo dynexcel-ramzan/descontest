@@ -110,7 +110,7 @@
         <field name="model">hr.timesheet.report</field>
         <field name="arch" type="xml">
             <search string="Hr Tiemsheet Attendance Search">
-                <filter string="My Timesheets" name="mytimesheets" domain="[('partner_id.user_id.id', '=', uid)]" />
+                <filter string="My Timesheets" name="mytimesheets" domain="[('incharge_id.user_id.id', '=', uid)]" />
                 <separator/>
                
                 <group expand="0" string="Group By">

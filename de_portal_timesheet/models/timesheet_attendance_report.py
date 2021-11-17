@@ -29,7 +29,7 @@ class PortalTimesheet(models.Model):
     _rec_name = 'partner_id'
    
     
-    partner_id = fields.Many2one('res.partner', string='Client',  required=True)
+    partner_id = fields.Many2one('res.ora.client', string='Client',  required=True)
     project_id = fields.Many2one('project.project', string='Project',  required=True)
     incharge_id = fields.Many2one('hr.employee', string='Incharge',  required=True)
     date_from = fields.Date(string='Date From')
@@ -50,6 +50,10 @@ class PortalTimesheet(models.Model):
     approval_request_id = fields.Many2one('approval.request', string="Approval")
     category_id = fields.Many2one(related='incharge_id.timesheet_categ_id')
 
+
+    def _get_report_base_filename(self):
+        self.ensure_one()
+        return '%s %s' % (self.partner_id.name, self.project_id.name)
 
 
     @api.depends('timesheet_attendance_ids')

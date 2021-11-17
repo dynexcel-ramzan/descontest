@@ -29,6 +29,7 @@
         'report/timesheet_attendance_report_template.xml',
         'wizard/timesheet_incharge_wizard.xml',
         'views/approval_request_views.xml',
+        'views/res_ora_client_views.xml',
         'views/project_project_views.xml',
         'views/timesheet_attendance_report_views.xml',
         'views/timesheet_attendance_report_template.xml',

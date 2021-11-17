@@ -409,7 +409,7 @@
                                         <span t-esc="emp.name" />
                                     </td>
                                     <td class="date_from">
-                                        <input type="date" class="form-control s_website_form_input" name="date_from" id="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom" />
+                                        <input type="date" class="form-control s_website_form_input" name="date_from" id="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom"/>
                                     </td>
                                     <td class="date_to">
                                         <input type="date" class="form-control s_website_form_input" name="date_to" id="date_to"    t-options='{"widget": "date"}'  t-att-value="dateto"/>
