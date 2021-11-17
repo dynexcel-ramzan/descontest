@@ -90,35 +90,38 @@
                                                        </t>
                                                     </t>
                                                     </t>
+                                                    
                                                     <t t-set="docs_start_date" t-value="docs_start_date + datetime.timedelta(1)"/>
                                                         <t t-if="var_rest_day==1" >
                                                             <td style="border: 1px solid black;background-color:LightGreen;">
                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
-                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
-                                                                <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
+<!--                                                               <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >  -->
+                                                                P<span t-esc='lineta' /> <br/>
+                                                                <span t-esc='start_date' />
+                                                                <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="attr">
                                                                       P
                                                                 <t t-set="line_total" t-value="line_total + 1"/>
                                                                 </t>
                                                                 <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
                                                                 <t t-set="startday" t-value="(start_date).strftime('%d')"/>
                                                                </t>
-                                                              </t>
+                                                              <!--  </t> -->
                                                             </td>
                                                         </t>
 
                                                         <t t-if="var_gazetted_day==1" >
                                                          <t t-if="not var_rest_day ==1" >
                                                             <td style="border: 1px solid black;background-color:#C4A484;">
-                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
-                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
+                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
+                                                              
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
                                                                       P
                                                                 <t t-set="line_total" t-value="line_total + 1"/>
                                                                 </t>
                                                                 <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
                                                                 <t t-set="startday" t-value="(start_date).strftime('%d')"/>
-                                                               </t>
-                                                              </t>
+                                                                </t>
+                                                                
                                                             </td>
                                                           </t>
                                                         </t>
@@ -126,28 +129,27 @@
                                                         <t t-if="not var_gazetted_day==1" >
                                                          <t t-if="not var_rest_day ==1" >
                                                             <td style="border: 1px solid black;">
-                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
-                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
+
+                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')&lt;=line.date_to.strftime('%d')" >
+                                                                P<span t-esc='startday' /> <br/>
+                                                                <span t-esc='start_date' />
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
-                                                                      P
+                                                                      
                                                                 <t t-set="line_total" t-value="line_total + 1"/>
                                                                 </t>
                                                                 <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
                                                                 <t t-set="startday" t-value="(start_date).strftime('%d')"/>
-                                                               </t>
-                                                              </t>
+                                                                 </t> 
+                                                               <!--</t> -->
                                                             </td>
                                                           </t>
                                                         </t>
                                                   </t>
                                                 </t>
 
-
-                                             <td style="border: 1px solid black;">
-                                                
+                                             <td style="border: 1px solid black;">  
                                                   <span t-esc="line_total"/>
-                                                  <t t-set="tot_line_total" t-value="tot_line_total + line_total"/>  
-                                                    
+                                                  <t t-set="tot_line_total" t-value="tot_line_total + line_total"/>      
                                               </td>
                                         </tr>
                                       </t>
@@ -182,11 +184,21 @@
                                         <tr>
 
                                             <th>Position</th>
-                                            <td><u><span t-esc="o.incharge_id.job_id.name"/></u></td>
+                                            <td><u>
+                                                <t t-if='o.state=="approved"'>
+                                                  <span t-esc="o.incharge_id.job_id.name"/>
+                                                </t>    
+                                                </u>
+                                            
+                                            </td>
                                             <th>Date</th>
                                             <td>-----------</td>
                                             <th>Position</th>
-                                            <td><u><span t-esc="o.incharge_id.parent_id.job_id.name"/></u></td>
+                                            <td><u>
+                                                <t t-if='o.state=="approved"'>
+                                                <span t-esc="o.incharge_id.parent_id.job_id.name"/>
+                                                </t>    
+                                                </u></td>
                                             <th>Date</th>
                                             <td>-----------</td>
                                         </tr>

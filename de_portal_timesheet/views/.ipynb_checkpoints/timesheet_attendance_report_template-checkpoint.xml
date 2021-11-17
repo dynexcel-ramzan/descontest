@@ -318,7 +318,7 @@
 			</div>
                                     <div class="col-lg-4 mt-4 mt-lg-0">
                                    <div class='section-custom col-md-12'>
-                                                   <a class="mb-5" id="submit-leave" t-attf-href="/project/timesheets">
+                                                   <a class="mb-5" id="submit-timesheet" t-attf-href="/project/timesheets">
                                                         <button t-attf-class="btn btn-primary #{'col-md-10' if multi_type else 'col-md-12'} mb-2">View Project Timesheet</button>
                                                     </a>
                                                 </div>
@@ -366,6 +366,7 @@
 
         <template id="portal_create_timesheet_report_lines" name="hr_timesheet_report">
          <t t-set="foo" t-value="2 + 1"/>
+                 
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar">
@@ -376,13 +377,45 @@
                     You are not incharge of any employee.
                 </div>
             </t>
+            <script>
+                  function validateForm() {
+                      let datefroma = document.getElementById("date_from").value;
+                      let datefromb = document.getElementById("datefromb").value;
+                      let datetoa = document.getElementById("date_to").value;
+                      let datetob = document.getElementById("datetob").value;
+                      if (new Date(datefroma) > new Date(datetob)) {
+                        alert("Not Allow to Enter date Greater than Project Date to.");
+                      }
+                      if (new Date(datefromb) > new Date(datefroma)) {
+                        alert("Not Allow to Enter date less than Project Date From.");
+                      }
+                      if (new Date(datetoa) > new Date(datetob)) {
+                        alert("Not Allow to Enter date Greater than Project Date to.");
+                      }
+                      if (new Date(datefromb) > new Date(datetoa)) {
+                        alert("Not Allow to Enter date less than Project Date From.");
+                      }
+                      if (new Date(datefroma) > new Date(datetob)) {
+                        document.getElementById("date_from").value= datefromb;
+                      }
+                      if (new Date(datefromb) > new Date(datefroma)) {
+                       document.getElementById("date_from").value= datefromb;
+                      }
+                      if (new Date(datetoa) > new Date(datetob)) {
+                        document.getElementById("date_to").value= datetob;
+                      }
+                      if (new Date(datefromb) > new Date(datetoa)) {
+                        document.getElementById("date_to").value= datetob;
+                      }
+                    }
+            </script> 
             <t t-if="emps">
                 <form id="portal_timesheet_report_form_line" data-toggle="validator" action="/project/timesheet/line/save">
                 <table class="table table-sm table-striped table-bordered"   id="datepanel">
 
                             <tr>
                                 <th class="text-left">Client</th>
-                                <td class="text-left"><span t-esc='partner.name'  /></td>
+                                <td class="text-left"><span t-esc='partner.name' /></td>
                                 <th class="text-left">Project</th>
                                 <td class="text-left"><span t-esc='project.name'  /></td>
                             </tr>
@@ -409,10 +442,10 @@
                                         <span t-esc="emp.name" />
                                     </td>
                                     <td class="date_from">
-                                        <input type="date" class="form-control s_website_form_input" name="date_from" id="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom"/>
+                                        <input  type="date" class="form-control s_website_form_input" name="date_from" id="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom"  onchange="return validateForm()"/>
                                     </td>
                                     <td class="date_to">
-                                        <input type="date" class="form-control s_website_form_input" name="date_to" id="date_to"    t-options='{"widget": "date"}'  t-att-value="dateto"/>
+                                        <input  type="date" class="form-control s_website_form_input" name="date_to" id="date_to"    t-options='{"widget": "date"}'  t-att-value="dateto" onchange="return validateForm()"/>
                                     </td>
 
                                 </tr>
@@ -422,10 +455,10 @@
                   </table>
 
                     <input type="hidden" id="timesheet_attendance_vals" class="form-control s_website_form_input" name="timesheet_attendance_vals"  multiple="true" />
-                       <input type="hidden" id="date_from" class="form-control s_website_form_input" name="date_from" t-att-value="datefrom"  multiple="true" />
+                       <input id='datefromb' type="hidden"  class="form-control s_website_form_input" name="date_from" t-att-value="datefrom"  multiple="true" />
                         <input type="hidden" id="project_id" class="form-control s_website_form_input" name="project_id" t-att-value="project.id"  multiple="true" />
                         <input type="hidden" id="partner_id" class="form-control s_website_form_input" name="partner_id" t-att-value="partner.id"  multiple="true" />
-                        <input type="hidden" id="date_to" class="form-control s_website_form_input" name="date_to" t-att-value="dateto"  multiple="true" />
+                        <input id='datetob' type="hidden"  class="form-control s_website_form_input" name="date_to" t-att-value="dateto"  multiple="true" />
 
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     
