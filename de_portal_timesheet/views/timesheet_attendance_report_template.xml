@@ -90,7 +90,9 @@
                                         </t>
                                     </td>
                                     <td class="text-left">
+                                        <t t-if='ptimesheet.state!="refused"'> 
                                          <a t-attf-href="/project/timesheet/print/#{ptimesheet.id}?{{ keep_query() }}" title="Download">Print<i class="fa fa-download"></i></a>
+                                        </t>    
                                     </td>
                                 </tr>
                                </t>
@@ -122,8 +124,12 @@
                         <div class="card-header">
                     <div class="row no-gutters">
                         <div class="col-12">
-                            <div class="pull-right"><a t-attf-href="/project/timesheet/print/#{ptimesheet.id}?{{ keep_query() }}" title="Dowload">Print<i class="fa fa-download"></i></a>
-</div>
+                            <div class="pull-right">
+                                <t t-if='ptimesheet.state!="refused"'> 
+                                     <a t-attf-href="/project/timesheet/print/#{ptimesheet.id}?{{ keep_query() }}" title="Download">Print<i class="fa fa-download"></i>     
+                                     </a>
+                                </t>     
+                               </div>
                             <h5 class="d-flex mb-1 mb-md-0 row">
                                 <small class="text-muted d-none d-md-inline"> (#<span t-field="ptimesheet.id"/>)</small>
                                 <div class="col-md-3  text-right">
