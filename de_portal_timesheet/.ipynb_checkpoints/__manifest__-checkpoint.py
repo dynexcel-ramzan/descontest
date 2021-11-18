@@ -25,6 +25,7 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
         'report/timesheet_attendance_report.xml',
         'report/timesheet_attendance_report_template.xml',
         'wizard/timesheet_incharge_wizard.xml',

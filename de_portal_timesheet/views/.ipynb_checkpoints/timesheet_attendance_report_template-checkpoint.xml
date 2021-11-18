@@ -15,7 +15,7 @@
 
     <template id="portal_my_home" name="Show Timesheet / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="40">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-call="portal.portal_docs_entry" >
+            <t t-call="portal.portal_docs_entry"  groups='de_portal_timesheet.group_portal_timesheet'>
                 <t t-set="title">Timesheet</t>
                 <t t-set="url" t-value="'/project/timesheets'"/>
                 <t t-set="placeholder_count" t-value="'ptimesheet_count'"/>
@@ -450,8 +450,7 @@
 
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     
-                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-                   <script src="/de_portal_timesheet/src/js/jquery_min.js"></script>
+                   <script src="/de_portal_timesheet/static/src/js/jquery_min.js"></script>
                       <script type="text/javascript">
                         $(document).ready(function(){
                         $("#timesheetreport").on('click',function(){
