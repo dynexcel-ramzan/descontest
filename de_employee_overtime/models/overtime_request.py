@@ -264,7 +264,7 @@ class HrOverTime(models.Model):
                             for compansationinrest in line.overtime_type_id.type_line_ids:
                                 if compansationinrest.rate_type == 'percent' and compansationinrest.entry_type_id == 'single' and rest_single_hourss_limit < compansationinrest.ot_hours:
                                     rest_single_hourss_limit =  compansationinrest.ot_hours
-                                    raise UserError(('test '+str(compansationinrest.ot_hours))) 
+                                    
                                 if compansationinrest.compansation == 'leave': 
                                     leave_period_rest = compansationinrest.leave_type
                                     rest_single_hourss_limit =  compansationinrest.ot_hours     
