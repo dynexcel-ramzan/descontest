@@ -135,7 +135,6 @@ class HrOverTime(models.Model):
             double_ot_amount = 0.0
             grate = 0
             grate2 = 0
-            compansation1 = []
             double_rate_ot_hours = 0.0 
             single_hour_limit = 0.0 
             only_cpl = line.employee_id.cpl
@@ -218,8 +217,7 @@ class HrOverTime(models.Model):
             leave_type = 0
             only_cpl = False
             rate = 0
-            rest_singl_hours = 0.0
-            compansation1 = 0 
+            rest_singl_hours = 0.0 
             rest_single_ot_amount = 0.0
             rest_double_ot_amount = 0.0
             rest_double_rate_ot_hours = 0.0 
@@ -245,7 +243,7 @@ class HrOverTime(models.Model):
                             for compansation1rest in line.overtime_type_id.type_line_ids:
                                 if line.hours >= compansation1rest.ot_hours:
                                     if compansation1rest.rate_type == 'percent' and compansation1rest.entry_type_id == 'double' and rest_double_hours_limit < compansation1rest.ot_hours:
-                                        rest_double_hours_limit =  compansation1.ot_hours
+                                        rest_double_hours_limit =  compansation1rest.ot_hours
 
                             rest_single_hour_limit1  =   line.hours - rest_singl_hours            
                             rest_single_hour_limit = line.hours - rest_single_hour_limit1
