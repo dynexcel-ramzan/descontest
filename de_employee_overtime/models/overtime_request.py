@@ -135,6 +135,7 @@ class HrOverTime(models.Model):
             double_ot_amount = 0.0
             grate = 0
             grate2 = 0
+            compansation1 = []
             double_rate_ot_hours = 0.0 
             single_hour_limit = 0.0 
             only_cpl = line.employee_id.cpl
@@ -217,7 +218,8 @@ class HrOverTime(models.Model):
             leave_type = 0
             only_cpl = False
             rate = 0
-            rest_singl_hours = 0.0 
+            rest_singl_hours = 0.0
+            compansation1 = 0 
             rest_single_ot_amount = 0.0
             rest_double_ot_amount = 0.0
             rest_double_rate_ot_hours = 0.0 
