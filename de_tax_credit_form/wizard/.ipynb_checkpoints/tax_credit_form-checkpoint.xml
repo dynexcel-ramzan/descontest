@@ -11,6 +11,15 @@
                       <group>
                           <field name="investment_amount"/>
                       </group>
+                        <group>
+                          <field name="company_id"/>
+                           <field name="tax_period"/>
+                           <field name="emp_code"/>
+                      </group>
+<!--                         <footer>
+            <button string='Calculate Tax income' name="tax_credit" type="object" default_focus="1" class="oe_highlight"/>
+                        
+                    </footer> -->
                         
                          <group>
                    
