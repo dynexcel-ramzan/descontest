@@ -390,16 +390,19 @@
                       let datetoa = document.getElementById("date_to").value;
                       let datetob = document.getElementById("datetob").value;
                       if (new Date(datefroma) > new Date(datetob)) {
-                        alert("Not Allow to Enter date Greater than Project Date to.");
+                        alert("Not Allow to Enter date Greater than Project Date to. "+datetob);
                       }
                       if (new Date(datefromb) > new Date(datefroma)) {
-                        alert("Not Allow to Enter date less than Project Date From.");
+                        alert("Not Allow to Enter date less than Project Date From. "+datefromb);
                       }
                       if (new Date(datetoa) > new Date(datetob)) {
-                        alert("Not Allow to Enter date Greater than Project Date to.");
+                        alert("Not Allow to Enter date Greater than Project Date to. "+datetob);
                       }
                       if (new Date(datefromb) > new Date(datetoa)) {
-                        alert("Not Allow to Enter date less than Project Date From.");
+                        alert("Not Allow to Enter date less than Project Date From. "+datefromb);
+                      }
+                      if (new Date(datefroma) > new Date(datetoa)) {
+                        alert("Not Allow to Enter date less than Project Date From. "+datefroma);
                       }
                       if (new Date(datefroma) > new Date(datetob)) {
                         document.getElementById("date_from").value= datefromb;
@@ -461,10 +464,10 @@
                   </table>
 
                     <input type="hidden" id="timesheet_attendance_vals" class="form-control s_website_form_input" name="timesheet_attendance_vals"  multiple="true" />
-                       <input id='datefromb' type="hidden"  class="form-control s_website_form_input" name="date_from" t-att-value="datefrom"  multiple="true" />
+                       <input id='datefromb' type="hidden"  class="form-control s_website_form_input" name="docsdate_from" t-att-value="datefrom"  multiple="true" />
                         <input type="hidden" id="project_id" class="form-control s_website_form_input" name="project_id" t-att-value="project.id"  multiple="true" />
                         <input type="hidden" id="partner_id" class="form-control s_website_form_input" name="partner_id" t-att-value="partner.id"  multiple="true" />
-                        <input id='datetob' type="hidden"  class="form-control s_website_form_input" name="date_to" t-att-value="dateto"  multiple="true" />
+                        <input id='datetob' type="hidden"  class="form-control s_website_form_input" name="docsdate_to" t-att-value="dateto"  multiple="true" />
 
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     

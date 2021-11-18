@@ -70,8 +70,8 @@ class CreateTimesheet(http.Controller):
             'incharge_id': request.env['hr.employee'].sudo().search([('user_id','=', http.request.env.context.get('uid'))]).id,
             'partner_id': int(kw.get('partner_id')),
             'project_id': int(kw.get('project_id')),
-            'date_from': kw.get('date_from'),
-             'date_to': kw.get('date_to'),
+            'date_from': kw.get('docsdate_from'),
+             'date_to': kw.get('docsdate_to'),
         }
         sheet_report = request.env['hr.timesheet.report'].sudo().create(vals)
         timesheet_attendance_list = ast.literal_eval(kw.get('timesheet_attendance_vals'))
