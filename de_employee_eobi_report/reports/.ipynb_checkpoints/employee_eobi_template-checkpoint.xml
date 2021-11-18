@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <report
+            id="open_employee_eobi_register_action"
+            string="Purchase Tax Register"
+            model="report.de_employee_eobi_report.computation_report"
+            report_type="qweb-pdf"
+            file="de_employee_eobi_report.computation_report"
+            name="de_employee_eobi_report.computation_report"
+        />
+    </data>
+</odoo>
