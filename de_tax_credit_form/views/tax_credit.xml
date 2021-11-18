@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="view_hr_payslip_form_inherit_credit" model="ir.ui.view">
+            <field name="name">account.hr.payslip.form.inherit.credit</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='number']" position="after">
+                        <field name="payslip_month"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+        <!--Display form view of wizard-->    
+        <record id="view_total_tax_credit_forms" model="ir.ui.view">
+            <field name="name">total.tax.credit.forms.form</field>
+            <field name="model">total.tax.credit.forms</field>
+            <field name="arch" type="xml">
+                <form string="total tax credit Form">
+                    <group>
+                        
+                      <group>
+                          <field name="tax_company_id"/>
+                           <field name="tax_period"/>
+<!--                            <field name="empl_code"/> -->
+                      </group>
+                 
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--Open the wizard on click of menu-->
+        <record id="open_total_tax_credit_action" model="ir.actions.act_window">
+            <field name="name">Tax Credit Forms 2</field>
+            <field name="res_model">total.tax.credit.forms</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_total_tax_credit_forms"/>
+        </record>
+    
+<!--     
+<menuitem action="open_total_tax_credit_action" id="new_total_tax_credit"  parent="hr_payroll.menu_hr_payroll_employees_root" sequence="3"/> -->
+
+</odoo>

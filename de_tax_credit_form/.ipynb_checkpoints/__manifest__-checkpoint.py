@@ -27,6 +27,8 @@
         'security/ir.model.access.csv',
         'wizard/tax_credit_form.xml',
         'wizard/tax_credit_forms.xml',
+        'wizard/total_tax_credit.xml',
+        'views/tax_credit.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

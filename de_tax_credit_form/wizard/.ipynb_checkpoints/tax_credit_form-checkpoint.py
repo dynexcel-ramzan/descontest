@@ -20,20 +20,42 @@ class TaxCredit(models.TransientModel):
     _description = 'Tax Credit form fo calculations'
         
     investment_amount = fields.Float(string= "Investment Amount")
-    company_id = fields.Many2one('res.partner', string="Company")
-    tax_period = fields.Date( string="Tax Period", compute='action_investment_amount')
-    emp_code = fields.Char( string="Employee Code")
+    credit_amount = fields.Float(string= "Credit Amount")
+    tax_company_id = fields.Many2one('res.company', string="Company")
+    tax_period = fields.Date( string="Tax Period")
+    empl_code = fields.Char( string="Employee")
+        
+#     empl_code = fields.Many2one('hr.employee', string="Employee",
+# #                                 related="tax_company_id.empl_code"
+#                                )
     
     
     def action_investment_amount(self):
-
-
-        tot_tax_income = self.env['hr.payslip'].search(['tax_period', '=', self.tax_period.strftime('%m-%y')])
+        incom_tax = 0
+        
+        tot_tax_income = self.env['hr.payslip'].search([('payslip_month', '=', self.tax_period.strftime('%m-%y'))])
+        
         for rule in tot_tax_income.line_ids:
             incom_tax = 0
             if rule.code == 'INC01':
                 incom_tax = rule.amount
-        UserError(strf(tax_period))
+        raise UserError(str(incom_tax))
+        
+        
+        
+    def total_tax_investment(self):
+            
+        return {
+            'name': ('Investment Tax'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'total.tax.credit.forms',
+            'view_id': False,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+#             'context': {'default_tax_company_id': self.tax_company_id.ids , 'default_tax_period': self.tax_period, 'default_emp_code': self.empl_code },
+        }
+            
             
             
             

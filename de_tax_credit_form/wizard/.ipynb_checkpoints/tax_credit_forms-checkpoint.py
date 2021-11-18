@@ -12,9 +12,12 @@ class TaxCreditForm(models.TransientModel):
     _name = 'tax.credit.forms'
     _description = 'de tax credit form'
 
-    company_id = fields.Many2one('res.partner', string="Company")
+    tax_company_id = fields.Many2one('res.company', string="Company")
     tax_period = fields.Date( string="Tax Period")
-    emp_code = fields.Char( string="Employee Code")
+    empl_code = fields.Char( string="Employee")
+#     empl_code = fields.Many2one('hr.employee', string="Employee Code",
+# #                                 related="tax_company_id.empl_code"
+#                                )
     
     
     
@@ -28,7 +31,7 @@ class TaxCreditForm(models.TransientModel):
             'view_id': False,
             'type': 'ir.actions.act_window',
             'target': 'new',
-            'context': {'default_company_id': self.company_id.ids , 'default_tax_period': self.tax_period, 'default_emp_code': self.emp_code },
+            'context': {'default_tax_company_id': self.tax_company_id.ids , 'default_tax_period': self.tax_period, 'default_emp_code': self.empl_code },
         }
     
   
