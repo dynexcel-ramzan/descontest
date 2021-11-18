@@ -43,7 +43,6 @@
                                     <thead>
                                         <tr>
                                             <th style="border: 1px solid black;">Employee Name</th>
-                                            
                                             <t t-set="todays" t-value="0"/>
                                             <t t-set="todays" t-value="(o.date_to - o.date_from).days+1"/>
                                             <t t-set="datelabel" t-value="[]"/>
@@ -52,7 +51,10 @@
                                             </t>
                                             <t t-foreach="set(datelabel)" t-as="ta">
                                                 <t t-if="datelabel">
-                                                  <th style="border: 1px solid black;"><span t-esc="(docs.date_from + datetime.timedelta(ta)).strftime('%d')"/></th>
+                                                  <th style="border: 1px solid black;">
+                                                      <span t-esc="(docs.date_from + datetime.timedelta(ta)).strftime('%b')"/>
+                                                      <span t-esc="(docs.date_from + datetime.timedelta(ta)).strftime('%d')"/>
+                                                  </th>
                                                 </t>
                                             </t>
                                             <th style="border: 1px solid black;">Total</th>
