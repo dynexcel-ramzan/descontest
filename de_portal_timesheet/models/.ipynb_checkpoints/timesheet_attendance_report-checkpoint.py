@@ -30,7 +30,7 @@ class PortalTimesheet(models.Model):
    
     
     partner_id = fields.Many2one('res.ora.client', string='Client',  required=True)
-    project_id = fields.Many2one('project.project', string='Project',  required=True)
+    project_id = fields.Many2one('ora.project.project', string='Project',  required=True)
     incharge_id = fields.Many2one('hr.employee', string='Incharge',  required=True)
     date_from = fields.Date(string='Date From')
     date_to  = fields.Date(string='Date To')

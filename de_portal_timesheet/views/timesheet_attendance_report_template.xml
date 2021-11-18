@@ -175,7 +175,6 @@
                         <div class="row">
                         <table class="table table-sm table-striped table-bordered"   id="timesheetlineTable">
 
-
                             <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
                                 <th class="text-left">Employee</th>
                                 <th class="text-left">Date From</th>
@@ -193,16 +192,10 @@
                                     <td class="date_to">
                                       <span t-esc="line.date_to"    t-options='{"widget": "date"}'/>
                                     </td>
-
                                 </tr>
-
                             </t>
-
                   </table>
                    </div>
-
-
-
                 </t>
             </t>
 
@@ -242,24 +235,7 @@
                     <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
                         <div class="container">
                             <form id="timesheetForm"  action="/project/timesheet/next"  method="post"  enctype="multipart/form-data">
-                                <div class="s_website_form_rows row s_col_no_bgcolor">
-                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
-                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity2">
-                                                <span class="s_website_form_label_content">Client</span>
-                                            </label>
-                                            <div class="col-sm">
-                                                <select  id="client" class="form-control  s_website_form_input" name="partner_id"  reqquired="1">
-                                                    <t t-foreach="partners" t-as="client">
-                                                            <option t-att-value="client.id">
-                                                                <t t-esc="client.name"/>
-                                                            </option>
-                                                     </t>
-                                                 </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
 
                                 <div class="s_website_form_rows row s_col_no_bgcolor">
@@ -404,6 +380,9 @@
                       if (new Date(datefroma) > new Date(datetoa)) {
                         alert("Not Allow to Enter date less than Project Date From. "+datefroma);
                       }
+                      if (new Date(datefroma) > new Date(datetoa)) {
+                        document.getElementById("date_to").value= datetob;
+                      } 
                       if (new Date(datefroma) > new Date(datetob)) {
                         document.getElementById("date_from").value= datefromb;
                       }

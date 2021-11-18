@@ -30,10 +30,10 @@
         'wizard/timesheet_incharge_wizard.xml',
         'views/approval_request_views.xml',
         'views/res_ora_client_views.xml',
-        'views/project_project_views.xml',
         'views/timesheet_attendance_report_views.xml',
         'views/timesheet_attendance_report_template.xml',
         'views/hr_employee_views.xml',
+        'views/ora_project_project_views.xml',
 
     ],
     # only loaded in demonstration mode

@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="view_ora_project_project_form" model="ir.ui.view">
+            <field name="name">ora.project.project.form</field>
+            <field name="model">ora.project.project</field>
+            <field name="arch" type="xml">
+                <form string="Timesheet Attendance">
+                    <sheet>
+                       <group>
+                        <group>
+                            <field name='name' />
+                             <field name='client_id' />
+                        </group>
+                        <group>
+                            <field name='code' />
+                            <field name='ora_record_id' invisible="1" />
+                        </group>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_ora_project_project_tree">
+            <field name="name">ora.project.project.tree</field>
+            <field name="model">ora.project.project</field>
+            <field name="arch" type="xml">
+                <tree string="Timesheet Report">
+                    <field name="name"/>
+					<field name="code"/>
+					<field name="client_id"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_ora_project_project_timesheet" model="ir.actions.act_window">
+            <field name="name">Project</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ora.project.project</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="view_ora_project_project_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Records Here.......
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="res_ora_project_project_menuitem"
+                  name="Project"
+                  parent="hr_timesheet.menu_hr_time_tracking"
+                  action="action_ora_project_project_timesheet"
+                  sequence="3"/>
+
+    </data>
+</odoo>

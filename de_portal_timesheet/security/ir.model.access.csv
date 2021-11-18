@@ -3,3 +3,4 @@ access_hr_timesheet_report,access.hr.timesheet.report,model_hr_timesheet_report,
 access_hr_timesheet_report_line,access.hr.timesheet.report.line,model_hr_timesheet_report_line,,1,1,1,
 access_timesheet_incharge_wizard,access.timesheet.incharge.wizard,model_timesheet_incharge_wizard,,1,1,1,
 access_res_ora_client,access.res.ora.client,model_res_ora_client,,1,1,1,1
+access_ora_project_project,access.ora.project.project,model_ora_project_project,,1,1,1,1

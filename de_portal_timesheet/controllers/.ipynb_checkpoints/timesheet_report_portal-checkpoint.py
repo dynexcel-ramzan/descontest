@@ -22,7 +22,7 @@ import json
 import ast
 
 def timesheet_page_content(flag=0):
-    projects = request.env['project.project'].search([])
+    projects = request.env['ora.project.project'].search([])
     employees = request.env['hr.employee'].sudo().search([])
     partners = request.env['res.ora.client'].sudo().search([])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
@@ -35,13 +35,13 @@ def timesheet_page_content(flag=0):
         'company_info': company_info
     }
 
-def timesheet_line_page_content(partner,project,datefrom,dateto):
-    uprojects = request.env['project.project'].search([('id','=',project)])
+def timesheet_line_page_content(project,datefrom,dateto):
+    uprojects = request.env['ora.project.project'].search([('id','=',project)])
     employees = request.env['hr.employee'].sudo().search([('timesheet_incharge_id.user_id','=',http.request.env.context.get('uid'))])
-    upartners = request.env['res.ora.client'].sudo().search([('id','=',partner)])
+    upartner = request.env['res.ora.client'].search([('id','=',uprojects.client_id.id)])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
     return {
-        'partner': upartners,
+        'partner': upartner,
         'project': uprojects,
         'emps': employees,
         'datefrom': datefrom,
@@ -58,11 +58,10 @@ class CreateTimesheet(http.Controller):
 
     @http.route('/project/timesheet/next', type="http", auth="public", website=True)
     def project_timesheet_next_forms(self, **kw):
-        partner = int(kw.get('partner_id'))
         project = int(kw.get('project_id'))
         datefrom = kw.get('date_from')
         dateto = kw.get('date_to')
-        return request.render("de_portal_timesheet.portal_create_timesheet_report_lines", timesheet_line_page_content(partner,project,datefrom,dateto))
+        return request.render("de_portal_timesheet.portal_create_timesheet_report_lines", timesheet_line_page_content(project,datefrom,dateto))
 
     @http.route('/project/timesheet/line/save', type="http", auth="public", website=True)
     def project_timesheet_submit_forms(self, **kw):
