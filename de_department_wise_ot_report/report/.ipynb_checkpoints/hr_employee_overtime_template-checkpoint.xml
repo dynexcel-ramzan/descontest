@@ -117,39 +117,24 @@
                              </div>  
                     </div>
                     
-                     <table class="table">
+                     <table class="table" >
                             <tr style="color:blue">
-                                <th style="border: 1px solid black;"  width="500">Department</th>
-                                <th style="border: 1px solid black;" scope="col" width="50">Sr No</th>
-                                <th style="border: 1px solid black;" scope="col" width="80">Emp.Code</th>
-                                <th  style="border: 1px solid black;" scope="col" width="300">Name:</th>
-                                <th style="border: 1px solid black;" scope="col" width="300">Designation</th>
+                                <th style="border: 1px solid black; height: auto; font-size: 10px" class="text-center">Department</th>
+                                <th style="border: 1px solid black; font-size: 10px " scope="col" width="50" class="text-center">Sr No</th>
+                                <th style="border: 1px solid black;  font-size: 10px" scope="col" width="80" class="text-center">Emp.Code</th>
+                                <th  style="border: 1px solid black; font-size: 10px" scope="col" width="100" class="text-center">Name:</th>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center">Designation</th>
                                 
-                                <th style="border: 1px solid black;" scope="col" width="100" colspan="2">System<br/>Mins  &#160;  &#160; &#160;    &#160;  &#160; &#160; Hours </th>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="300" colspan="2" class="text-center" >System<br/>Mins  &#160; Hours </th>
                               
                                 
-                              
-                                <th style="border: 1px solid black;" scope="col" width="200">Feeded
-                                <table class="table">
-                                    <tr style="color:blue">
-                                        <th>Mins</th>
-                                        <th>Hours</th>
-                                    </tr>
-                                    </table>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="300" colspan="2" class="text-center" >Feeded<br/>Mins  &#160; Hours </th>
                                 
-                                </th>
-                                <th style="border: 1px solid black;" scope="col" width="200">Overtime
-                                <table class="table">
-                                    <tr style="color:blue">
-                                        <th>Mins</th>
-                                        <th>Hours</th>
-                                    </tr>
-                                 </table>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="300" colspan="2" class="text-center" >Overtime<br/>Mins  &#160; Hours </th>
                                 
                                 
-                                </th>
-                                <th style="border: 1px solid black;" scope="col" width="50">Diff Mins</th>
-                               <th style="border: 1px solid black;" scope="col" width="80">Payable Hours</th>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="50" class="text-center">Diff Mins</th>
+                               <th style="border: 1px solid black; font-size: 10px" scope="col" width="80" class="text-center">Payable Hours</th>
                       </tr>
 
                           <t t-foreach="docs.department_ids"  t-as="dep">
@@ -189,7 +174,7 @@
                                 
                               
                               
-                                <td style="border-left: 1px solid black;">
+                                <td style="border-left: 1px solid black; font-size: 10px" width="300">
                                   
                                     <t t-if='dep_count==0'>
                                       <span t-field="employee.department_id.name"/>
@@ -198,22 +183,19 @@
                              
                                 
                                 
-                                <td style="border: 1px solid black;" width="50"><t t-esc="sr_no"/></td>
-                                <td style="border: 1px solid black;" scope="col" width="80"> <span t-field="employee.barcode"/></td>
-                                <td style="border: 1px solid black;" scope="col" width="300"> <span t-field="employee.name"/></td>
-                                <td style="border: 1px solid black;" scope="col" width="300"> <span t-field="employee.grade_designation"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" width="50" class="text-center"><t t-esc="sr_no"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="80" class="text-center"> <span t-field="employee.barcode"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-field="employee.name"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-field="employee.grade_designation"/></td>
                                
                                 
 
                                 <t t-set='str_hour_mint' t-value='str(system_hours).split(".")'/>
                                 <t t-set='tot_min_system' t-value="tot_min_system + int(str_hour_mint[1])"/>
-                            
                                 <t t-set='tot_hours_system' t-value="tot_hours_system + int(str_hour_mint[0])"/>
 
-                                <td style="border: 1px solid black;" scope="col" width="50">
-                                    <span t-esc= "str_hour_mint[1]"/>
-                                 </td> 
-                                  <td style="border: 1px solid black;" scope="col" width="50">
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="50" class="text-center"><span t-esc= "str_hour_mint[1]"/></td> 
+                                  <td style="border: 1px solid black; font-size: 10px" scope="col" width="50" class="text-center">
                                     <span t-esc= "str_hour_mint[0]"/>
                                  </td> 
                                         
@@ -222,83 +204,60 @@
                                 
                                 
                                 <t t-set='str_hour_feed' t-value='str(feeded_hours).split(".")'/>
-                                
-                                <td style="border: 1px solid black;" scope="col" width="50">
-                                <table class="table">
-                                    <tr style="color:blue">
-                                <td scope="col" width="100"> <span t-esc= "str_hour_feed[1]"/>
                                 <t t-set='tot_feeded_min' t-value="tot_feeded_min + int(str_hour_feed[1])"/>
-                                </td>
-                                <td scope="col" width="100"> <span t-esc= "str_hour_feed[0]"/> </td>
                                 <t t-set='tot_feeded_hours' t-value="tot_feeded_hours + int(str_hour_feed[0])"/>
-                                    </tr>
-                                </table>
-                                </td>
+                                
+                                
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="50"> <span t-esc= "str_hour_feed[1]"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="50"> <span t-esc= "str_hour_feed[0]"/> </td>
+
+                                
+                                
+                                
                                 
                                 
                                 
                                 <t t-set='str_hour_overtime' t-value='str(overtime).split(".")'/>
+                                <t t-set='tot_overtime_min' t-value="tot_overtime_min + int(str_hour_overtime[1])"/>
+                                <t t-set='tot_overtime_hours' t-value="tot_overtime_hours + int(str_hour_overtime[0])"/>
                                 
-                                <td style="border: 1px solid black;" scope="col" width="100">
-                                <table class="table">
-                                    <tr style="color:blue">
-                                <td scope="col" width="100"> <span t-esc= "str_hour_overtime[1]"/> 
-                                </td>
-                                <td scope="col" width="100"> <span t-esc= "str_hour_overtime[0]"/> </td>
-                                    </tr>
-                                </table>
-                                </td>
+                                
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="50"> <span t-esc= "str_hour_overtime[1]"/> </td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="50"> <span t-esc= "str_hour_overtime[0]"/> </td>
+
+                             
+
                                 
                     
                                 
                                 <t t-set='str_hour_difference' t-value='str(system_hours).split(".")'/>
-                                <td  style="border: 1px solid black;" scope="col" width="100"> <span t-esc= "str_hour_difference[1]"/> </td>
-                                <t t-set='tot_overtime_min' t-value="tot_overtime_min + int(str_hour_difference[1])"/>
+                                <td  style="border: 1px solid black; font-size: 10px" scope="col" width="100"> <span t-esc= "str_hour_difference[1]"/> </td>
 
-                                
+                                 
                                 <t t-set='str_payable_difference' t-value='str(overtime).split(".")'/>
-                                <td  style="border: 1px solid black;" scope="col" width="100"> <span t-esc= "str_payable_difference[0]"/> </td>
-                                <t t-set='tot_overtime_hours' t-value="tot_overtime_hours + int(str_payable_difference[0])"/>
+                                <td  style="border: 1px solid black; font-size: 10px" scope="col" width="100"> <span t-esc= "str_payable_difference[0]"/> </td>
 
-                          </tr>
+                            </tr>
                                  <t t-set='dep_count' t-value='dep_count + 1'/>
                              </t>
                         <tr style="color:blue">
-                                        <td style="border-bottom: 1px solid black; border-left: 1px solid black;"></td>
-                                        <td style="border-bottom: 1px solid black;"></td>
-                                        <td style="border-bottom: 1px solid black;"></td>
-                                        <td style="border-bottom: 1px solid black;" > </td>
-                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">Total</td>
-                           <td style="border: 1px solid black;">
-                               <table>
-                                   <tr>
-                               
-                                        <td><span t-esc= "tot_min_system"/> </td>
-                                       <td><span t-esc= "tot_hours_system"/> </td>
-                                   </tr>
-                               </table>
-                            </td>
-                                
-                            <td style="border: 1px solid black;">
-                               <table>
-                                   <tr>
-                               
-                                        <td><span t-esc= "tot_feeded_min"/> </td>
-                                       <td><span t-esc= "tot_feeded_hours"/> </td>
-                                   </tr>
-                               </table>
-                            </td>
+                                        <td style="border-bottom: 1px solid black; font-size: 10px; border-left: 1px solid black;"></td>
+                                        <td style="border-bottom: 1px solid black; font-size: 10px"></td>
+                                        <td style="border-bottom: 1px solid black; font-size: 10px"></td>
+                                        <td style="border-bottom: 1px solid black; font-size: 10px" > </td>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black; font-size: 10px">Total</td>
+                            <td style="border: 1px solid black; font-size: 10px"><span t-esc= "tot_min_system"/></td>
+                            <td style="border: 1px solid black; font-size: 10px"><span t-esc= "tot_hours_system"/> </td>
+                            <td style="border: 1px solid black; font-size: 10px"><span t-esc= "tot_feeded_min"/></td>
+                            <td style="border: 1px solid black; font-size: 10px"><span t-esc= "tot_feeded_hours"/> </td>
+
+                             
                             
                             
-                            <td style="border: 1px solid black;">
-                               <table>
-                                   <tr>
-                               
-                                        <td><span t-esc= "tot_overtime_min"/> </td>
-                                       <td><span t-esc= "tot_overtime_hours"/> </td>
-                                   </tr>
-                               </table>
-                            </td>
+                            <td style="border: 1px solid black; font-size: 10px"><span t-esc= "tot_overtime_min"/></td>
+                            <td style="border: 1px solid black; font-size: 10px"><span t-esc= "tot_overtime_hours"/> </td>
+
+                              
                             
                             
                             
@@ -306,11 +265,8 @@
                             
                             
                             
-                            
-                            
-                            
-                                        <td style="border-bottom: 1px solid black;" ></td>
-                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;"></td>
+                            <td style="border-bottom: 1px solid black; font-size: 10px" ></td>
+                            <td style="border-right: 1px solid black; border-bottom: 1px solid black; font-size: 10px"></td>
 
                         </tr> 
                          </t>
