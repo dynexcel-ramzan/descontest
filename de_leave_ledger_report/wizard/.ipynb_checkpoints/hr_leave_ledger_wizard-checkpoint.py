@@ -14,17 +14,17 @@ class LeaveLedger(models.TransientModel):
     date_from = fields.Date(string='Start Date', required=True)
     date_to = fields.Date(string='End Date', required=True)
     sorted_by = fields.Char(string='Sorted by')
-    company_id = fields.Many2many('res.company', string='Company')
+    company_ids = fields.Many2many('res.company', string='Company')
    
 
     
     def check_report(self):
         data = {}
-        data['form'] = self.read(['department_ids','employee_type_id','section_ids','date_from','date_to','sorted_by'])[0]
+        data['form'] = self.read(['department_ids','employee_type_id','section_ids','date_from','date_to','sorted_by','company_ids'])[0]
         return self._print_report(data)
 
     def _print_report(self, data):
-        data['form'].update(self.read(['department_ids','employee_type_id','section_ids','date_from','date_to','sorted_by',])[0])
+        data['form'].update(self.read(['department_ids','employee_type_id','section_ids','date_from','date_to','sorted_by','company_ids',])[0])
         return self.env.ref('de_leave_ledger_report.open_hr_leave_ledger_action').report_action(self, data=data, config=False)
         
         

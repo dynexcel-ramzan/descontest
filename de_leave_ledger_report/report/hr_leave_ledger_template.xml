@@ -6,7 +6,7 @@
                 <t t-call="de_leave_ledger_report.leave_report_layout"/>
                 <div class="page">
                      <div class="row">
-                             <div class="col-4" style="font-size:8px">
+                             <div class="col-3" style="font-size:10px">
                                  <table >
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
@@ -16,7 +16,7 @@
                                      </tbody>
                                  </table>
                              </div>
-                     <div class="col-4" style="font-size:8px">
+                     <div  style="font-size:10px">
                                  <table>
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;" >
@@ -26,7 +26,7 @@
                                      </tbody>
                                  </table>
                              </div>
-                     <div class="col-4" style="font-size:8px">
+<!--                      <div class="col-2" style="font-size:10px">
                                  <table >
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
@@ -35,12 +35,23 @@
                                          </tr>
                                      </tbody>
                                  </table>
-                             </div>  
+                             </div> 
+                         <div class="col-2" style="font-size:10px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td> </td>
+                                              
+                                         </tr>
+                                     </tbody>
+                                 </table> -->
+                           
                         </div>
+                       
                     
                     
                     <div class="row">
-                             <div class="col-4" style="font-size:8px">
+                             <div class="col-3" style="font-size:10px">
                                  <table >
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
@@ -54,7 +65,7 @@
                                      </tbody>
                                  </table>
                              </div>
-                     <div class="col-4" style="font-size:8px">
+                     <div class="col-3" style="font-size:10px">
                          <table>
                                 <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
@@ -64,7 +75,7 @@
                                 </tbody>
                          </table>
                              </div>
-                     <div class="col-3" style="font-size:8px">
+                     <div class="col-3" style="font-size:9px">
                                  <table >
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;" >
@@ -88,25 +99,53 @@
                                  </table>
                              </div>
                         </div>
-                    <table class="table"  style="border: 1px solid black;" >
-                            <tr style="border: 1px solid black; color:blue">
-                                <th style="font-size: 8px" class="text-center">Date</th>
-                                <th style="font-size: 8px " scope="col" width="300">Activity Name</th>
-                                <th style="font-size: 8px" scope="col" width="60" class="text-center">Reason</th>
-                                <th  style="font-size: 8px" scope="col" width="80" class="text-center">Status</th>
-                                <th style="font-size: 8px" scope="col" width="200" class="text-center">Approved By</th>
+                    <br/>
+            
+                    <table class="table" >
+                        <tbody  style="border: 1px solid black;">
+                            <tr style="color:blue">
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">Date</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold; " scope="col" width="300">Activity Name</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="60" class="text-center">Reason</th>
+                                <th  style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="80" class="text-center">Status</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="200" class="text-center">Approved By</th>
                                 
-                                <th style="font-size: 8px" scope="col" width="200" class="text-center" >Approved Date</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="200" class="text-center" >Approved Date</th>
                               
                                 
-                                <th style="font-size: 8px" scope="col" width="200" class="text-center" >Start</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="200" class="text-center" >Start</th>
                                 
-                                <th style="font-size: 8px" scope="col" width="400" colspan="2" >End Date</th>
+                                <th style="border-top: 1px solid black; font-size: 7px; font-weight: bold;" scope="col" width="300" colspan="2" >End Date</th>
                                 
                                 
-                                <th style="font-size: 8px" scope="col" width="50" class="text-center">Leaves</th>
-                               <th style="font-size: 8px" scope="col" width="60" class="text-center">Balance</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="50" class="text-center">Leaves</th>
+                               <th style="border-top: 1px solid black; font-size: 8px;font-weight: bold;" scope="col" width="60" class="text-center">Balance</th>
                       </tr>
+                      
+                        <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black" ><span t-field="docs.employee_type_id.emp_number"/></td>
+                        <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black"><span t-field="docs.employee_type_id"/></td>
+                            
+                    
+                            
+<!--                             <t t-foreach="docs.company_ids"  t-as="dep">
+                            
+                            
+                                                         
+                            <t t-foreach="request.env['hr.leave.type'].search(['company_ids','=',dep.company_id])"  t-as="lv_typ">
+                                <span t-field="lv_typ.display_name"/><br/>
+                                
+                                
+                                
+                                </t> -->
+                                
+<!--                             </t> -->
+                              
+                              
+
+                              
+                              
+                            </tbody>
+
                     </table>
                         
                         

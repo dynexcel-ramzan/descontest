@@ -18,7 +18,7 @@
                         <field name="section_ids" widget='many2many_tags'/>
                         <field name="sorted_by"/>
                         <field name="date_to"/>
-                          <field name ="company_id" widget='many2many_tags'/>
+                          <field name ="company_ids" widget='many2many_tags'/>
 
 
                       </group>                        
