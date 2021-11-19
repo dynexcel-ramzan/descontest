@@ -1,0 +1,13 @@
+<odoo>
+  <data>
+        <report 
+            id="open_hr_leave_ledger_action"
+            string="Leave Ledger Report"
+            model="report.de_leave_ledger_report.leave_ledger_report"
+            report_type="qweb-pdf"
+            file="de_leave_ledger_report.leave_ledger_report"
+            name="de_leave_ledger_report.leave_ledger_report"
+        />
+     
+  </data>
+</odoo>

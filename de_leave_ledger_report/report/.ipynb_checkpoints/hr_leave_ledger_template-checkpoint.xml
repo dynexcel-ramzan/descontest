@@ -1,0 +1,136 @@
+<odoo>
+    <template id="leave_ledger_report">
+      <t t-call="web.html_container">
+             <t t-foreach="docs" t-as="docs">
+                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-call="de_leave_ledger_report.leave_report_layout"/>
+                <div class="page">
+                     <div class="row">
+                             <div class="col-4" style="font-size:8px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Department:</td>
+                                             <td><span t-field=" docs.department_ids"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:8px">
+                                 <table>
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td >Employee:</td>
+                                             <td><span t-field=" docs.employee_type_id"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:8px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td> </td>
+                                              
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>  
+                        </div>
+                    
+                    
+                    <div class="row">
+                             <div class="col-4" style="font-size:8px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                            <td>Section: </td>
+                                              <td>
+                                                  <t t-foreach="docs.section_ids"  t-as="dep">
+                                                  <span t-field="dep.name"/>
+                                                </t>   
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:8px">
+                         <table>
+                                <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Start Date :</td>
+                                             <td><span t-field=" docs.date_from"/></td>
+                                         </tr>
+                                </tbody>
+                         </table>
+                             </div>
+                     <div class="col-3" style="font-size:8px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td >End Date:</td>
+                                             <td><span t-field=" docs.date_to"/></td>
+
+                                         </tr>
+                                     </tbody>
+                                     
+                                 </table>
+                             </div>  
+                             <div class="col-1" style="font-size:8px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr>
+                                             <td>Sorted by</td>
+                                             <td><span t-field="docs.sorted_by"/></td>
+                                         </tr>
+                                    
+                                     </tbody>
+                                 </table>
+                             </div>
+                        </div>
+                    <table class="table"  style="border: 1px solid black;" >
+                            <tr style="border: 1px solid black; color:blue">
+                                <th style="font-size: 8px" class="text-center">Date</th>
+                                <th style="font-size: 8px " scope="col" width="300">Activity Name</th>
+                                <th style="font-size: 8px" scope="col" width="60" class="text-center">Reason</th>
+                                <th  style="font-size: 8px" scope="col" width="80" class="text-center">Status</th>
+                                <th style="font-size: 8px" scope="col" width="200" class="text-center">Approved By</th>
+                                
+                                <th style="font-size: 8px" scope="col" width="200" class="text-center" >Approved Date</th>
+                              
+                                
+                                <th style="font-size: 8px" scope="col" width="200" class="text-center" >Start</th>
+                                
+                                <th style="font-size: 8px" scope="col" width="400" colspan="2" >End Date</th>
+                                
+                                
+                                <th style="font-size: 8px" scope="col" width="50" class="text-center">Leaves</th>
+                               <th style="font-size: 8px" scope="col" width="60" class="text-center">Balance</th>
+                      </tr>
+                    </table>
+                        
+                        
+                       
+                    
+                           
+                            
+                    
+                     
+                    
+                    
+                    
+
+
+                 </div>
+                 
+                 </div>
+                 
+                 
+                 
+                 
+                 
+       </t>
+        </t>
+    
+    </template>
+</odoo>
