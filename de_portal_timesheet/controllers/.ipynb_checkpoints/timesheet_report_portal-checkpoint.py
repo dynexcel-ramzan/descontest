@@ -22,7 +22,7 @@ import json
 import ast
 
 def timesheet_page_content(flag=0):
-    projects = request.env['ora.project.project'].search([])
+    projects = request.env['project.project'].sudo().search([('ora_enabled','=', True)])
     employees = request.env['hr.employee'].sudo().search([])
     partners = request.env['res.ora.client'].sudo().search([])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
@@ -36,9 +36,9 @@ def timesheet_page_content(flag=0):
     }
 
 def timesheet_line_page_content(project,datefrom,dateto):
-    uprojects = request.env['ora.project.project'].search([('id','=',project)])
+    uprojects = request.env['project.project'].sudo().search([('id','=',project)])
     employees = request.env['hr.employee'].sudo().search([('timesheet_incharge_id.user_id','=',http.request.env.context.get('uid'))])
-    upartner = request.env['res.ora.client'].search([('id','=',uprojects.client_id.id)])
+    upartner = request.env['res.ora.client'].search([('id','=',uprojects.ora_client_id.id)])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
     return {
         'partner': upartner,
