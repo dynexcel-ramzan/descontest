@@ -12,12 +12,24 @@ class TaxCreditForm(models.TransientModel):
     _name = 'tax.credit.forms'
     _description = 'de tax credit form'
 
-    tax_company_id = fields.Many2one('res.company', string="Company")
+    company_id = fields.Many2one('res.company', string="Company")
     tax_period = fields.Date( string="Tax Period")
     empl_code = fields.Char( string="Employee")
-#     empl_code = fields.Many2one('hr.employee', string="Employee Code",
-# #                                 related="tax_company_id.empl_code"
-#                                )
+    employee_id = fields.Many2one('hr.employee', string="Employee",
+                                domain="[('company_id.id','=',company_id)]")
+    
+
+    
+#      def taxable_income(self):
+#             wage = 0
+#             benefit = 0
+            
+#              tot_tax_income = self.env['hr.contract'].search([('wage', '=', self.investment_amount)])
+#              wage = tot_tax_income.wage
+#             for f in tot_tax_income.benefit_line_ids:
+#                 benfit = f.amount + benfit
+                
+#             return wage + benefit
     
     
     
@@ -31,6 +43,6 @@ class TaxCreditForm(models.TransientModel):
             'view_id': False,
             'type': 'ir.actions.act_window',
             'target': 'new',
-            'context': {'default_tax_company_id': self.tax_company_id.ids , 'default_tax_period': self.tax_period, 'default_emp_code': self.empl_code },
+            'context': {'default_company_id': self.company_id.ids , 'default_tax_period': self.tax_period, 'default_employee_id': self.employee_id.id },
         }
         

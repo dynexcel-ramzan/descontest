@@ -14,14 +14,14 @@
                          <field name="credit_amount"/>
                       </group>
                         <group>
-                          <field name="tax_company_id" readonly="1"/>
+                          <field name="company_id" readonly="1"/>
                            <field name="tax_period" readonly="1" />
-                           <field name="empl_code" readonly="1" />
+                           <field name="employee_id" readonly="1" />
                       </group>
                         <footer>
  <button string='Calculate ' name="action_investment_amount" type="object" default_focus="1" class="oe_highlight"/>
                             
-<!-- <button string='Calculate Tax Credit' name="total_tax_investment" type="object" default_focus="1" class="oe_highlight"/> -->
+<button string='Calculate Tax Credit' name="total_tax_investment" type="object" default_focus="1" class="oe_highlight"/>
                     </footer>
                          <group>
                       </group>
@@ -40,7 +40,7 @@
         </record>
     
      
- <menuitem action="open_computation_tax_register_action" id="new_computation_tax_report"  sequence="3"/>
-          
+<!--  <menuitem action="open_computation_tax_register_action" id="new_computation_tax_report"  sequence="3"/>
+           -->
 
 </odoo>

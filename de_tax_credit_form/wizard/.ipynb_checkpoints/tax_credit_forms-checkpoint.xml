@@ -9,9 +9,9 @@
                     <group>
                         
                       <group>
-                          <field name="tax_company_id"/>
+                          <field name="company_id"/>
                            <field name="tax_period"/>
-                           <field name="empl_code"/>
+                           <field name="employee_id"/>
                       </group>
                  
                     </group>
@@ -25,14 +25,14 @@
 
         <!--Open the wizard on click of menu-->
         <record id="open_tax_credit_forms_action" model="ir.actions.act_window">
-            <field name="name">Tax Credit Forms 1</field>
+            <field name="name">Tax Credit Investment</field>
             <field name="res_model">tax.credit.forms</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
             <field name="view_id" ref="view_tax_credit_forms"/>
         </record>
     
-    
-     <menuitem action="open_tax_credit_forms_action" id="new_tax_credit"  parent="hr_payroll.menu_hr_payroll_employees_root" sequence="3"/>
+<!--     
+     <menuitem action="open_tax_credit_forms_action" id="new_tax_credit"  parent="hr_payroll.menu_hr_payroll_employees_root" sequence="3"/> -->
 
 </odoo>

@@ -20,10 +20,11 @@ class TaxCredit(models.TransientModel):
     _description = 'Tax Credit form fo calculations'
         
     investment_amount = fields.Float(string= "Investment Amount")
-    credit_amount = fields.Float(string= "Credit Amount")
-    tax_company_id = fields.Many2one('res.company', string="Company")
+    credit_amount = fields.Float(string= "Installment Amount")
+    company_id = fields.Many2one('res.company', string="Company")
     tax_period = fields.Date( string="Tax Period")
-    empl_code = fields.Char( string="Employee")
+    employee_id = fields.Many2one('hr.employee', string="Employee Code",
+                                domain="[('company_id.id','=',company_id.id)]") 
         
 #     empl_code = fields.Many2one('hr.employee', string="Employee",
 # #                                 related="tax_company_id.empl_code"

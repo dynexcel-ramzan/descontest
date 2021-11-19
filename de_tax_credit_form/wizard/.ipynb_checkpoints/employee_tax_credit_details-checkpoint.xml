@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+        <!--Display form view of wizard-->    
+        <record id="view_tax_credit_details" model="ir.ui.view">
+            <field name="name">tax.credit.details.form</field>
+            <field name="model">tax.credit.details</field>
+            <field name="arch" type="xml">
+                 <t t-foreach="docs" t-as="doc">
+                <form string="Tax Credit Details">
+                             <table class="table">
+                            <tr>
+                                 <th scope="col">Company:
+                                 <td>
+                                     <field name="company_id"/>
+                                </td>
+                                </th>
+                                <th scope="col">Period:
+                                    <td>
+                                        <field name="date_from"/>
+                                    </td>
+                                </th>
+                           <th scope="col">Emp Code:
+                                <td>
+                                    <field name="emp_number"/>
+                                    </td>
+                                </th>
+                            </tr>
+                        </table>
+                    
+                    <notebook>
+                   <page string="Tax credit details">
+                
+                    <br/>
+                 <table class="table"> 
+                   
+                <thead class="thead-light">
+                      <tr>
+    
+                           <th scope="col">Emp code</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Period</th>
+                            <th scope="col">Reason</th>
+                             <th scope="col">Cal.Inc Tax</th>
+                            <th scope="col">Carry forward amount</th>
+                             <th scope="col">Current month amount</th>
+                             <th scope="col">Month Distribution</th>
+                             <th scope="col">Debit amount</th>
+                             <th scope="col">Credit/Debit type</th>
+                             <th scope="col">Post</th>
+                        </tr>
+              </thead>
+             <tbody>
+<!--                    <field name="company_id"/>
+                  <field name="empl_code"/>
+                  <field name="emp_number"/>
+                  <field name="date_from" />
+                  <field name="empl_code" /> -->
+                      <tr>
+                           <td>
+                           <field name="company_id"/>
+                           </td>
+                            <td>
+                           <field name="empl_code"/>
+                           </td>
+                           <td>
+                           <field name="emp_number"/>
+                           </td>
+                            <td>
+                            <field name="date_from" />
+                            </td>
+                           <td>
+                            <field name="empl_code" />
+                            </td>
+                           <td>
+                            <field name="empl_code" />
+                            </td>
+                           <td>
+                            <field name="empl_code" />
+                            </td>
+                            <td>
+                            <field name="empl_code" />
+                            </td>
+                            <td>
+                            <field name="empl_code" />
+                            </td>
+                            <td>
+                            <field name="empl_code" />
+                            </td>
+                            <td>
+                            <field name="empl_code" />
+                            </td>
+                        </tr>
+          
+
+                </tbody>
+               </table>
+                </page>
+                </notebook>
+                    
+      
+                   
+
+                    
+<!--                        <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                   
+                        </tr>
+                    </thead>
+                             <tbody style="color:black">
+                     <t t-foreach="employees" t-as="emp">
+                    <tr>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.name"/>
+                        </td>
+                       
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.emp_number"/>
+                        </td>
+                         <td style="border: 1px solid black;">
+                             <t t-esc="emp.parent_id.name"/>
+                        </td>
+                   
+                        <td style="border: 1px solid black;">
+                             <t t-esc="emp.company_id.name"/>
+                        </td>
+                     </tr>
+                     </t>
+                    </tbody>
+
+                    </table> -->
+   
+                    <group>
+                    </group>
+                </form>
+                </t>
+            </field>
+        </record>
+
+        <!--Open the wizard on click of menu-->
+        <record id="open_tax_credit_details_action" model="ir.actions.act_window">
+            <field name="name">Tax Credit details</field>
+            <field name="res_model">tax.credit.details</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_tax_credit_details"/>
+        </record>
+    
+    
+     <menuitem action="open_tax_credit_details_action" id="new_tax_credit_details"  parent="hr_payroll.menu_hr_payroll_employees_root" sequence="3"/>
+
+</odoo>
+
+
+<!--                       <group>
+                          <field name="company_id"/>
+                           <field name="tax_period"/>
+                           <field name="employee_id"/>
+                      </group>
+                  -->

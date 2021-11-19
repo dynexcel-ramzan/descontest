@@ -2,3 +2,5 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 tax_credit,tax.credit,model_tax_credit,,1,1,1,1 
 tax_credit_forms,tax.credit.forms,model_tax_credit_forms,,1,1,1,1
 total_tax_credit_forms,total.tax.credit.forms,model_total_tax_credit_forms,,1,1,1,1
+tax_credit_details,tax.credit.details,model_tax_credit_details,,1,1,1,1
+tax_credit_details_lines,tax.credit.details.lines,model_tax_credit_details_lines,,1,1,1,1
