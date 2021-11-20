@@ -550,10 +550,7 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 20, bank_account, format3)
                 sheet.write(row, 21, str(total_days if total_days>0 else '-'), format3)
                 sheet.write(row, 22, str(round(over_time_works,2) if over_time_works>0 else '-'), format3)
-                
-                sheet.write(row, 23, str(round(basic_salry,2) if basic_salry>0 else '-'), format3)
-                if House_rent>0:
-                    
+                sheet.write(row, 23, str(round(basic_salry,2) if basic_salry>0 else '-'), format3)     
                 sheet.write(row, 24, str(round(House_rent,2) if House_rent>0 else '-'), format3)
                 sheet.write(row, 25, str(round(Conv_allown,2) if Conv_allown>0 else '-'), format3)
                 sheet.write(row, 26, str(round(Utilities_bills,2) if Utilities_bills>0 else '-'), format3)
@@ -569,7 +566,6 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 36, str(round(Overtime,2) if Overtime>0 else '-'), format3)
                 sheet.write(row, 37, str(round(Site_All,2) if Site_All>0 else '-'), format3)
                 sheet.write(row, 38, str(round(Food_Acc_Allowance,2) if Food_Acc_Allowance>0 else '-'), format3)
-        
                 sheet.write(row, 39, str(round(Mobile_All,2) if Mobile_All>0 else '-'), format3)
                 sheet.write(row, 40, str(round(Incentive,2) if Incentive>0 else '-'), format3)
                 sheet.write(row, 41, str(round(Off_Site_All,2) if Off_Site_All>0 else '-'), format3)
