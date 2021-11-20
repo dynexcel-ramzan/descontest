@@ -31,12 +31,12 @@ class GenerateXLSXReport(models.Model):
         sheet.write(3, 15, 'Emp Type', format1)
         sheet.write(3, 16, 'Nic No.', format1)
         sheet.write(3, 17, 'Ipl Variable Cost', format1)
-        sheet.write(3, 18, 'Act Gross', format1)
+        sheet.write(3, 18, 'Base Salary', format1)
         sheet.write(3, 19, 'Bank Name', format1)
         sheet.write(3, 20, 'Bank Account', format1)
         sheet.write(3, 21, 'Days', format1)
         sheet.write(3, 22, 'Ot Hours', format1)
-        sheet.write(3, 23, 'Basic Salry', format1)
+        sheet.write(3, 23, 'Current Month Salary', format1)
         sheet.write(3, 24, 'Hr', format1)
         sheet.write(3, 25, 'conv', format1)
         sheet.write(3, 26, 'Util', format1)
@@ -193,7 +193,7 @@ class GenerateXLSXReport(models.Model):
         for id in lines:
             if id.date_end:
                 date_end = id.date_end
-                date_end = date_end.strftime("%d/%m/%Y")
+                date_end = date_end.strftime("%b-%y")
             else:
                 date_end = None
             payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name)])
@@ -306,9 +306,14 @@ class GenerateXLSXReport(models.Model):
                         Income_tax = payslip_line.amount 
                         tot_Income_tax += Income_tax
                 for gros_line in payroll.line_ids:
-                    if gros_line.category_id.code in ('BASIC', 'ALW'):
-        
-                        tot_Gross += gros_line.amount
+                    if gros_line.category_id.code == 'GROSS':
+                        gross = gros_line.amount
+
+                        tot_Gross += gross
+                        
+                        
+                        
+                        
                 for absent_days in payroll.worked_days_line_ids:
                     if absent_days.work_entry_type_id.code == 'ABSENT100':
                         absent_amount = absent_days.amount
@@ -520,11 +525,12 @@ class GenerateXLSXReport(models.Model):
                 contract = self.env['hr.contract'].search([('employee_id','=',employee.id)], limit=1)  
                 for cost_line in contract.cost_center_information_line:
                     cost_account = cost_line.cost_center.name
+                    cost_center = cost_line.cost_center.code
                 sheet.set_column('A:A', 5,)
                 sheet.write(row, 0, sr_no, format3)
                 sheet.write(row, 1, company, format2)
                 sheet.write(row, 2, location, format2)
-                sheet.write(row, 3, employee.company_id.segment1, format3)
+                sheet.write(row, 3, cost_center, format3)
                 sheet.write(row, 4, cost_account, format2)
                 sheet.write(row, 5, department, format2)
                 sheet.write(row, 6, date_end, format2)
@@ -544,13 +550,16 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 20, bank_account, format3)
                 sheet.write(row, 21, str(total_days if total_days>0 else '-'), format3)
                 sheet.write(row, 22, str(round(over_time_works,2) if over_time_works>0 else '-'), format3)
+                
                 sheet.write(row, 23, str(round(basic_salry,2) if basic_salry>0 else '-'), format3)
+                if House_rent>0:
+                    
                 sheet.write(row, 24, str(round(House_rent,2) if House_rent>0 else '-'), format3)
                 sheet.write(row, 25, str(round(Conv_allown,2) if Conv_allown>0 else '-'), format3)
                 sheet.write(row, 26, str(round(Utilities_bills,2) if Utilities_bills>0 else '-'), format3)
                 sheet.write(row, 27, str(round(Car_allown,2) if Car_allown>0 else '-'), format3)
                 sheet.write(row, 28, str(round(special_allown,2) if special_allown>0 else '-'), format3)
-                sheet.write(row, 29, str(round(absent_amount,2) if absent_amount>0 else '-'),format3)
+                sheet.write(row, 29, str(round(gross,2) if gross>0 else '-'),format3)
                 sheet.write(row, 30, str(round(accomadation_allwn,2) if accomadation_allwn>0 else '-'), format3)
                 sheet.write(row, 31, str(round(salry_allown,2) if salry_allown>0 else '-'), format3)
                 sheet.write(row, 32, str(round(washing,2) if washing>0 else '-'), format3)
