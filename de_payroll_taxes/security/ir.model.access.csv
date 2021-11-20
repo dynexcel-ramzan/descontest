@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_income_tax,access.hr.income.tax,model_hr_income_tax,,1,1,1,1
+access_hr_tax_credit,access.hr.tax.credit,model_hr_tax_credit,,1,1,1,1
