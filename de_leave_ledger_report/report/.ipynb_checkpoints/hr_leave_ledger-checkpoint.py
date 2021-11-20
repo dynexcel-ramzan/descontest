@@ -19,10 +19,17 @@ class LeaveLedgerReport(models.AbstractModel):
     
     
     def _get_report_values(self, docids, data=None):
+        
         model = self.env.context.get('active_model')
         docs = self.env['leave.ledger.wizard'].browse(self.env.context.get('active_id'))
+  
+        
+        leave_type_obj = self.env['hr.leave.type'].search([('company_id','in',docs.company_ids.ids)])
+        
         
         
         return {
+            
             'docs': docs,
+            'leave_type_obj':leave_type_obj
         }

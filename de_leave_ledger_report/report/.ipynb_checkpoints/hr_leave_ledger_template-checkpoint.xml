@@ -1,7 +1,7 @@
 <odoo>
     <template id="leave_ledger_report">
       <t t-call="web.html_container">
-             <t t-foreach="docs" t-as="docs">
+             <t t-foreach="docs" t-as="doc">
                 <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
                 <t t-call="de_leave_ledger_report.leave_report_layout"/>
                 <div class="page">
@@ -11,7 +11,7 @@
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
                                              <td>Department:</td>
-                                             <td><span t-field=" docs.department_ids"/></td>
+                                             <td><span t-field=" doc.department_ids"/></td>
                                          </tr>
                                      </tbody>
                                  </table>
@@ -21,7 +21,7 @@
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;" >
                                              <td >Employee:</td>
-                                             <td><span t-field=" docs.employee_type_id"/></td>
+                                             <td><span t-field=" doc.employee_type_id"/></td>
                                          </tr>
                                      </tbody>
                                  </table>
@@ -57,7 +57,7 @@
                                          <tr style="font-weight: bold;">
                                             <td>Section: </td>
                                               <td>
-                                                  <t t-foreach="docs.section_ids"  t-as="dep">
+                                                  <t t-foreach="doc.section_ids"  t-as="dep">
                                                   <span t-field="dep.name"/>
                                                 </t>   
                                              </td>
@@ -70,7 +70,7 @@
                                 <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
                                              <td>Start Date :</td>
-                                             <td><span t-field=" docs.date_from"/></td>
+                                             <td><span t-field=" doc.date_from"/></td>
                                          </tr>
                                 </tbody>
                          </table>
@@ -80,7 +80,7 @@
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;" >
                                              <td >End Date:</td>
-                                             <td><span t-field=" docs.date_to"/></td>
+                                             <td><span t-field=" doc.date_to"/></td>
 
                                          </tr>
                                      </tbody>
@@ -92,7 +92,7 @@
                                      <tbody style="color:blue">
                                          <tr>
                                              <td>Sorted by</td>
-                                             <td><span t-field="docs.sorted_by"/></td>
+                                             <td><span t-field="doc.sorted_by"/></td>
                                          </tr>
                                     
                                      </tbody>
@@ -121,32 +121,56 @@
                                 <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="50" class="text-center">Leaves</th>
                                <th style="border-top: 1px solid black; font-size: 8px;font-weight: bold;" scope="col" width="60" class="text-center">Balance</th>
                       </tr>
-                      
-                        <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black" ><span t-field="docs.employee_type_id.emp_number"/></td>
-                        <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black"><span t-field="docs.employee_type_id"/></td>
                             
-                    
-                            
-<!--                             <t t-foreach="docs.company_ids"  t-as="dep">
-                            
-                            
+                      </tbody>
+
+                    </table> 
+
+                              <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black" ><span t-field="doc.employee_type_id.emp_number"/></td>
+                        <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black"><span t-field="doc.employee_type_id"/></td>
+                        
+
                                                          
-                            <t t-foreach="request.env['hr.leave.type'].search(['company_ids','=',dep.company_id])"  t-as="lv_typ">
-                                <span t-field="lv_typ.display_name"/><br/>
+                       <td>   <t t-foreach="leave_type_obj"  t-as="lv_typ">
+                            <span t-field="lv_typ.display_name"/><br/>
+                              
+    <t t-foreach="request.env['hr.leave'].search([('employee_id','=',doc.employee_type_id.id)])"  t-as="ovt"><br/>
+        <tr><span t-field="ovt.date_from"/><br/></tr>
+                                
+                               
+                                
+                               </t>
+                               
                                 
                                 
                                 
-                                </t> -->
+                            </t>
+                            </td>     
                                 
-<!--                             </t> -->
+ 
+                  
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                               
                               
 
                               
                               
-                            </tbody>
 
-                    </table>
                         
                         
                        
