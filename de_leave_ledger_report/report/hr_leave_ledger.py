@@ -24,7 +24,7 @@ class LeaveLedgerReport(models.AbstractModel):
         docs = self.env['leave.ledger.wizard'].browse(self.env.context.get('active_id'))
   
         
-        leave_type_obj = self.env['hr.leave.type'].search([('company_id','in',docs.company_ids.ids)])
+        leave_type_obj = self.env['hr.leave.'].search([('company_id','in',docs.company_ids.ids)])
         
         
         

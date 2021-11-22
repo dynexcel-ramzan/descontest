@@ -16,8 +16,9 @@
                                      </tbody>
                                  </table>
                              </div>
-                     <div  style="font-size:10px">
-                                 <table>
+                   <div class="col-3" style="font-size:10px">
+
+                         <table>
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;" >
                                              <td >Employee:</td>
@@ -26,7 +27,7 @@
                                      </tbody>
                                  </table>
                              </div>
-<!--                      <div class="col-2" style="font-size:10px">
+                     <div class="col-3" style="font-size:10px">
                                  <table >
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
@@ -36,7 +37,7 @@
                                      </tbody>
                                  </table>
                              </div> 
-                         <div class="col-2" style="font-size:10px">
+                         <div class="col-3" style="font-size:10px">
                                  <table >
                                      <tbody style="color:blue">
                                          <tr style="font-weight: bold;">
@@ -44,9 +45,10 @@
                                               
                                          </tr>
                                      </tbody>
-                                 </table> -->
+                                 </table>
                            
                         </div>
+                    </div>
                        
                     
                     
@@ -125,36 +127,54 @@
                       </tbody>
 
                     </table> 
+                <div style="border-right: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid black; font-size: 8px; font-weight: bold;" >
+                 
+                          
 
-                              <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black" ><span t-field="doc.employee_type_id.emp_number"/></td>
-                        <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold; color:blue; border-bottom: 1px solid black"><span t-field="doc.employee_type_id"/></td>
+                        <td><span t-field="doc.employee_type_id.emp_number"/></td>
+                    <td><span t-field="doc.employee_type_id"/></td>
+                   
+                            
                         
-
-                                                         
-                       <td>   <t t-foreach="leave_type_obj"  t-as="lv_typ">
-                            <span t-field="lv_typ.display_name"/><br/>
+                    
+                    
+                      
+                        <t t-foreach="leave_type_obj"  t-as="lv_typ">
+                              
+                               <tr>  <span t-field="lv_typ.display_name"/></tr>
+                               <br/>
+                            
+ </t>
                               
     <t t-foreach="request.env['hr.leave'].search([('employee_id','=',doc.employee_type_id.id)])"  t-as="ovt"><br/>
-        <tr><span t-field="ovt.date_from"/><br/></tr>
+     
+       
+        <div style="font-size:10px" class="col-12">
+        <table style="border: 1px solid black;">
+          <thead style="color:blue">
+        <td><span t-field="ovt.date_from"/></td>
+        <td ></td>
+        <td ><span t-field="ovt.name"/></td>
+        <td ><span t-field="ovt.state"/></td>
+             
+            </thead>
+            
+        </table>
+        </div>
                                 
-                               
-                                
-                               </t>
+                              
                                
                                 
                                 
                                 
                             </t>
-                            </td>     
-                                
- 
-                  
                             
+                          
+                    
+              </div>     
+                        
                             
-                            
-                            
-                            
-                            
+                             
                             
                             
                             
