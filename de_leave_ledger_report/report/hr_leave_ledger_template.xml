@@ -101,7 +101,7 @@
                                  </table>
                              </div>
                         </div>
-                    <br/>
+                  
             
                     <table style="border: 1px solid black;">
                         <thead style="color:blue">
@@ -128,18 +128,33 @@
                  <tr>
                           
 <tbody>
-                        <td ><span t-field="doc.employee_type_id.emp_number"/></td>
-                        <td ><span t-field="doc.employee_type_id"/></td>
+                        <td style="border 1px solid black; font-size: 8px; font-weight: bold;"><span t-field="doc.employee_type_id.emp_number"/></td>
+                        <td style="border 1px solid black; font-size: 8px; font-weight: bold;"><span t-field="doc.employee_type_id"/></td>
                             
                      
                        
                               
-     <t t-foreach="request.env['hr.leave.report'].search([('employee_id','=',doc.employee_type_id.id)])"  t-as="ovt"><br/>
-     
-       
-         <tr class="text-center"><span t-field="ovt.holiday_status_id"/></tr>
-       
-        
+     <t t-foreach="request.env['hr.leave.type'].search([('company_id','in',doc.company_ids.ids)])"  t-as="ovt">
+         <tr class="text-center">
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;">     <span t-field="ovt.display_name"/> </td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;">Opening Balance</td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+             <td  style="border 1px solid black; font-size: 8px; font-weight: bold;">0</td>
+         </tr>
+         <t t-foreach="request.env['hr.leave.report'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="leav">
+                 <tr style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">
+                 
+                     <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">   <span t-field="leav.date_from"/></td>
+                       <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">   <span t-field="leav.number_of_days"/></td>
+                       <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">   <span t-field="leav.leave_type"/></td>
+
+                 </tr>
+         </t>
         
  
                             
