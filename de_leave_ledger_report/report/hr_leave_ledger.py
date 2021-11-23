@@ -24,12 +24,12 @@ class LeaveLedgerReport(models.AbstractModel):
         docs = self.env['leave.ledger.wizard'].browse(self.env.context.get('active_id'))
   
         
-        leave_type_obj = self.env['hr.leave.'].search([('company_id','in',docs.company_ids.ids)])
+#         leave_type_obj = self.env['hr.leave.allocation'].search([('employee_id','=',docs.employee_type_id.name)])
         
         
         
         return {
             
             'docs': docs,
-            'leave_type_obj':leave_type_obj
+#             'leave_type_obj':leave_type_obj
         }

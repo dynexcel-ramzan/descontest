@@ -103,9 +103,9 @@
                         </div>
                     <br/>
             
-                    <table class="table" >
-                        <tbody  style="border: 1px solid black;">
-                            <tr style="color:blue">
+                    <table style="border: 1px solid black;">
+                        <thead style="color:blue">
+                            <tr>
                                 <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">Date</th>
                                 <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold; " scope="col" width="300">Activity Name</th>
                                 <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="60" class="text-center">Reason</th>
@@ -122,59 +122,35 @@
                                 
                                 <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="50" class="text-center">Leaves</th>
                                <th style="border-top: 1px solid black; font-size: 8px;font-weight: bold;" scope="col" width="60" class="text-center">Balance</th>
-                      </tr>
-                            
-                      </tbody>
-
-                    </table> 
-                <div style="border-right: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid black; font-size: 8px; font-weight: bold;" >
-                 
+                     
+                            </tr>
+                        </thead>
+                 <tr>
                           
-
-                        <td><span t-field="doc.employee_type_id.emp_number"/></td>
-                    <td><span t-field="doc.employee_type_id"/></td>
-                   
+<tbody>
+                        <td ><span t-field="doc.employee_type_id.emp_number"/></td>
+                        <td ><span t-field="doc.employee_type_id"/></td>
                             
-                        
-                    
-                    
-                      
-                        <t t-foreach="leave_type_obj"  t-as="lv_typ">
+                     
+                       
                               
-                               <tr>  <span t-field="lv_typ.display_name"/></tr>
-                               <br/>
-                            
- </t>
-                              
-    <t t-foreach="request.env['hr.leave'].search([('employee_id','=',doc.employee_type_id.id)])"  t-as="ovt"><br/>
+     <t t-foreach="request.env['hr.leave.report'].search([('employee_id','=',doc.employee_type_id.id)])"  t-as="ovt"><br/>
      
        
-        <div style="font-size:10px" class="col-12">
-        <table style="border: 1px solid black;">
-          <thead style="color:blue">
-        <td><span t-field="ovt.date_from"/></td>
-        <td ></td>
-        <td ><span t-field="ovt.name"/></td>
-        <td ><span t-field="ovt.state"/></td>
-             
-            </thead>
-            
-        </table>
-        </div>
-                                
-                              
-                               
-                                
-                                
-                                
-                            </t>
+         <tr class="text-center"><span t-field="ovt.holiday_status_id"/></tr>
+       
+        
+        
+ 
                             
-                          
-                    
-              </div>     
-                        
-                            
-                             
+    </t>     
+       
+  
+                     </tbody>
+                        </tr>   
+                       
+                    </table>
+           
                             
                             
                             
