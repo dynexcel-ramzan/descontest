@@ -27,10 +27,11 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/hr_income_tax_views.xml',
+        'wizard/hr_tax_credit_wizard.xml',
         'views/hr_tax_credit_views.xml',
         'views/res_company_views.xml',
         'views/hr_salary_rule_category_views.xml',
+        'views/hr_payslip_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

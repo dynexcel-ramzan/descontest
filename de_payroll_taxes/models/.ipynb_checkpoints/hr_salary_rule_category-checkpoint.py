@@ -10,3 +10,4 @@ class SalaryRuleCategory(models.Model):
     
     
     
+    
