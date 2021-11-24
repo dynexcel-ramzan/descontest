@@ -43,10 +43,10 @@ class HrPayslip(models.Model):
         result = 0
         bonus_amount = 0
         arreas_amount = 0
-        for arreas_input in payslip.inputs_line_ids:
+        for arreas_input in payslip.input_line_ids:
             if arreas_input.input_type_id.is_arrears == True:
                 arreas_amount += arreas_input.amount 
-        for bonus_input in payslip.inputs_line_ids:
+        for bonus_input in payslip.input_line_ids:
             if bonus_input.input_type_id.is_arrears == True:
                 bonus_amount += bonus_input.amount        
         rule_categ_list = []
