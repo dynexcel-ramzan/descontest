@@ -135,26 +135,76 @@
                        
                               
      <t t-foreach="request.env['hr.leave.type'].search([('company_id','in',doc.company_ids.ids)])"  t-as="ovt">
-         <tr class="text-center">
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
+        
+         <tr class="text-center" style="border 1px solid black; font-size: 8px; font-weight: bold;">
+             <td style="border 1px solid black; border-top 1px solid black; font-size: font-size: 8px; font-weight: bold;"></td>
              <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
              <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
              <td style="border 1px solid black; font-size: 8px; font-weight: bold;">     <span t-field="ovt.display_name"/> </td>
              <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;">Opening Balance</td>
+             <td style="border 1px solid black; border-top 1px solid black; font-size: 8px; font-weight: bold;">Opening Balance</td>
              <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
              <td style="border 1px solid black; font-size: 8px; font-weight: bold;"></td>
              <td  style="border 1px solid black; font-size: 8px; font-weight: bold;">0</td>
          </tr>
-         <t t-foreach="request.env['hr.leave.report'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="leav">
-                 <tr style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">
-                 
-                     <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">   <span t-field="leav.date_from"/></td>
-                       <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">   <span t-field="leav.number_of_days"/></td>
-                       <td style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">   <span t-field="leav.leave_type"/></td>
+            <t t-foreach="request.env['hr.leave.allocation'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="leav">
+        
+               <tr style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">
+                        
+                    
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="leav.create_date"/></td>
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" >Leave Opening Balance</td>
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" >Leave Application-<span t-esc='ovt.display_name'/></td>
+<!--                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="leav.name"/></td> -->
+                   
+                   
+                    <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" >Opening Balance</td>
+                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ></td>
+                   
+                     
+                   
+                   
+                   
+                   
+                   
+                   
 
-                 </tr>
-         </t>
+                     
+                     </tr >   
+             </t> 
+         
+              <t t-foreach="request.env['hr.leave'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="allow">
+                     
+                     
+                       
+                    <tr style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">
+                        
+                    
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="allow.create_date"/></td>
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" >Leave Application</td>
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-esc='allow.name'/></td>
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="allow.state"/></td>
+                     
+                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="allow.employee_id.parent_id.name"/></td>
+
+ 
+                     
+                     </tr >
+                     
+              </t>       
+           
+                         
+                         
+                         
+                  
+                     
+                     
+                     
+                     
+
+             
+             
+         
         
  
                             
@@ -166,7 +216,7 @@
                        
                     </table>
            
-                            
+                           
                             
                             
                             
