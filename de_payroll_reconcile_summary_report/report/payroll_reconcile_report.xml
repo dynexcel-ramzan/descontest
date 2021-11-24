@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+
+
+    <template id="computation_rep">
+        <t t-call="web.external_layout">
+            <t t-call="web.html_container" style="text-align: left">
+                <t t-foreach="docs" t-as="doc">
+                    <br>
+                        <center>
+                            <div style="float:left; width: 110%">
+                                <h3>Descon Power Solutions(Private) Limited</h3>
+                            </div>
+                        </center>
+
+                    </br>
+                    <br>
+                        <center>
+                            <div style="float:left; width: 40%">
+                                <h3>Payroll Reconcilation Report</h3>
+                            </div>
+                        </center>
+                    </br>
+                    
+                    
+                    <div class="page">
+                    <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>For Period :</td>
+                                            <td>
+                                                <span t-field="doc.date_from"/>
+                                            </td>
+                                         </tr>
+                                          <td>For Period :</td>
+                                          <td>
+                                                <span t-field="doc.date_to"/>
+                                            </td>
+                                     </tbody>
+                                 </table>
+                             </div>
+                    </div>
+                     </div>
+
+
+                </t>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody style="color:black">
+
+                        <t t-foreach="reconcile_list" t-as="reconcile">
+<!--                            <t t-set='prev_month_net_amount' t-value='0'/>
+                                -->
+                            <tr>
+                                <td style="border: 1px solid black;" scope="col" width="50">
+                                    <t t-esc="reconcile['desc']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="50">
+                                    <t t-esc="reconcile['amount']"/>
+                                </td>
+                      <td style="border: 1px solid black;" scope="col" width="50">
+                      <t t-esc="reconcile['prev_month_net_amount']-['curr_month_net_amount']"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <th scope="col">Total:
+                            </th>
+                            
+                             <td>
+                                
+                                <span t-esc="incom_tax"/>
+                            </td>
+                              <td>
+                                
+                                <span t-esc="incom_tax"/>
+                            </td>
+
+                            <td>
+                                 <h3>Total A</h3>
+                                <span t-esc="incom_tax"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                    <center>
+                        <div style="float:left; width: 110%">
+                            <h3>Reasons of change in Net Salary Payable</h3>
+                        </div>
+                    </center>
+                </br>
+
+<!--                 <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Compensation</th>
+                            <th scope="col">
+                                <td>
+                                    <span t-esc="docs.date_from.strftime('%b-%Y')"/>
+                                </td>
+                            </th>
+                            <th scope="col">
+                                <td>
+                                    <span t-esc="docs.date_to.strftime('%b-%Y')"/>
+                                </td>
+                            </th>
+                            <th scope="col">Current-Prev</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color:black">
+                        <t t-foreach="compansation_list" t-as="comp_entry">
+                            <tr>
+                                <td style="border: 1px solid black;" scope="col" width="50">
+                                    <t t-esc="comp_entry['rule_name']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="50">
+                                    <t t-esc="comp_entry['comp_pre_month_amount']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="50">
+                                    <t t-esc="comp_entry['comp_curr_month_amount']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="50">
+                               <t t-esc="reconcile['comp_pre_month_amount']-['comp_curr_month_amount']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table> -->
+                
+                     <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Compensation</th>
+                             <th scope="col">Aug-12</th>
+                             <th scope="col">Sep-20</th>
+                        </tr>
+                    </thead>
+                              
+<!--                            
+                                <td><span t-esc="docs.date_from.strftime('%b-%Y')"/></td>
+                           -->
+                        
+                    <tbody style="color:black">
+
+                        <t t-foreach="compansation_list" t-as="comp_entry">
+                            <t t-set='tot_date_from' t-value='0'/>
+                              <t t-set='tot_date_to' t-value='0'/>
+                             <t t-set='cur_pre_difference' t-value='0'/>
+                            <tr>
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="comp_entry['rule_name']"/>
+                                </td>
+                               
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="comp_entry['comp_pre_month_amount']"/>
+                                <t t-set='tot_date_from' t-value="tot_date_from + comp_entry['comp_pre_month_amount']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="comp_entry['comp_curr_month_amount']"/>
+                                    <t t-set='tot_date_to' t-value="tot_date_to + comp_entry['comp_curr_month_amount']"/>
+                                </td>
+                              
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="comp_entry['arrears']"/>
+                                    <t t-set='cur_pre_difference' t-value="cur_pre_difference + comp_entry['arrears']"/>
+                                </td>
+                                
+                            </tr>
+                        </t>
+
+                    </tbody>
+                </table>
+                
+                
+                  <br>
+                        <table class="table">
+                            <tr>
+                                <th scope="col">Total A:
+                                </th>
+                                
+                                   <td> 
+                                   <span t-esc="tot_date_from"/>
+                                </td>
+                               
+                                <td> 
+                                   <span t-esc="tot_date_to"/>
+                                </td>
+                                
+                                  <td> 
+                                   <span t-esc="cur_pre_difference"/>
+                                </td>
+                                 
+                            </tr>
+                        </table>
+                    </br>
+                
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Deductions</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color:black">
+
+                        <t t-foreach="deduction_list" t-as="ded_entry">
+                              <t t-set='ded_tot_date_from' t-value='0'/>
+                              <t t-set='ded_tot_date_to' t-value='0'/>
+                             <t t-set='ded_cur_pre_difference' t-value='0'/>
+                            <tr>
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="ded_entry['rule_name']"/>
+                                </td>
+                               
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="ded_entry['ded_curr_month_amount']"/>
+                            <t t-set='ded_tot_date_from' t-value="ded_tot_date_from + ded_entry['ded_curr_month_amount']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="ded_entry['ded_pre_month_amount']"/>
+                                <t t-set='ded_tot_date_to' t-value="ded_tot_date_to + ded_entry['ded_pre_month_amount']"/>
+                                </td>
+                                <td style="border: 1px solid black;" scope="col" width="80">
+                                    <t t-esc="ded_entry['arrears']"/>
+                <t t-set='ded_cur_pre_difference' t-value="ded_cur_pre_difference + ded_entry['arrears']"/>
+                                </td>
+                            </tr>
+                        </t>
+
+                    </tbody>
+                </table>
+
+
+                
+                  <br>
+                        <table class="table">
+                            <tr>
+                                <th scope="col">Total B:
+                                </th>
+                                
+                                   <td> 
+                                   <span t-esc="ded_tot_date_from"/>
+                                </td>
+                               
+                                <td> 
+                                   <span t-esc="ded_tot_date_to"/>
+                                </td>
+                                
+                                  <td> 
+                                   <span t-esc="ded_cur_pre_difference"/>
+                                </td>
+                                 
+                            </tr>
+                        </table>
+                    </br>
+                
+                    <br>
+                        <table class="table">
+                            <tr>
+                                <th scope="col">Total A-B:
+                                </th>
+                               
+                              
+                                  <td> 
+                                   <span t-esc="ded_cur_pre_difference"/>
+                                </td>
+                                 
+                            </tr>
+                        </table>
+                    </br>
+                
+                
+                
+<!--                  <div style="color:blue" width="400">
+                  <p1 style="border: 1px solid black;"> Payroll Register wise Salary Comparison</p1>
+                    </div> -->
+
+
+                <table class="table">
+                        <tr>
+                            <th scope="col">Total Bank Transferable for SEP-20</th>
+                            <th> 
+                              <div style="color:blue" width="400">
+                             <p1 style="border: 1px solid black;">
+                             <td><span t-esc="tot_net_wage"/></td>
+                             </p1>
+                             </div>
+                            </th>
+                        </tr>
+                </table>
+
+
+<!--                 <table>
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Taxable Income</th>
+                            <th scope="col">Rates %</th>
+                        </tr>
+
+                    </thead>
+                    <t t-foreach="payslip_fild" t-as="entri">
+                        <tr>
+                            <td>
+                                <span t-field="entri.taxable_income"/>
+                            </td>
+                            <td>
+                                <span t-field="entri.rate"/>
+                            </td>
+                        </tr>
+                    </t>
+                </table> -->
+
+
+<!--                 <td>
+                    <strong>company office etc/collecting/deducting the tax.
+                    </strong>
+                </td> -->
+
+                <div class="row">
+                    <div class="col-6">
+                        <table>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>Prepared by</td>
+                                    <td>
+                                        <u>________</u>
+                                    </td>
+                                     <td>Verified By</td>
+                                    <td>
+                                        <u>___________</u>
+                                    </td>
+                                     <td>Approved by</td>
+                                    <td>
+                                        <u>____________</u>
+                                    </td>
+                                     <td>Approved by</td>
+                                    <td>
+                                        <u>___________</u>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+
+
+        <!--                                             <td> <span t-field="doc.employee_id.date_from"/></td> -->
+
+        <!--                                             <td><t t-esc="entry['date']"/></td> -->
+        <!--                                <t t-set='tot_net_wage' t-value='tot_net_wage + gross_pay'/> -->
+
+
+        <!--                           <t t-foreach="reconcile_list" t-as="entry">
+                                                <tr>
+                                                         </tr>
+                                            </t>
+                                 -->
+        <!--                                               <td><t t-esc="entry['description']"/>
+                                                     </td> -->
+        <!--                                             <td><t t-esc="entry['amount']"/></td> -->

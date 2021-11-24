@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <report
+            id="open_payroll_reconcile_wizard_action"
+            string="Payroll Reconcile Summary Report"
+            model="report.de_payroll_reconcile_summary_report.computation_rep"
+            report_type="qweb-pdf"
+            file="de_payroll_reconcile_summary_report.computation_rep"
+            name="de_payroll_reconcile_summary_report.computation_rep"
+        />
+    </data>
+</odoo>

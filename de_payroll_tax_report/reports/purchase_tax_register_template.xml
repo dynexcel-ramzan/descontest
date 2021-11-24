@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <report
+            id="open_purchase_tax_register_action"
+            string="Purchase Tax Register"
+            model="report.de_payroll_tax_report.report_pdf"
+            report_type="qweb-pdf"
+            file="de_payroll_tax_report.report_pdf"
+            name="de_payroll_tax_report.report_pdf"
+        />
+    </data>
+</odoo>
+
+
+
+
+
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="open_purchase_tax_register_action"
+            string="Purchase Tax Register"
+            model="report.de_payroll_tax_report.report_pdf"
+            report_type="qweb-pdf"
+            file="de_payroll_tax_report.report_pdf"
+            name="de_payroll_tax_report.report_pdf"
+        />
+    </data>
+</odoo> -->

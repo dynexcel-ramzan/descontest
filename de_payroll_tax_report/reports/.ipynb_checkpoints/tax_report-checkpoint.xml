@@ -1,0 +1,87 @@
+<!-- <?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+
+    <report id="de_payroll_tax_calculation" model="payroll.tax"
+            string="Tax Certificate" 
+            report_type="qweb-pdf"
+            name="de_payroll_tax_report.report_pdf"
+            file="de_payroll_tax_report.report_pdf"/>
+</odoo> -->
+
+
+  #report ka python code
+
+
+
+#             moves= self.env['account.move'].search([('partner_id','=',docs.name.address_id.id), ('date','>=',docs.date_from), ('date','<=', docs.date_to)])
+#             final_tax_cal = []
+#             final_tax_calc = []
+            
+#             payslip_ids = self.env['hr.payslip'].search([('name','=',docs.name.id), ('date_from','>=',docs.bank_name), ('date_to','<=',docs.branch_address)], limit=1)
+#             return {
+#                 'date_from': docs.date_from,
+#                 'date_to': docs.date_to,
+#                 'payslip_ids': payslip_ids,
+#             }
+            
+            
+            
+        
+        
+    
+#     @api.model
+#     def _get_report_values(self, docids, data=None):
+#         docs = self.env['purchase.tax.register.wizard'].browse(self.env.context.get('active_id'))
+#         outstanding_invoice = [] 
+                  
+#         moves= self.env['account.move'].search([('partner_id','=',docs.name.address_id.id), ('date','>=',docs.date_from), ('date','<=', docs.date_to)])
+    
+#         final_tax_cal = []
+#         final_tax_calc = []
+        
+#         payslip_ids = self.env['hr.payslip'].search([('name','=',docs.name.id), ('date_from','>=',docs.bank_name), ('date_to','<=',docs.branch_address)], limit=1)
+#         return {
+#             'date_from': docs.date_from,
+#             'date_to': docs.date_to,
+#             'payslip_ids': payslip_ids,
+#         }
+            
+#             incom_tex = 0
+           
+#             for rule in payslip.line_ids:
+#                 if rule.code =='INC01':
+#                     incom_tex = rule.amount    
+#             final_tax_calc.append({
+#                     'date': entry_line.date.strftime('%d-%b-%Y'),
+#                     'bank':  self.bank_name,
+#                     'address': self.branch_address,
+#                     'amount':  incom_tex, 
+#                 })
+#          data = {'final_tax_calc': final_tax_calc}
+#          data['form'] = self.read(['date_from', 'date_to'])[0]
+#         return {
+#             'final_tax_cal': final_tax_calc,
+#         }
+
+        
+#         if docs.target_move == 'posted':
+#             invoices = self.env['account.move'].search([('invoice_date', '>=', docs.date_from),('invoice_date', '<=', docs.date_to)])
+#         else:
+#             invoices = self.env['account.move'].search([('invoice_date', '>=', docs.date_from),('invoice_date', '<=', docs.date_to)])
+            
+#         if invoices:
+#            amount_due = 0
+#            for total_amount in invoices:
+#                amount_due += total_amount.amount_residual
+#            docs.total_amount_due = amount_due
+
+#             return {
+#                 'docs': docs,
+# #                 'invoices': invoices,
+#             }
+#         else:
+#             raise UserError("There is not any Purchase invoice in between selected dates")
+
+            
+    

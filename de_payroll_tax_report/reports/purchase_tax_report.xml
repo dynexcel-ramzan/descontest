@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+
+
+    <template id="report_pdf">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set='amount_words' t-value='0'/>
+                <t t-set="docs" t-value="docs.with_context()"/>
+                <div class="page">
+                    <div class="oe_structure"/>
+
+                    <div align="center">
+                        <br/>
+                        <h2>Certificate of Collection and Deduction of Income Tax(Including Salary)</h2>
+                    </div>
+
+                    <div align="center">
+                        <br/>
+                        <h2>(under rule 42)</h2>
+                    </div>
+
+                    <br>
+                        <table class="table">
+
+                            <tr>
+                                <td>
+                                    <strong>Emp no :
+                                        <u>
+                                            <td>
+                                                <span t-field="docs.date_from"/>
+                                            </td>
+                                        </u>
+                                    </strong>
+
+                                </td>
+                                <td>Original/Duplicate</td>
+                                <td>
+
+                                    <strong>Date of Issue :
+                                        <u>
+                                            <td>
+                                                <span t-field="docs.date_from"/>
+                                            </td>
+                                        </u>
+                                    </strong>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </br>
+
+                    <br>
+                        <div class="row">
+                            <t t-set='total_incom_amount' t-value='0'/>
+                            <t t-foreach="request.env['hr.payslip'].search([('employee_id','=',docs.name.id),
+                                        ])" t-as="payslip">
+
+                                <t t-foreach="payslip.line_ids" t-as="rule">
+
+                                    <t t-if='rule.code=="INC01"'>
+                                
+
+                                    </t>
+
+                                </t>
+                            </t>
+<!--                             <t t-set="amount_words"
+                               t-value="entry.company_id.currency_id.amount_to_text(tot_net_wage)"/> -->
+
+
+                            <tr>
+                                <br>
+
+                                    <strong>Certificate that the sum of Rupees___
+                                        <u>
+                                            (<t t-esc='amount_words'/>)
+                                        </u>
+                                        ______(amount in
+                                        words)
+                                    </strong>
+
+
+                                </br>
+                                <br>
+
+                                    <strong>
+                                        on account of income tax has been deducted /collected from
+                                        __________
+                                        <td style="border: 1px  black;">
+                                            <u>
+                                                <span t-field="docs.name"/>
+                                            </u>
+                                        </td>
+                                        _________
+
+                                        (Maintenance
+                                        Manager)
+                                    </strong>
+                                </br>
+                                <br>
+
+                                    <strong>In case of an indivdual ,his/her name in full and in case of an association
+                                        of persons/company ,name and style of the association of persons/company
+                                    </strong>
+
+                                </br>
+                                <br>
+
+                                    <strong>having National Tax Number_______________
+                                        <u>0493680-8
+                                        </u>_________(if
+                                        any) and
+                                    </strong>
+
+                                </br>
+                                <br>
+                                    <strong>holder of CNIC No. _________________________
+                                        <u>
+                                            <span t-field="docs.name.cnic"/>
+                                        </u>
+                                        ________________
+                                        (in case of an
+                                        individual)
+                                    </strong>
+
+                                </br>
+                                <br>
+
+                                    <strong>on or during the period
+                                        <td style="border: 1px solid white;">
+                                            <u>
+                                                <span t-field="docs.date_from"/>
+                                            </u>
+                                        </td>
+
+                                        To
+
+                                        <td style="border: 1px solid white;">
+                                            <u>
+                                                <span t-field="docs.date_to"/>
+                                            </u>
+                                            (
+                                        </td>
+                                        Date of collected /deduction)
+                                    </strong>
+                                </br>
+                                <br>
+                                    <strong>under section 149 of income Tax Ordinance, 2001 on account of
+                                        <u>(Tax Year-2021-2022</u>
+                                        (Period
+                                        of
+                                        collection/deduction)
+                                    </strong>
+                                </br>
+
+                                <br>
+                                    <strong>on the value/amount of Rupee______________________
+                                        <u>
+                                            (<t t-esc='tot_net_wage'/>)
+                                        </u>
+                                        ______________________
+                                        (Gross amount on which Tax deducted /collected in fitures)
+
+                                    </strong>
+                                </br>
+
+                                <br>
+                                    <strong>This is to further certify that the tax collected/deducted has been
+                                        deposited to the federal
+                                        Government Account as per the following details.
+                                    </strong>
+                                </br>
+
+                            </tr>
+                        </div>
+                    </br>
+                    
+                                <table class="table table-sm table-striped table-bordered">
+                                    <tr style="height:30%">
+                                        <th  align="center">From Date</th>
+                                        <th  align="center">Bank Name</th>
+                                        <th  align="center">Branch Address</th>
+                                         <th  align="center">Amount</th>
+                    
+                                    </tr>
+                                     <t t-set='tot_net_wage' t-value='0'/>
+                                    
+                                    <t t-foreach="incom_taxes" t-as="entry">
+                                        <tr>
+                                            <td><t t-esc="entry['date_from']"/></td>
+                                             <td><span t-field="docs.bank_name"/></td>
+                                            <td><span t-field="docs.branch_address"/></td>
+                                            <td><t t-esc="entry['tot_net_wage']"/></td>
+                                        </tr>
+                                    </t>
+                                      <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <span t-esc="tot_net_wage"/>
+                            </td>
+                        </tr>
+                                </table>
+                                    
+<!--                                             <span t-field="docs.payslip"/>  -->
+
+                    <td>
+                        <strong>company office etc/collecting/deducting the tax.
+                        </strong>
+                    </td>
+                    <div class="row">
+                        <div class="col-6">
+                            <table>
+
+                                <tbody>
+
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>
+                                            <u>Descon Power Solutions(Pvt) Limited.</u>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address</td>
+                                        <td>
+                                            <u>
+                                                <span t-field="docs.name.address_id"/>
+                                            </u>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>NTN (if any)</td>
+                                        <td>
+                                            <u>
+                                                <span t-field="docs.name.ntn"/>
+                                            </u>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date</td>
+                                        <td>
+                                            <u>
+                                                <span t-field="docs.date_from"/>
+                                            </u>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Signature</td>
+                                        <td>
+                                            <u></u>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>
+                                            <u>
+                                                <span t-field="docs.name"/>
+                                            </u>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Designation</td>
+                                        <td>
+                                            <u>HR Executive</u>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Seal</td>
+                                        <td>
+                                            <u></u>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <report
+            id="open_computation_tax_register_action"
+            string="Computation Tax Register"
+            model="report.de_payroll_tax_report.computation_report_pdf"
+            report_type="qweb-pdf"
+            file="de_payroll_tax_report.computation_report_pdf"
+            name="de_payroll_tax_report.computation_report_pdf"
+        />
+    </data>
+</odoo>

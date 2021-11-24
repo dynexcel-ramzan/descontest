@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <report
+            id="employee_eobi_wizard_action"
+            string="Employee Eobi Report"
+            model="report.de_employee_eobi_report.report_eobi"
+            report_type="qweb-pdf"
+            file="de_employee_eobi_report.report_eobi"
+            name="de_employee_eobi_report.report_eobi"
+        />
+    </data>
+</odoo>

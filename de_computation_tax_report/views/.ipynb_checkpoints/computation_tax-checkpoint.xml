@@ -1,0 +1,44 @@
+<odoo>
+
+    <record id="computation_tax_tree" model="ir.ui.view">
+        <field name="name">computation.tax.tree</field>
+        <field name="model">computation.tax</field>
+        <field name="arch" type="xml">
+            <tree string="Computation Tax">
+                <field name="taxable_income"/>
+                <field name="rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="computation_tax_form" model="ir.ui.view">
+        <field name="name">computation.tax.form</field>
+        <field name="model">computation.tax</field>
+        <field name="arch" type="xml">
+            <form string="Computation Tax form">
+                <sheet>
+                    <group>
+                <field name="taxable_income"/>
+                <field name="rate"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="computation_tax_action" model="ir.actions.act_window">
+        <field name="name">Computation Tax</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">computation.tax</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Computation Tax!</p>
+        </field>
+    </record>
+
+    <menuitem id="computation_tax_report_fld" name="Computation Tax"  parent="hr_work_entry_contract.menu_hr_payroll_configuration"
+              sequence="3" action="computation_tax_action"/>
+    
+    
+</odoo>
+
