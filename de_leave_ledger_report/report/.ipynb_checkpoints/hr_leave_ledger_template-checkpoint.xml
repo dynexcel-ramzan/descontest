@@ -174,8 +174,6 @@
              </t> 
          
               <t t-foreach="request.env['hr.leave'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="allow">
-                     
-                     
                        
                     <tr style="border-top: 1px solid black; font-size: 8px; font-weight: bold;">
                         
