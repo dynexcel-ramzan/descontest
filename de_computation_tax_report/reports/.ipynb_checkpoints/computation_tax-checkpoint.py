@@ -49,6 +49,7 @@ class ComputationTaxRegister(models.AbstractModel):
 
                     for rule in multiple_slips.line_ids:
                         incom_tax = ot_amount = car_allowance = bonus = arrears = overtime = others = incentive = mobile_allowance = gross_pay = 0
+
                         if rule.code == 'INC01':
                             incom_tax = rule.amount
                         elif  rule.code == 'OT100':  
