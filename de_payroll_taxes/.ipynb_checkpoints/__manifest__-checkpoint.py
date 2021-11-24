@@ -32,6 +32,7 @@
         'views/res_company_views.xml',
         'views/hr_salary_rule_category_views.xml',
         'views/hr_payslip_views.xml',
+        'views/hr_payslip_input_type_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

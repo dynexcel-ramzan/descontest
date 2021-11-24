@@ -29,6 +29,8 @@ class de_payroll_taxes(models.Model):
     tax_year = fields.Char(string='Tax Year')
     date = fields.Date(string='Date')
     tax_amount = fields.Float(string='Amount', required=True)
+    reconcile_amount = fields.Float(string='Reconcile Amount', readonly=True)
+    remaining_amount = fields.Float(string='Remaining Amount', readonly=True)
     company_id = fields.Many2one('res.company', string='Company')
     
     

@@ -41,6 +41,14 @@ class HrPayslip(models.Model):
     def _action_update_income_tax(self, payslip, date):
         total_gross_amount = 0
         result = 0
+        bonus_amount = 0
+        arreas_amount = 0
+        for arreas_input in payslip.inputs_line_ids:
+            if arreas_input.input_type_id.is_arrears == True:
+                arreas_amount += arreas_input.amount 
+        for bonus_input in payslip.inputs_line_ids:
+            if bonus_input.input_type_id.is_arrears == True:
+                bonus_amount += bonus_input.amount        
         rule_categ_list = []
         rule_categories=self.env['hr.salary.rule.category'].search([('is_compute_tax','=',True)])
         for rule_categ in rule_categories:
@@ -64,7 +72,7 @@ class HrPayslip(models.Model):
         for paye in payslips:
             stop_salary_fiscal_year += 1   
         fiscal_month = (initial_fiscal_month - stop_salary_fiscal_year)    
-        total_gross =  total_gross_amount + (apf/fiscal_month)   
+        total_gross =  total_gross_amount + arreas_amount + bonus_amount + (apf/fiscal_month)    
         if ((total_gross)*fiscal_month>=600001 and (total_gross)*fiscal_month<=1200000):
             result = (round(((((total_gross*fiscal_month)-600000)/100)*5)/12,0))
         elif ((total_gross)*fiscal_month>=1200001 and (total_gross)*fiscal_month<=1800000):
@@ -88,7 +96,23 @@ class HrPayslip(models.Model):
         elif ((total_gross)*fiscal_month>=75000001):
             result = (round((((((total_gross*fiscal_month)-75000000)/100)*35)+21420000)/12,0))
         else:
-            result = 0.0      
+            result = 0.0  
+        tax_credit=self.env['hr.tax.credit'].search([('employee_id','=',payslip.employee_id.id),('tax_year','=',payslip.date_to.strftime('%Y')),('period','=',payslip.date_to.strftime('%m'))], limit=1) 
+        tax_credit_amount=0
+        if tax_credit:
+            tax_credit_amount = tax_credit.tax_amount  
+        if   tax_credit_amount >= result:
+            result = 0
+            tax_credit.update({
+                'reconcile_amount': result,
+                'remaining_amount': tax_credit_amount - result,
+            })
+        else:
+            result = result - tax_credit_amount
+            tax_credit.update({
+                'reconcile_amount': tax_credit_amount,
+                'remaining_amount': 0,
+            })
         payslip.update({
             'current_month_tax_amount': result,
         })
