@@ -32,6 +32,7 @@ class EmployeeEobi(models.AbstractModel):
         elif docs.department_id:
             employees = self.env['hr.employee'].search([('department_id', '=', docs.department_id.id)], )
 
+                                           
         return {
             'docs': docs,
             'employees': employees,
