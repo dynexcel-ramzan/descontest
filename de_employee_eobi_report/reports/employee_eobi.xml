@@ -4,41 +4,21 @@
 
 
 <template id="computation_report">
+     <t t-foreach="employees" t-as="emp">
         <t t-call="web.external_layout">
             <t t-call="web.html_container" style="text-align: left">
-                <t t-foreach="docs" t-as="doc">
+                      
+                    <div align="center">
+                        <br/>
+                        <h2>Descon Oxychem Limited</h2>
+                    </div>
+                
+                    <div align="center">
+                        <br/>
+                        <h2>Employees Report</h2>
+                    </div>
 
-                    <br>
-                        <center>
-                            <div style="float:left; width: 110%">
-                                <h3>Employee's Old Age Benefits Institution</h3>
-                            </div>
-                        </center>
-                    </br>
-                    <br>
-                    <center>
-                        <div style="float:left; width: 40%">
-                            <h3>Government of Pakistan, Ministry of Labour, Manpower   Overseas Pakistanis (Labour Division).</h3>
-                        </div>
-                    </center>
-                    </br>
-
-                     <br>
-                    <center>
-                        <div style="float:left; width: 40%">
-                            <h3>Descon Power Solutions (Pvt) Limited.</h3>
-                        </div>
-                    </center>
-                    </br>
-
-                     <br>
-                    <center>
-                        <div style="float:left; width: 40%">
-                            <h3>E.O.B.I  Contribution Detail</h3>
-                        </div>
-                    </center>
-                    </br>
-
+                  
 
 
                      <br>
@@ -48,21 +28,21 @@
 
                                  <th scope="col">Location:
                                  <td>
-<!--                                     <span t-field="doc.work_location_id.name"/> -->
+                                    <span t-field="emp.work_location_id.name"/>
                                 </td>
                                 </th>
 
 
                                 <th scope="col">Department:
                                     <td>
-<!--                                         <span t-field="doc.department_id.name"/> -->
+                                       <span t-field="emp.department_id.name"/>
                                     </td>
                                 </th>
 
 
                            <th scope="col">Section:
                                 <td>
-<!--                                        <span t-field="doc.section.name"/>-->
+                                        <span t-field="emp.department_id.name"/>
                                     </td>
                                 </th>
 
@@ -77,13 +57,13 @@
 
                                 <th scope="col">Emp type:
                                 <td>
-<!--                                        <span t-field="dos.emp_type.name"/>-->
+                                        <span t-field="emp.department_id.name"/>
                                     </td>
                                 </th>
 
                                   <th scope="col">Employee type:
                                 <td>
-<!--                                         <span t-field="dos.emp_type.name"/> -->
+                                        <span t-field="emp.department_id.name"/>
                                     </td>
                                 </th>
                             </tr>
@@ -130,8 +110,8 @@
                              <t t-esc="emp.grade_type.name"/></td>
                          <td style="border: 1px solid black;">
                              <t t-esc="emp.grade_designation.name"/></td>
-                         <td style="border: 1px solid black;">
-                             <t t-esc="emp.emp_number"/></td>
+<!--                          <td style="border: 1px solid black;">
+                             <t t-esc="emp.emp_number"/></td> -->
                          <td style="border: 1px solid black;">
                              <t t-esc="emp.parent_id.name"/></td>
                          <td style="border: 1px solid black;">

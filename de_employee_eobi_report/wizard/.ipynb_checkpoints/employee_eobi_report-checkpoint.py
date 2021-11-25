@@ -23,6 +23,8 @@ class EmployeeEobi(models.TransientModel):
     date_to = fields.Date(string="Date to", default=datetime.today())
     bank_name = fields.Char(string="Bank Name")
     branch_address = fields.Char(string="Branch address")
+    department_id = fields.Many2one('hr.department', string="Department id")
+    location_id = fields.Many2one('hr.work.location', string="location id")
 
 
 
