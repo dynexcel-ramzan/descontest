@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-import cx_Oracle
+# import cx_Oracle
 from datetime import date, datetime, timedelta
 from odoo import exceptions
 from dateutil.relativedelta import relativedelta

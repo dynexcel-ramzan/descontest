@@ -115,7 +115,7 @@ class CustomerPortal(CustomerPortal):
         return self._get_page_view_values(ptimesheet, access_token, values, 'my_ptimesheet_history', False, **kwargs)
 
     @http.route(['/project/timesheets', '/project/timesheet/page/<int:page>'], type='http', auth="user", website=True)
-    def portal_project_timesheets(self, page=1, date_begin=None, date_end=None, sortby=None, filterby=None, search=None,
+    def portal_project_timesheets_report(self, page=1, date_begin=None, date_end=None, sortby=None, filterby=None, search=None,
                            search_in='content', groupby=None, **kw):
         values = self._prepare_portal_layout_values()
         searchbar_sortings = {
