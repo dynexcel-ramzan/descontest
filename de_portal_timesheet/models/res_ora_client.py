@@ -12,4 +12,4 @@ class ResORAClient(models.Model):
 
     
     name = fields.Char(string='Description')
-
+    code = fields.Char(string='Code')
