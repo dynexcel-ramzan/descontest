@@ -364,12 +364,15 @@
                     const selected_date=event.target.value;
                       let datefroma = document.getElementById("datefromb").value;
                       let datetoa = document.getElementById("datetob").value;
-                      
+                      let line_dateto = document.getElementById("date_to").value;
                       if (new Date(datefroma) > new Date(selected_date)) {
                         alert("Not Allow to Enter date less than Project Date From. "+datefroma);
                         event.target.value= datefroma;
                       }
-                     
+                      if (new Date(selected_date) > new Date(line_dateto)) {
+                        alert("Not Allow to Enter date greater than Date To. "+line_dateto);
+                        event.target.value= datefroma;
+                      }
                       if (new Date(selected_date) > new Date(datetoa)) {
                          alert("Not Allow to Enter date Greater than Project Date To. "+datetoa);
                          event.target.value= datefroma;
@@ -381,8 +384,13 @@
                       const selected_date=event.target.value;
                       let datetob = document.getElementById("datetob").value;
                       let datefromb = document.getElementById("datefromb").value;
+                      let line_datefrom = document.getElementById("date_from").value;
                       if ( new Date(datefromb) > new Date(selected_date)) {
                         alert("Not Allow to Enter date less than Project Date From. "+datefromb);
+                        event.target.value= datetob;
+                      }
+                      if ( new Date(line_datefrom) > new Date(selected_date)) {
+                        alert("Not Allow to Enter date less than Date From. "+line_datefrom);
                         event.target.value= datetob;
                       }
                       
@@ -433,10 +441,10 @@
                                         <span t-esc="emp.name" />
                                     </td>
                                     <td class="date_from">
-                                        <input  type="date" class="form-control s_website_form_input" name="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom"  />
+                                        <input id='date_from' type="date" class="form-control s_website_form_input" name="date_from"    t-options='{"widget": "date"}' t-att-value="datefrom"  />
                                     </td>
                                     <td class="date_to">
-                                        <input  type="date" class="form-control s_website_form_input" name="date_to" id="date_to"    t-options='{"widget": "date"}'  t-att-value="dateto" />
+                                        <input id='date_to'  type="date" class="form-control s_website_form_input" name="date_to"     t-options='{"widget": "date"}'  t-att-value="dateto" />
                                     </td>
 
                                 </tr>

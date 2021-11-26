@@ -14,6 +14,7 @@
                                  <field name="ora_category_id" />
                                  <field name="ora_enabled" />
                                  <field name="ora_job_duration" />
+                                 <field name="ora_status" />
                                  <field name="ora_record_id" invisible="1"/>
                              </group>
                              <group>

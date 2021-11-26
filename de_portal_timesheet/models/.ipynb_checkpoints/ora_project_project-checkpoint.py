@@ -18,8 +18,14 @@ class ORAProjectProject(models.Model):
     ora_region = fields.Char(string='Region')
     ora_enabled = fields.Boolean(string='Enabled')
     ora_job_duration = fields.Char(string='Job Duration')
-    ora_close_date = fields.Char(string='Close Date')
+    ora_close_date = fields.Date(string='Close Date')
     ora_record_id = fields.Integer(string='Ora Record Id')
+    ora_status = fields.Selection([
+        ('draft', 'Draft'),
+        ('approved', 'Approved'),
+        ('close', 'Closed')
+         ],
+        readonly=False, string='Status')
 
     def _action_fetch_oracle_project(self):
         conn = cx_Oracle.connect('xx_odoo/xxodoo123$@//192.168.65.152:1523/test2')

@@ -22,7 +22,7 @@ import json
 import ast
 
 def timesheet_page_content(flag=0):
-    projects = request.env['project.project'].sudo().search([('ora_enabled','=', True)])
+    projects = request.env['project.project'].sudo().search([('ora_enabled','=', True),('ora_close_date','>=',fields.date.today()),('ora_status','=','approved')])
     employees = request.env['hr.employee'].sudo().search([])
     partners = request.env['res.ora.client'].sudo().search([])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
