@@ -125,7 +125,7 @@
                      
                             </tr>
                         </thead>
-                 <tr>
+                 <tr style="border-right 1px solid black;">
                           
 <tbody>
                         <td style="border 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"><span t-field="doc.employee_type_id.emp_number"/></td>
@@ -162,22 +162,22 @@
                <tr style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 8px; font-weight: bold;">
                         
                     
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center" >  <span t-field="leav.create_date" t-options="{'widget': 'date'}"/></td>
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Leave Opening Balance</td>
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center" >Leave Application-<span t-esc='ovt.display_name'/></td>
+                      <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center" ><span t-field="leav.create_date" t-options="{'widget': 'date'}"/></td>
+                      <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Leave Opening Balance</td>
+                      <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center" >Leave Application-<span t-esc='ovt.display_name'/></td>
 <!--                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="leav.name"/></td>
                     -->
                    
-                    <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Opening Balance</td>
-                    <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"></td>
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"></td>
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='leav.date_from' t-options="{'widget': 'date'}"/></td>
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='leav.date_to' t-options="{'widget': 'date'}"/></td>
+                    <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Opening Balance</td>
+                    <td style="border-right: 1px solid black; border-left: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"></td>
+                   <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"></td>
+                   <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='leav.date_from' t-options="{'widget': 'date'}"/></td>
+                   <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='leav.date_to' t-options="{'widget': 'date'}"/></td>
                    <td></td>
                   
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="leav.number_of_days"/></td>
+                   <td style="border-right: 1px solid black; border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="leav.number_of_days"/></td>
                    <t t-set="balance" t-value="balance+leav.number_of_days"/> 
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
+                   <td style="border-right: 1px solid black; border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></td>
                    
                    
                      
@@ -201,45 +201,47 @@
                     <tr style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 8px; font-weight: bold;">
                         
                     
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.create_date" t-options="{'widget': 'date'}"/></td>
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.create_date" t-options="{'widget': 'date'}"/></td>
                         
                         
                       
                         
                         
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Leave Application</td>
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='allow.name'/></td>
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.state"/></td>
-                     
-                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.employee_id.parent_id.name"/></td>
-                        <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.approve_date"/></td>
-                        <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.date_from" t-options="{'widget': 'date'}"/></td>
-                        <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.date_to" t-options="{'widget': 'date'}"/></td>
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Leave Application</td>
+                       
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='allow.name'/></td>
+                        
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.state"/></td>
+                      
+                      <td style= "border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.employee_id.parent_id.name"/></td>
+                       
+                        <td style="border-right: 1px solid black; border-top: 1px solid black;font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.approve_date"/></td>
+                        <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.date_from" t-options="{'widget': 'date'}"/></td>
+                        <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.date_to" t-options="{'widget': 'date'}"/></td>
                         <td></td>
-                        <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">-<span t-field="allow.number_of_days"/></td>
+                        <td style="border-right: 1px solid black; border-top: 1px solid black; font-weight: bold;" width="100" class="text-center">-<span t-field="allow.number_of_days"/></td>
                         <t t-set="balance" t-value="balance-allow.number_of_days"/> 
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
+                   <td style="border-left 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></td>
                     
                         
-
  
                      
                      </tr >
                  
               </t>       
             <tr class="text-center" style="border-bottom: 1px solid black;">
-             <td style="border 1px solid black; border-top 1px solid black; font-size: font-size: 8px; font-weight: bold;" class="text-center"></td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">  </td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
-             <td style="border 1px solid black; border-top 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">Closing Balance</td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
-             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-weight: bold;" class="text-center"></td>
+             <td style="font-weight: bold;" class="text-center">  </td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center">Closing Balance</td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
              <td></td>
              <td></td>
               <t t-set="total_balance" t-value="total_balance + balance"/> 
-                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="total_balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
+                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="total_balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></td>
          </tr>
                      
                          
