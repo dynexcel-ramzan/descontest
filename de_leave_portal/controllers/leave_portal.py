@@ -27,13 +27,27 @@ import json
 def timeoff_page_content(flag = 0):
     leave_type = request.env['hr.leave.type'].search([('is_publish','=', True)])
     employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
-    leave_allocation = request.env['hr.leave.allocation'].sudo().search([('employee_id.user_id', '=', http.request.env.context.get('uid') )])
-    
+    leave_type_list = []
+    allocation_list = []
+    leave_allocation = request.env['hr.leave.allocation'].sudo().search([('employee_id.user_id', '=', http.request.env.context.get('uid') ),('state','=','validate')])
+    for allocate in leave_allocation:
+        leave_type_list.append(allocate.holiday_status_id.id)    
+    uniq_leave_allocation = set(leave_type_list)
+    for uniq_allocate in uniq_leave_allocation:
+        uniq_allocation_leave = request.env['hr.leave.allocation'].sudo().search([('holiday_status_id','=',uniq_allocate),('employee_id.user_id', '=', http.request.env.context.get('uid')), ('state','=','validate')], limit=1)
+        if uniq_allocation_leave.max_leaves > 0.0:
+            allocation_list.append({
+                'leave_categ': uniq_allocation_leave.holiday_status_id.name,
+                'leave_max': round(uniq_allocation_leave.max_leaves,2),
+                'leave_taken': round(uniq_allocation_leave.leaves_taken,2),
+                'balance': round((uniq_allocation_leave.max_leaves - uniq_allocation_leave.leaves_taken),2),
+            })
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     managers = employees.line_manager
     employee_name = employees
     return {
         'leave_type' : leave_type,
+        'allocation_list': allocation_list,
         'employees' : employees,
         'employee_name': employee_name,
         'managers': managers,
