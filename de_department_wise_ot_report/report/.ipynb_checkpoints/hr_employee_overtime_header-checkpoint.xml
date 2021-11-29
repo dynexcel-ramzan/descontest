@@ -1,0 +1,43 @@
+<odoo>
+       <template id="overtime_report_layout">
+           <t t-set="company" t-value="user.company_id"/>
+           <div class="header">
+            <div class="row" >
+                <div class="col-1">
+                <i>
+                    <i style="border-bottom: 1px solid black;" class="col-2 mb4">
+                       <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 40px;" alt="logo"/>
+                    </i>
+                     </i> 
+                </div>
+                    <div class="col-7">
+                    <i style="font-weight: bold;" t-field="company.partner_id"
+                         t-options='{"widget": "contact", "fields":["address","name"],"no_marker": true }'
+                    />
+                        <p1> Department Wise Employee's Overtime Summary </p1>
+                     
+                </div>
+                <div class="col-4">
+              <i class='pull-right'>
+                      <t t-set='printed_by'  t-value='0'/>
+                      Printed By:   
+                      <t t-foreach="request.env['hr.employee'].search([('user_id','=',uid)])" t-as="user">
+                         <t t-set='printed_by'  t-value='user.name'/>
+                       </t>  
+                         <t t-esc="printed_by"/>
+                       <br/>
+                       <i>
+                        Print on: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                      </i>
+            
+                 </i>
+                </div>
+               </div>
+               
+        <div t-if="company.logo or company.report_header" class="row zero_min_height">
+          
+           </div> 
+       </div>
+                
+    </template>
+</odoo>

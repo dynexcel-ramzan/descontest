@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+           <!--Display form view of wizard-->    
+        <record id="view_hr_leave_ledger_form" model="ir.ui.view">
+            <field name="name">hr.leave.ledger.wizard.form</field>
+            <field name="model">leave.ledger.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Leave Ledger Report:">
+                    <group>
+                        
+                       <group>
+                            <field name="department_ids"  widget='many2many_tags'/>
+                            <field name="employee_type_id" widget="many2one_tags"/>
+                            <field name="date_from" />
+                      </group>
+                        
+                      <group>
+                        <field name="section_ids" widget='many2many_tags'/>
+                        <field name="sorted_by"/>
+                        <field name="date_to"/>
+                          <field name ="company_ids" widget='many2many_tags'/>
+
+
+                      </group>                        
+                        
+                    </group>
+                    
+                    <footer>
+                        <button string='Print' name="check_report" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Open the wizard on click of menu-->
+        <record id="open_leave_ledger_wizard_action" model="ir.actions.act_window">
+            <field name="name">Leave Ledger Report</field>
+            <field name="res_model">leave.ledger.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_hr_leave_ledger_form"/>
+        </record>
+      <menuitem action="open_leave_ledger_wizard_action" id="leave_ledger_report" name="Leave Ledger Report" parent="hr_holidays.menu_hr_holidays_report" sequence="1"/>
+      
+      
+  </data>
+</odoo>

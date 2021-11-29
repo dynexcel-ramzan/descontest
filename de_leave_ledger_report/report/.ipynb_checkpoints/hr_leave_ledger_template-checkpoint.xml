@@ -1,0 +1,311 @@
+<odoo>
+    <template id="leave_ledger_report">
+      <t t-call="web.html_container">
+             <t t-foreach="docs" t-as="doc">
+                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-call="de_leave_ledger_report.leave_report_layout"/>
+                <div class="page">
+                     <div class="row">
+                             <div class="col-3" style="font-size:10px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Department:</td>
+                                             <td><span t-field=" doc.department_ids"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                   <div class="col-3" style="font-size:10px">
+
+                         <table>
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td >Employee:</td>
+                                             <td><span t-field=" doc.employee_type_id"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-3" style="font-size:10px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td> </td>
+                                              
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div> 
+                         <div class="col-3" style="font-size:10px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td> </td>
+                                              
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                           
+                        </div>
+                    </div>
+                       
+                    
+                    
+                    <div class="row">
+                             <div class="col-3" style="font-size:10px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                            <td>Section: </td>
+                                              <td>
+                                                  <t t-foreach="doc.section_ids"  t-as="dep">
+                                                  <span t-field="dep.name"/>
+                                                </t>   
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-3" style="font-size:10px">
+                         <table>
+                                <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Start Date :</td>
+                                             <td><span t-field=" doc.date_from"/></td>
+                                         </tr>
+                                </tbody>
+                         </table>
+                             </div>
+                     <div class="col-3" style="font-size:9px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td >End Date:</td>
+                                             <td><span t-field=" doc.date_to"/></td>
+
+                                         </tr>
+                                     </tbody>
+                                     
+                                 </table>
+                             </div>  
+                             <div class="col-1" style="font-size:8px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr>
+                                             <td>Sorted by</td>
+                                             <td><span t-field="doc.sorted_by"/></td>
+                                         </tr>
+                                    
+                                     </tbody>
+                                 </table>
+                             </div>
+                        </div>
+                  
+            
+                    <table style="border: 1px solid black;">
+                        <thead style="color:blue">
+                            <tr style="border-bottom: 1px solid black;">
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">Date</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold; " class="text-center" scope="col" width="300">Activity Name</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="60" class="text-center">Reason</th>
+                                <th  style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="80" class="text-center">Status</th>
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="200" class="text-center">Approved By</th>
+                                
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="200" class="text-center" >Approved Date</th>
+                              
+                                
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="200" class="text-center" >Start</th>
+                                
+                                <th style="border-top: 1px solid black; font-size: 7px; font-weight: bold;" scope="col" width="100" colspan="2" >End Date</th>
+                                
+                                
+                                <th style="border-top: 1px solid black; font-size: 8px; font-weight: bold;" scope="col" width="100" class="text-center">Leaves</th>
+                               <th style="border-top: 1px solid black; font-size: 8px;font-weight: bold;" scope="col" width="60" class="text-center">Balance</th>
+                     
+                            </tr>
+                        </thead>
+                 <tr style="border-right 1px solid black;">
+                          
+<tbody>
+                        <td style="border 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"><span t-field="doc.employee_type_id.emp_number"/></td>
+                        <td style="border 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"><span t-field="doc.employee_type_id"/></td>
+                            
+                     
+                       
+                              
+     <t t-foreach="request.env['hr.leave.type'].search([('company_id','in',doc.company_ids.ids)])"  t-as="ovt">
+        <t t-set="balance" t-value="0"/>
+         <t t-set="total_balance" t-value="0"/>
+
+         
+         
+         
+         <tr class="text-center" style="border-bottom: 1px solid black;">
+             <td style="border 1px solid black; border-top 1px solid black; font-size: font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">     <span t-field="ovt.display_name"/> </td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="border 1px solid black; border-top 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">Opening Balance</td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td></td>
+             <td></td>
+             <td  style="border 1px solid black; font-size: 8px; font-weight: bold;" class="text-center">0</td>
+         </tr>
+            <t t-foreach="request.env['hr.leave.allocation'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="leav">
+                
+                
+                
+        
+               <tr style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 8px; font-weight: bold;">
+                        
+                    
+                      <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center" ><span t-field="leav.create_date" t-options="{'widget': 'date'}"/></td>
+                      <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Leave Opening Balance</td>
+                      <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center" >Leave Application-<span t-esc='ovt.display_name'/></td>
+<!--                      <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" ><span t-field="leav.name"/></td>
+                    -->
+                   
+                    <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Opening Balance</td>
+                    <td style="border-right: 1px solid black; border-left: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"></td>
+                   <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"></td>
+                   <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='leav.date_from' t-options="{'widget': 'date'}"/></td>
+                   <td style="border-right: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='leav.date_to' t-options="{'widget': 'date'}"/></td>
+                   <td></td>
+                  
+                   <td style="border-right: 1px solid black; border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="leav.number_of_days"/></td>
+                   <t t-set="balance" t-value="balance+leav.number_of_days"/> 
+                   <td style="border-right: 1px solid black; border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></td>
+                   
+                   
+                     
+                   
+  
+
+                   
+                   
+                   
+                   
+                   
+
+                     
+                     </tr >   
+             </t> 
+         
+              <t t-foreach="request.env['hr.leave'].search([('employee_id','=',doc.employee_type_id.id),('holiday_status_id','=',ovt.id)])"  t-as="allow">
+                     
+                     
+                       
+                    <tr style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 8px; font-weight: bold;">
+                        
+                    
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.create_date" t-options="{'widget': 'date'}"/></td>
+                        
+                        
+                      
+                        
+                        
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center">Leave Application</td>
+                       
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc='allow.name'/></td>
+                        
+                      <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.state"/></td>
+                      
+                      <td style= "border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.employee_id.parent_id.name"/></td>
+                       
+                        <td style="border-right: 1px solid black; border-top: 1px solid black;font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.approve_date"/></td>
+                        <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.date_from" t-options="{'widget': 'date'}"/></td>
+                        <td style="border-right: 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-field="allow.date_to" t-options="{'widget': 'date'}"/></td>
+                        <td></td>
+                        <td style="border-right: 1px solid black; border-top: 1px solid black; font-weight: bold;" width="100" class="text-center">-<span t-field="allow.number_of_days"/></td>
+                        <t t-set="balance" t-value="balance-allow.number_of_days"/> 
+                   <td style="border-left 1px solid black; border-top: 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></td>
+                    
+                        
+ 
+                     
+                     </tr >
+                 
+              </t>       
+            <tr class="text-center" style="border-bottom: 1px solid black;">
+             <td style="font-size: font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-weight: bold;" class="text-center"></td>
+             <td style="font-weight: bold;" class="text-center">  </td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center">Closing Balance</td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td style="font-size: 8px; font-weight: bold;" class="text-center"></td>
+             <td></td>
+             <td></td>
+              <t t-set="total_balance" t-value="total_balance + balance"/> 
+                   <td style="border-top: 1px solid black; border-right 1px solid black; font-size: 8px; font-weight: bold;" width="100" class="text-center"><span t-esc="total_balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></td>
+         </tr>
+                     
+                         
+                         
+                         
+                  
+                     
+                     
+                     
+                     
+
+             
+             
+         
+        
+ 
+                            
+    </t>     
+       
+  
+                     </tbody>
+                        </tr>   
+                       
+                    </table>
+           
+                           
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                              
+                              
+
+                              
+                              
+
+                        
+                        
+                       
+                    
+                           
+                            
+                    
+                     
+                    
+                    
+                    
+
+
+                 </div>
+                 
+                 </div>
+                 
+                 
+                 
+                 
+                 
+       </t>
+        </t>
+    
+    </template>
+</odoo>
