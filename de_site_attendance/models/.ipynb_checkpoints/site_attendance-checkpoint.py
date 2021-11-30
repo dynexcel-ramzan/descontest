@@ -75,11 +75,11 @@ class SiteAttendnace(models.Model):
             
         
 
-    def unlink(self):
-        for line in self:
-            if line.state != 'draft':
-                raise UserError('A record in Submitted or Approved state can`t be deleted!')
-        return super(SiteAttendnace, self).unlink()
+#     def unlink(self):
+#         for line in self:
+#             if line.state != 'draft':
+#                 raise UserError('A record in Submitted or Approved state can`t be deleted!')
+#         return super(SiteAttendnace, self).unlink()
 
     def action_submit(self):
         self.state = 'submitted'
