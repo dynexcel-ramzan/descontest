@@ -1,6 +1,8 @@
 from odoo import fields, models, api, _
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import AccessError, UserError, ValidationError
+from datetime import date, datetime, timedelta
 
 
 class HREmployee(models.Model):
@@ -33,6 +35,8 @@ class HREmployee(models.Model):
                                     temp = 'days'
                                 elif timeoff.request_unit == 'hour':
                                     temp = 'hours'
+                                pre_month=(fields.date.today().month - employee.date.month)
+                                
                                 vals = {
                                         'name': 'Probation Allocation For ' + employee.name,
                                         'holiday_status_id': timeoff.id,
@@ -41,29 +45,62 @@ class HREmployee(models.Model):
                                         'employee_id': employee.id,
                                         'date_from': employee.date,  # Start Date
                                         'date_to': employee.confirm_date,  # Run Untill
-                                        'number_per_interval': 1,
+                                        'number_per_interval': 0.83,
                                         'unit_per_interval': temp,
                                         'number_of_days': 0,
                                         'interval_number': 30,
                                         'interval_unit': 'days',
                                 }
+                                extra_month = 30 * pre_month
+                                next_execution_date = employee.date + timedelta(extra_month)
+                                if next_execution_date < fields.date.today():
+                                    next_execution_date = next_execution_date + timedelta(30) 
                                 if timeoff.request_unit == 'day':
+                                    extra_days = 0.83 * pre_month
                                     vals.update({
-                                            'number_of_days_display': 0.0,
+                                            'number_of_days': extra_days,
                                         })
                                 elif timeoff.request_unit == 'hour':
+                                    if employee.shift_id:
+                                        tot_hours=(employee.shift_id.hours_per_day * (0.83 * pre_month))
+                                    else:
+                                        tot_hours=(8 * (0.83 * pre_month))
                                     vals.update({
-                                            'number_of_hours_display': 0.0,
+                                            'number_of_hours_display': tot_hours,
                                         })
                                 leave_obj = self.env['hr.leave.allocation'].create(vals)
+                                
                                 if timeoff.leave_validation_type == 'both':
                                     leave_obj.action_approve()
+#                                     if next_execution_date > 
+                                    leave_obj.update({
+                                        'nextcall': next_execution_date
+                                    })
+                                    extra_days = 0.83 * pre_month
+                                    leave_obj.update({
+                                            'number_of_days': extra_days,
+                                        })
+                                    
                                     if leave_obj.state == 'validate':
                                         pass
                                     else:
                                         leave_obj.action_validate()
+                                        extra_days = 0.83 * pre_month
+                                        leave_obj.update({
+                                                'number_of_days': extra_days,
+                                            })
+                                        leave_obj.update({
+                                        'nextcall': next_execution_date
+                                        })
                                 else:
                                     leave_obj.action_approve()
+                                    leave_obj.update({
+                                        'nextcall': next_execution_date
+                                    })
+                                    extra_days = 0.83 * pre_month
+                                    leave_obj.update({
+                                       'number_of_days': extra_days,
+                                    })
 
                                 if leave_obj:
                                     employee.probation_leaves_allocated = True
@@ -77,7 +114,7 @@ class HREmployee(models.Model):
         """
         current_date = date.today()
         employees_id = self.env['hr.employee'].search([])
-
+         
         for employee in employees_id:
             time_off_for_probation = self.env['hr.leave.type'].search(
                 [('allocated_during_probation', '=', True), ('target_year', '=', current_date.year)
