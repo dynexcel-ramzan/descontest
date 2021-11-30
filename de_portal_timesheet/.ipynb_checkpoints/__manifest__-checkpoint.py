@@ -20,13 +20,22 @@
     'version': '14.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr_timesheet','approvals'],
+    'depends': ['base','hr_timesheet','approvals','hr','de_employee_enhancement','de_employee_shift', 'web', 'portal','de_portal_approvals'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'security/security.xml',
+        'report/timesheet_attendance_report.xml',
+        'report/timesheet_attendance_report_template.xml',
+        'wizard/timesheet_incharge_wizard.xml',
+        'views/approval_request_views.xml',
+        'views/res_ora_client_views.xml',
+        'views/timesheet_attendance_report_views.xml',
+        'views/timesheet_attendance_report_template.xml',
+        'views/hr_employee_views.xml',
+        'views/ora_project_project_views.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [
