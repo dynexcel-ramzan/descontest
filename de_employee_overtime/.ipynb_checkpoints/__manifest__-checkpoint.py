@@ -14,7 +14,7 @@
     'website': "https://www.dynexcel.com",
     'category': 'Human Resources',
     'version': '14.0.0.2',
-    'depends': ['base' ,'hr', 'hr_contract', 'mail' ,'hr_attendance', 'hr_holidays', 'hr_payroll','de_employee_shift','approvals','de_oracle_attendance_connector'],
+    'depends': ['base' ,'hr', 'hr_contract', 'mail' ,'hr_attendance', 'hr_holidays', 'hr_payroll','de_employee_shift','approvals'],
     
     'data': [
         'security/security.xml',

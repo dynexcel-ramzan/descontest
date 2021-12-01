@@ -131,22 +131,21 @@
             <field name="name">Overtime</field>
             <field name="model">hr.overtime.request</field>
             <field name="arch" type="xml">
-                <tree string="Overtime Request"  create="false" edit="false" decoration-danger="overtime_hours > 4">
-                    <field name="employee_id"  readonly="1"/>
-                    <field name="work_location_id"  invisible="1"/>
-                     <field name="workf_location_id"  readonly="1"/>
-                    <field name="date_from" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                    <field name="date_to" attrs="{'readonly': [('state', '!=', 'draft')]}" />
-                   <field name="overtime_hours" attrs="{'readonly': [('state', '!=', 'draft')]}"  widget="float_time" />
-                    <field name="actual_ovt_hours"  readonly="1" widget='float_time'  optional="hide"/>
-                    <field name="overtime_type_id"
-                                          attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                <tree string="Overtime Request"  create="1" edit="false" decoration-danger="overtime_hours > 4">
+                      <field name="employee_id" readonly="0"/>
+                      <field name="work_location_id" invisible="1"/>
+                      <field name="workf_location_id" readonly="1"/>
+                      <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                      <field name="date_from" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                      <field name="date_to" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                      <field name="overtime_hours" attrs="{'readonly': [('state', '!=', 'draft')]}" widget="float_time"/>
+                      <field name="actual_ovt_hours" readonly="0" widget="float_time" />
+                      <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                      <field name="overtime_type_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
                    
-                    <field name="remarks" />
-                    <field name="hours" readonly="1" widget='float_time'/>
-                     <field name="state"
-                                          readonly="1" />
-                    <field name="company_id"   attrs="{'readonly': [('state', '!=', 'draft')]}" optional="hide"/>
+                    <field name="remarks" optional="hide"/>
+                    <field name="hours" readonly="1" widget="float_time"/>
+                     <field name="state" readonly="1"/>
                    
                 </tree>
             </field>

@@ -29,7 +29,6 @@ class PayslipOverTime(models.Model):
                            }
                     entry_type = self.env['hr.work.entry.type'].create(vals)
                     
-                
             for uniq_overtime in uniq_overtime_type:
                 uniq_amount = 0.0
                 uniq_hours = 0.0
@@ -46,9 +45,9 @@ class PayslipOverTime(models.Model):
                                     'name': overtime_work_entry_type.name,
                                     'is_overtime': True,
                                     'sequence': overtime_work_entry_type.sequence,
-                                    'number_of_days' : uniq_hours/(payslip.employee_id.shift_id.hours_per_day),
+                                    'number_of_days' : 0,
                                     'number_of_hours' : uniq_hours,
-                                    'amount':  uniq_amount,
+                                    'amount':  round(uniq_amount,0),
                                             })]
                 work_days = self.env['hr.payslip.worked_days'].search([('payslip_id','=', payslip.id),('work_entry_type_id','=',overtime_work_entry_type.id)], limit=1)
                 if not work_days:
@@ -66,7 +65,7 @@ class PayslipOverTime(models.Model):
                 input_exists.create({
                                 'input_type_id': input_type_exists.id,
                                 'code': 'OT100',
-                                'amount': amount,
+                                'amount': round(amount,0),
                                 'contract_id': payslip.contract_id.id,
                                 'payslip_id': payslip.id,
                             })

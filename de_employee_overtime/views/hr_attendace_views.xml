@@ -19,6 +19,8 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='check_in']" position="after">
 					<field name="is_overtime" invisible="1"/>
+                                        <field name="write_date" invisible="1"/>
+                                        <field name="create_date" invisible="1"/>
 					<field name="company_id" invisible="1"/>
 				</xpath>
                 <xpath expr="//field[@name='worked_hours']" position="after">

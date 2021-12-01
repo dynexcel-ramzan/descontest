@@ -1,28 +1,21 @@
+# -*- coding: utf-8 -*-
+
+from odoo import models, fields, api, _
 import logging
-
-from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError, UserError
-from odoo import models, fields, api, _
-from datetime import datetime
-from odoo import exceptions 
-from odoo.exceptions import UserError, ValidationError 
-import math
-from datetime import date, timedelta
+from odoo.exceptions import ValidationError
+#import cx_Oracle
+from datetime import date, datetime, timedelta
+from odoo import exceptions
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError, ValidationError
 
-_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-class HrOvertimeAllocate(models.TransientModel):
-    _name = 'hr.overtime.allocate'
-    _description = 'Hr Overtime Allocate Wizard'
-
-    date_start = fields.Date(string='Date From')
-    date_end = fields.Date(string='Date To')
-    
-
-    
-    
+class OracleSettingConnector(models.Model):
+    _inherit = 'oracle.setting.connector'
+   
+            
     def get_normal_overtime_type(self, employee_company, work_location):
         """
          In this method you can get Normal Overtime 
@@ -95,15 +88,11 @@ class HrOvertimeAllocate(models.TransientModel):
                                 overtime_type = self.env['hr.overtime.type'].search([('type','=','rest_day')], limit=1)    
 
                         
-        return overtime_type
-    
-    
-    
+        return overtime_type    
         
-        
-    def action_create_overtime(self):
-        
-        attendances=self.env['hr.attendance'].search([('employee_id.allow_overtime','=',True),('is_overtime','=',False),('check_in','!=',False),('check_out','!=',False),('att_date','>=',self.date_start),('att_date','<=',self.date_end)])
+    def _action_create_overtime(self):
+        current_date= fields.datetime.now() - timedelta(2)
+        attendances=self.env['hr.attendance'].search([('employee_id.allow_overtime','=',True),('is_overtime','=',False),('write_date','>=',current_date),('check_in','!=',False),('check_out','!=',False)])
         for att in attendances:
             day_min_ovt = 0
             overtime_rule = self.env['hr.overtime.rule'].search([('company_id','=',att.employee_id.company_id.id)])

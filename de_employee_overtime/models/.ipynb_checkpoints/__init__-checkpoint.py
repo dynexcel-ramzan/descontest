@@ -9,4 +9,4 @@ from . import hr_leave_allocation
 
 from . import hr_work_location
 from . import approval_request
-from . import oracle_setting_connector
+
