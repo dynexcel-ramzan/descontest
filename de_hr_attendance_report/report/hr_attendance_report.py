@@ -29,8 +29,8 @@ class HrAttendanceReport(models.AbstractModel):
             
             employee = self.env['hr.employee'].sudo().search([('id',
                                                        '=', employee11.id)], limit=1)
-            date_from = datetime.strptime(str(docs.start_date), "%Y-%m-%d")
-            date_to = datetime.strptime(str(docs.end_date), "%Y-%m-%d")
+            date_from = docs.start_date
+            date_to = docs.end_date
 
             work_days = 0
             work_hours = 0 
@@ -78,16 +78,51 @@ class HrAttendanceReport(models.AbstractModel):
             leave_type = []
             
             total_leave_days = 0
-            emp_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('date_from','>=', date_from),('date_to','<=', date_to),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)])
+            emp_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','>=', date_from),('request_date_to','<=', date_to),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)])
+            last_day_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','=', date_to),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)], limit=1)
+            start_day_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', date_from),('request_date_to','>=', date_from),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)])        
             previous_date = fields.date.today()
             leave_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','LEAVE100')], limit=1)
+            for lastleave in last_day_leaves: 
+                leave_type.append(lastleave.holiday_status_id.id)
+            for startleave in start_day_leaves: 
+                leave_type.append(startleave.holiday_status_id.id)
             for leave in emp_leaves: 
                 leave_type.append(leave.holiday_status_id.id)
             uniq_leave_type = set(leave_type)
             for timeoff_type in uniq_leave_type:
                 leave_work_days = 0
                 leaves_work_hours = 0 
-                emp_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('date_from','>=', date_from),('date_to','<=', date_to),('state','=','validate')])
+                emp_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('request_date_from','>=', date_from),('request_date_to','<=', date_to),('state','=','validate')])
+                last_emp_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('request_date_from','=', date_to),('state','=','validate')], limit=1)
+                start_day_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('request_date_from','<=', date_from),('request_date_to','>=', date_from),('state','=','validate')], limit=1)
+                if start_day_leaves_type:
+                    if start_day_leaves_type.number_of_days <= 1:
+                        leave_work_days += start_day_leaves_type.number_of_days
+                        total_leave_days += start_day_leaves_type.number_of_days
+                    else:
+                        unsettle_day_count = 0
+                        uniq_diff = (date_from - start_day_leaves_type.request_date_from).days+1
+                        unsettle_day_date = start_day_leaves_type.request_date_from
+                        for unsettle_day in range(uniq_diff):
+                            unsettle_day_date = unsettle_day_date + timedelta(1)
+                            is_unrest_day=self.env['hr.shift.schedule.line'].sudo().search([('employee_id','=',employee.id),('date','=',unsettle_day_date)], limit=1)  
+                            if is_unrest_day:
+                                if is_unrest_day.rest_day==True: 
+                                    unsettle_day_count += 1
+                                elif is_unrest_day.first_shift_id:
+                                    is_ungazetted_day=self.env['shift.gazetted.line'].sudo().search([('shift_id','=',is_unrest_day.first_shift_id.id),('date','=',unsettle_day_date)], limit=1)
+                                    if is_ungazetted_day:
+                                        unsettle_day_count += 1
+                        leave_work_days += start_day_leaves_type.number_of_days - (uniq_diff - unsettle_day_count)
+                        total_leave_days += start_day_leaves_type.number_of_days - (uniq_diff - unsettle_day_count)     
+                if last_emp_leaves_type:
+                    if last_emp_leaves_type.number_of_days < 1:
+                        leave_work_days += last_emp_leaves_type.number_of_days
+                        total_leave_days += last_emp_leaves_type.number_of_days
+                    else:
+                        leave_work_days += 1
+                        total_leave_days += 1
                 for timeoff in emp_leaves_type:
                     attendance_exist = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','>=', timeoff.request_date_from),('att_date','<=', timeoff.request_date_to)])
                     if not attendance_exist:
@@ -215,7 +250,7 @@ class HrAttendanceReport(models.AbstractModel):
                 }
                 work_entry = self.env['hr.work.entry.type'].sudo().create(vals)
             apply_leave_days = 0    
-            emp_leaves_apply = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('date_from','>=', date_from),('date_to','<=', date_to),('state','=','validate')]) 
+            emp_leaves_apply = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','>=', date_from),('request_date_to','<=', date_to),('state','=','validate')]) 
             for leave_apply in emp_leaves_apply:
                 apply_leave_days += leave_apply.number_of_days
             
@@ -518,8 +553,8 @@ class PortalAttendanceReport(models.AbstractModel):
             
             employee = self.env['hr.employee'].sudo().search([('id',
                                                        '=', employee11)], limit=1)
-            date_from = datetime.strptime(str(data['start_date']), "%Y-%m-%d")
-            date_to = datetime.strptime(str(data['end_date']), "%Y-%m-%d")
+            date_from = data['start_date']
+            date_to = data['end_date']
 
             work_days = 0
             work_hours = 0 
@@ -566,16 +601,51 @@ class PortalAttendanceReport(models.AbstractModel):
             leave_type = []
             
             total_leave_days = 0
-            emp_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('date_from','>=', date_from),('date_to','<=', date_to),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)])
+            emp_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','>=', date_from),('request_date_to','<=', date_to),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)])
+            last_day_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','=', date_to),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)], limit=1)
+            start_day_leaves = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', date_from),('request_date_to','>=', date_from),('state','=','validate'),('holiday_status_id.is_rest_day','=',False)])        
             previous_date = fields.date.today()
             leave_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','LEAVE100')], limit=1)
+            for lastleave in last_day_leaves: 
+                leave_type.append(lastleave.holiday_status_id.id)
             for leave in emp_leaves: 
                 leave_type.append(leave.holiday_status_id.id)
+            for startleave in start_day_leaves: 
+                leave_type.append(startleave.holiday_status_id.id)
             uniq_leave_type = set(leave_type)
             for timeoff_type in uniq_leave_type:
                 leave_work_days = 0
                 leaves_work_hours = 0 
-                emp_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('date_from','>=', date_from),('date_to','<=', date_to),('state','=','validate')])
+                emp_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('request_date_from','>=', date_from),('request_date_to','<=', date_to),('state','=','validate')])
+                last_emp_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('request_date_from','=', date_to),('state','=','validate')], limit=1)
+                start_day_leaves_type = self.env['hr.leave'].sudo().search([('holiday_status_id','=', timeoff_type),('employee_id','=', employee.id),('request_date_from','<=', date_from),('request_date_to','>=', date_from),('state','=','validate')], limit=1)
+                if start_day_leaves_type:
+                    if start_day_leaves_type.number_of_days <= 1:
+                        leave_work_days += start_day_leaves_type.number_of_days
+                        total_leave_days += start_day_leaves_type.number_of_days
+                    else:
+                        unsettle_day_count = 0
+                        uniq_diff = (date_from - start_day_leaves_type.request_date_from).days+1
+                        unsettle_day_date = start_day_leaves_type.request_date_from
+                        for unsettle_day in range(uniq_diff):
+                            unsettle_day_date = unsettle_day_date + timedelta(1)
+                            is_unrest_day=self.env['hr.shift.schedule.line'].sudo().search([('employee_id','=',employee.id),('date','=',unsettle_day_date)], limit=1)  
+                            if is_unrest_day:
+                                if is_unrest_day.rest_day==True: 
+                                    unsettle_day_count += 1
+                                elif is_unrest_day.first_shift_id:
+                                    is_ungazetted_day=self.env['shift.gazetted.line'].sudo().search([('shift_id','=',is_unrest_day.first_shift_id.id),('date','=',unsettle_day_date)], limit=1)
+                                    if is_ungazetted_day:
+                                        unsettle_day_count += 1
+                        leave_work_days += start_day_leaves_type.number_of_days - (uniq_diff - unsettle_day_count)
+                        total_leave_days += start_day_leaves_type.number_of_days - (uniq_diff - unsettle_day_count)
+                if last_emp_leaves_type:
+                    if last_emp_leaves_type.number_of_days < 1:
+                        leave_work_days += last_emp_leaves_type.number_of_days
+                        total_leave_days += last_emp_leaves_type.number_of_days
+                    else:
+                        leave_work_days += 1
+                        total_leave_days += 1
                 for timeoff in emp_leaves_type:
                     attendance_exist = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','>=', timeoff.request_date_from),('att_date','<=', timeoff.request_date_to)])
                     if not attendance_exist:
@@ -702,7 +772,7 @@ class PortalAttendanceReport(models.AbstractModel):
                 }
                 work_entry = self.env['hr.work.entry.type'].sudo().create(vals)
             apply_leave_days = 0    
-            emp_leaves_apply = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('date_from','>=', date_from),('date_to','<=', date_to),('state','=','validate')]) 
+            emp_leaves_apply = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','>=', date_from),('request_date_to','<=', date_to),('state','=','validate')]) 
             for leave_apply in emp_leaves_apply:
                 apply_leave_days += leave_apply.number_of_days
             
