@@ -61,6 +61,8 @@ class CreateTimesheet(http.Controller):
         project = int(kw.get('project_id'))
         datefrom = kw.get('date_from')
         dateto = kw.get('date_to')
+        if dateto < datefrom:
+            raise UserError(_('Project Timesheet Date To cannot less than Date From! '+str(datefrom)))
         return request.render("de_portal_timesheet.portal_create_timesheet_report_lines", timesheet_line_page_content(project,datefrom,dateto))
 
     @http.route('/project/timesheet/line/save', type="http", auth="public", website=True)
@@ -78,14 +80,16 @@ class CreateTimesheet(http.Controller):
         for ptime in timesheet_attendance_list:
             count += 1
             if count > 1:
-                line_vals = {
-                    'timesheet_repo_id': sheet_report.id,
-                    'project_id': int(kw.get('project_id')),
-                    'employee_id': int(ptime['employee']),
-                    'date_from': ptime['datefrom'],
-                    'date_to': ptime['dateto'],
-                }
-                record_lines = request.env['hr.timesheet.report.line'].sudo().create(line_vals)
+                raise UserError(str(ptime['include']))
+                if ptime['include']=='on':
+                    line_vals = {
+                        'timesheet_repo_id': sheet_report.id,
+                        'project_id': int(kw.get('project_id')),
+                        'employee_id': int(ptime['employee']),
+                        'date_from': ptime['datefrom'],
+                        'date_to': ptime['dateto'],
+                    }
+                    record_lines = request.env['hr.timesheet.report.line'].sudo().create(line_vals)
         sheet_report.action_submit()
         return request.render("de_portal_timesheet.ptimesheet_submited", {})
 

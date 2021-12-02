@@ -22,7 +22,7 @@
                             Attendance Sheet
                           </h2>
                         </div>
-                        <table class="table table-condensed">
+                        <table class="table" style="table-layout: fixed">
                             <tr>
                                 <th>Client</th>
                                 <td><span t-esc="o.partner_id.name" /></td>
@@ -39,10 +39,11 @@
 
                         <div class="row justify-content-end">
                             <div class="col-12">
-                                <table class="table table-bordered table-condensed"  >
+                                <table class="table table-condensed"  style='font-size:13px;'>
                                     <thead>
                                         <tr>
-                                            <th style="border: 1px solid black;">Employee Name</th>
+                                            <th style="border: 1px solid black;">Employee</th>
+                                            <th style="border: 1px solid black;">Remarks</th>
                                             <t t-set="todays" t-value="0"/>
                                             <t t-set="todays" t-value="(o.date_to - o.date_from).days+1"/>
                                             <t t-set="datelabel" t-value="[]"/>
@@ -57,22 +58,35 @@
                                                   </th>
                                                 </t>
                                             </t>
-                                            <th style="border: 1px solid black;">Total</th>
+                                            <th style="border: 1px solid black;">Working Days</th>
+                                            <th style="border: 1px solid black;">Extra Days</th>
+                                            <th style="border: 1px solid black;">OT Hours</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                       <t t-set="tot_line_total" t-value="0"/>  
+                                      <t t-set="tot_extra_days_total" t-value="0"/>  
+                                      <t t-set="tot_ot_total" t-value="0"/>  
                                       <t t-foreach="o.timesheet_attendance_ids" t-as="line">
                                         <tr>
                                             <td style="border: 1px solid black;">
                                                 <span t-field="line.employee_id.name" /><br/>(<span t-field="line.employee_id.emp_number" />)
                                             </td>
+                                            <td style="border: 1px solid black;">
+                                                
+                                                Attendance
+                                                <hr/>
+                                                Overtime
+                                            </td>
+                                            
                                             
                                             
                                              <t t-set="startday" t-value="(line.date_from).strftime('%d')"/>
                                              <t t-set="start_date" t-value="line.date_from"/>
                                              <t t-set="docs_start_date" t-value="docs.date_from"/>
                                               <t t-set="line_total" t-value="0"/>
+                                              <t t-set="extra_days_total" t-value="0"/>
+                                              <t t-set="ot_total" t-value="0"/>
                                               <t t-foreach="set(datelabel)" t-as="lineta">
                                                 <t t-if="datelabel">
                                                     <t t-set="var_rest_day" t-value="0"/>
@@ -95,9 +109,20 @@
                                                             <td style="border: 1px solid black;background-color:LightGreen;">
                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="attr">
+                                                                    <t t-if='attr.worked_hours > (attr.shift_id.hours_per_day/2)' >  
                                                                       P
-                                                                <t t-set="line_total" t-value="line_total + 1"/>
+                                                                    
+                                                                 <hr/>
+                                                                 <t t-set="rest_ovt_hours" t-value="(attr.worked_hours - attr.shift_id.hours_per_day)"/>   
+                                                                 <t t-if='rest_ovt_hours > 1'>   
+                                                                    <span t-esc='round(rest_ovt_hours,2)'/>
+                                                                    <t t-set="ot_total" t-value="ot_total + round(rest_ovt_hours,2)"/>
+ 
+                                                                 </t>  
+                                                                    
+                                                                <t t-set="extra_days_total" t-value="extra_days_total + 1"/>
                                                                 </t>
+                                                                </t>    
                                                                 <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
                                                                 <t t-set="startday" t-value="(start_date).strftime('%d')"/>
                                                                </t>
@@ -110,9 +135,17 @@
                                                             <td style="border: 1px solid black;background-color:#C4A484;">
                                                               <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >                                                       
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
+                                                                <t t-if='att.worked_hours > (att.shift_id.hours_per_day/2)' >      
                                                                       P
-                                                                <t t-set="line_total" t-value="line_total + 1"/>
+                                                                 <t t-set="gazetted_ovt_hours" t-value="(att.worked_hours - att.shift_id.hours_per_day)"/>   
+                                                                 <t t-if='gazetted_ovt_hours > 1'>   
+                                                                    <span t-esc='round(gazetted_ovt_hours,2)'/>
+                                                                                                                                                                                         <t t-set="ot_total" t-value="ot_total + round(gazetted_ovt_hours,2)"/>
+ 
+                                                                 </t>   
+                                                                <t t-set="extra_days_total" t-value="extra_days_total + 1"/>
                                                                 </t>
+                                                                </t>    
                                                                 <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
                                                                 <t t-set="startday" t-value="(start_date).strftime('%d')"/>
                                                                 </t>
@@ -126,8 +159,17 @@
                                                             <td style="border: 1px solid black;">
                                                               <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >                                                                                                      
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
+                                                                 <t t-if='att.worked_hours > (att.shift_id.hours_per_day/2)' >  
                                                                   P    
-                                                                <t t-set="line_total" t-value="line_total + 1"/>
+                                                                 <hr/>
+                                                                 <t t-set="normal_ovt_hours" t-value="(att.worked_hours - att.shift_id.hours_per_day)"/>   
+                                                                 <t t-if='normal_ovt_hours > 1'>   
+                                                                    <span t-esc='round(normal_ovt_hours,2)'/>
+                                                                    <t t-set="ot_total" t-value="ot_total + round(normal_ovt_hours,2)"/> 
+                                                                 </t> 
+                                                                     
+                                                                 <t t-set="line_total" t-value="line_total + 1"/>
+                                                                  </t>    
                                                                 </t>
                                                                 <t t-set="start_date" t-value="start_date + datetime.timedelta(1)"/>
                                                                 <t t-set="startday" t-value="(start_date).strftime('%d')"/>
@@ -140,17 +182,31 @@
                                                 </t>
 
                                              <td style="border: 1px solid black;">  
-                                                  <span t-esc="line_total"/>
+                                                  <span t-esc="round(line_total,2)"/>
                                                   <t t-set="tot_line_total" t-value="tot_line_total + line_total"/>      
+                                              </td>
+                                            <td style="border: 1px solid black;">  
+                                                  <span t-esc="round(extra_days_total,2)"/>
+                                                  <t t-set="tot_extra_days_total" t-value="tot_extra_days_total + extra_days_total"/>      
+
+                                              </td>
+                                            <td style="border: 1px solid black;">
+                                                  <hr/>
+                                                  <span t-esc="round(ot_total,2)"/>
+                                                  <t t-set="tot_ot_total" t-value="tot_ot_total + ot_total"/>       
                                               </td>
                                         </tr>
                                       </t>
                                         <tr>
                                             <td></td>
+                                            <td></td>
                                             <t t-foreach="set(datelabel)" t-as="tot">  
                                               <td></td>
-                                            </t> 
-                                            <td><span t-esc="tot_line_total"/></td> 
+                                            </t>
+                                            
+                                            <td ><span t-esc="round(tot_line_total,2)"/> Days</td> 
+                                            <td ><span t-esc="round(tot_extra_days_total,2)"/> Days</td> 
+                                            <td ><span t-esc="round(tot_ot_total,2)"/> Hours</td> 
                                         </tr>
 
                                     </tbody>
