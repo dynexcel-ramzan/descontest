@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 class OvertimeReport(models.AbstractModel):
-    _name = 'report.de_department_wise_ot_report.overtime_report'
+    _name = 'report.de_employee_service_award.long_service_report'
     _description = 'Employee Overtime Report Deparmtent Wise'
 
     

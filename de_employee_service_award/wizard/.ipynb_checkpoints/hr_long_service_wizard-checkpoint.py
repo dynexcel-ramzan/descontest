@@ -21,7 +21,7 @@ class LongService(models.TransientModel):
 
     def _print_report(self, data):
         data['form'].update(self.read(['date','department_ids','employee_type_id','location_ids','section_ids'])[0])
-        return self.env.ref('de_department_wise_ot_report.open_hr_employee_overtime_action').report_action(self, data=data, config=False)
+        return self.env.ref('de_employee_service_award.open_hr_long_service_action').report_action(self, data=data, config=False)
         
         
         

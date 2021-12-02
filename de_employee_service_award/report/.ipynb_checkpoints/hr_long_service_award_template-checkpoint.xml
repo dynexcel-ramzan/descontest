@@ -2,14 +2,134 @@
     <template id="long_service_report">
       <t t-call="web.html_container">
              <t t-foreach="docs" t-as="docs">
-                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
-                <t t-call="de_long_service_award.long_service_report_layout"/>
-                <div class="page">
-                     
-                    <h>HELLO</h>
-                    
+                <t t-set='sr_no' t-value='0'/>
+                <t t-set="total_days" t-value="0"/>
                  
-                </div>
+                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-call="de_employee_service_award.long_service_report_layout"/>
+                <div class="page">
+                     <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                             <td>Date:&#160;</td>
+                                             <td><span t-field=" docs.date"/></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                             <td>Department:&#160;</td>
+                                              <td>
+                                                  <t t-foreach="docs.department_ids"  t-as="dep">
+                                                  <span t-field="dep.name"/>
+                                                </t>   
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                              <td>Emp Type:&#160;</td>
+                                             <td><span t-field=" docs.employee_type_id"/></td>
+                                              
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>  
+                        </div>
+                    
+                    
+                    <div class="row">
+                             <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                              <td >Location: &#160;</td>
+                                              <td>
+                                                <t t-foreach=" docs.location_ids"  t-as="loc">
+                                                  <span t-field="loc.name"/> 
+                                                </t>    
+                                             </td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table>
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;" >
+                                            <td>Section:&#160;</td>
+                                              <td>
+                                                  <t t-foreach="docs.section_ids"  t-as="sec">
+                                                  <span t-field="sec.name"/>
+                                                </t>   
+                                             </td>  
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                     <div class="col-4" style="font-size:12px">
+                                 <table >
+                                     <tbody style="color:blue">
+                                         <tr style="font-weight: bold;">
+                                            
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>  
+                        </div>
+                    <br/>
+
+                    <table class="table" style="height:5px;">
+                        <thead>
+                            <tr style="color:blue">
+                                <th style="border: 1px solid black; font-size: 10px " scope="col" width="70" class="text-center">Sr No</th>
+                                <th style="border: 1px solid black;  font-size: 10px" scope="col" width="80" class="text-center">Emp.Code</th>
+                                <th  style="border: 1px solid black; font-size: 10px" scope="col" width="100" class="text-center">Name:</th>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center">Department</th>
+                                <th style="border: 1px solid black; font-size: 10px" scope="col" width="200" colspan="2" ><div class="text-center">Long Service Award</div>  <br/> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; Date(DOP)  &#160; &#160;  &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;  &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160;&#160;&#160; Period</th>
+                                            
+                                
+                                
+                        </tr>
+                        </thead>
+                        
+                        <t t-foreach="docs.department_ids"  t-as="dep">
+                        
+                             <t t-foreach="request.env['hr.employee'].search([('department_id','=', dep.id)])"  t-as="employee">
+
+                                 
+                                 <t t-set='sr_no' t-value='sr_no + 1'/>
+                                
+                            <tr>
+                                <td style="border: 1px solid black; font-size: 10px"  width="50" class="text-center"><t t-esc="sr_no"/></td>
+                                 <td style="border: 1px solid black; font-size: 10px" scope="col" width="80" class="text-center"> <span t-field="employee.barcode"/></td>
+                                 <td style="border: 1px solid black; font-size: 10px" scope="col" width="80" class="text-center"> <span t-field="employee.name"/></td>
+                                 <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-field="employee.department_id.name"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-field="employee.date"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-esc="(docs.date-employee.date)/365"/></td>
+                                
+                               
+
+                              </tr>  
+                                
+                            </t>
+                        </t>
+                        
+                    </table>
+                    
+                           
+                    
+                    
+                    </div>
                  </div>
                  
                  
