@@ -28,15 +28,8 @@
     'data': [
         'security/ir.model.access.csv',
         'wizard/purchase_tax_register_views.xml',
-        'wizard/tax_computation_sheet.xml',
-#         'reports/tax_report.xml',
         'reports/purchase_tax_report.xml',
         'reports/purchase_tax_register_template.xml',
-#         'reports/computation_report_tax.xml',
-#         'reports/computation_tax_register.xml',
-        
-        
-        
     ],
     # only loaded in demonstration mode
     'demo': [

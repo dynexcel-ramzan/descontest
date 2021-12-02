@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo> 
         <!--Display form view of wizard-->    
-        <record id="view_computation_tax_register_wizard_form" model="ir.ui.view">
-            <field name="name">computation.tax.register.wizard.form</field>
-            <field name="model">computation.tax.register.wizard</field>
+        <record id="view_purchase_tax_register_wizard_form" model="ir.ui.view">
+            <field name="name">purchase.tax.register.wizard.form</field>
+            <field name="model">purchase.tax.register.wizard</field>
             <field name="arch" type="xml">
-                <form string="Computation tax register wizard">
+                <form string="Purchase Tax Register">
                     <group>
                       <group>
-                          <field name="employee_id"/>
+                          <field name="name"/>
                       </group>
                       <group>
                           <field name="date_from" />
@@ -27,16 +27,17 @@
         </record>
 
         <!--Open the wizard on click of menu-->
-        <record id="open_computation_tax_register_action" model="ir.actions.act_window">
-            <field name="name">Computation Tax Certificate</field>
-            <field name="res_model">computation.tax.register.wizard</field>
+        <record id="open_purchase_tax_register_action" model="ir.actions.act_window">
+            <field name="name">Tax Certificate</field>
+            <field name="res_model">purchase.tax.register.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
-            <field name="view_id" ref="view_computation_tax_register_wizard_form"/>
+            <field name="view_id" ref="view_purchase_tax_register_wizard_form"/>
         </record>
     
     
-     <menuitem action="open_computation_tax_register_action" id="new_computation_tax_report"     parent="hr_payroll.menu_hr_payroll_report" sequence="3"/>
+     <menuitem action="open_purchase_tax_register_action" id="new_purchase_tax_report" parent="hr_payroll.menu_hr_payroll_report" sequence="2"/>
 
 
 </odoo>
+
