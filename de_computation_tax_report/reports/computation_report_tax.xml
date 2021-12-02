@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <odoo>
-    
+
 
     <template id="computation_report_pdf">
         <t t-call="web.external_layout">
-           
+
             <t t-call="web.html_container" style="text-align: left">
                 <t t-foreach="docs" t-as="doc">
-                     
+
                     <br>
                         <center>
                             <div style="float:left; width: 110%">
@@ -18,41 +18,41 @@
 
                     </br>
                     <br>
-                    <center>
-                        <div style="float:left; width: 40%">
-                            <h3>Income Tax Computation Sheet</h3>
-                        </div>
-                    </center>
+                        <center>
+                            <div style="float:left; width: 40%">
+                                <h3>Income Tax Computation Sheet</h3>
+                            </div>
+                        </center>
                     </br>
-                    
+
                     <br>
-                    <center>
-                     <div align="center">
-                         <strong>
-                          <tr>
-                                <th scope="col">From :
-                                 <td>
-                                        <span t-field="doc.date_from"/>
-                                    </td>
-                                </th>
-                                <th scope="col">To:
-                                     <td>
-                                        <span t-field="doc.date_to"/>
-                                    </td>                               
-                                </th>
-                            </tr>
-                         </strong>
-                    </div>
-                    </center>
+                        <center>
+                            <div align="center">
+                                <strong>
+                                    <tr>
+                                        <th scope="col">From :
+                                            <td>
+                                                <span t-field="doc.date_from"/>
+                                            </td>
+                                        </th>
+                                        <th scope="col">To:
+                                            <td>
+                                                <span t-field="doc.date_to"/>
+                                            </td>
+                                        </th>
+                                    </tr>
+                                </strong>
+                            </div>
+                        </center>
                     </br>
-                   
+
 
                     <br>
                         <table class="table">
 
                             <tr>
                                 <th scope="col">Emp no :
-                                 <td>
+                                    <td>
                                         <span t-field="doc.employee_id.emp_number"/>
                                     </td>
                                 </th>
@@ -61,18 +61,18 @@
                                         <span t-field="doc.employee_id.name"/>
                                     </td>
                                 </th>
-                                <th scope="col">Designation: 
-                                 <td>
+                                <th scope="col">Designation:
+                                    <td>
                                         <span t-field="doc.employee_id.grade_designation"/>
                                     </td>
                                 </th>
-<!--                                 <th scope="col">Fiscal Year: 
-                                 <td>
-                                        <span t-field="doc.employee_id.date_to.strftime('%Y')"/>
-                                    </td>
-                                </th> -->
-                                
-                                
+                                <!--                                 <th scope="col">Fiscal Year:
+                                                                 <td>
+                                                                        <span t-field="doc.employee_id.date_to.strftime('%Y')"/>
+                                                                    </td>
+                                                                </th> -->
+
+
                             </tr>
                         </table>
 
@@ -81,29 +81,29 @@
                     <br>
                         <table class="table">
                             <tr>
-                                <th scope="col">Department: 
+                                <th scope="col">Department:
                                     <td>
                                         <span t-field="doc.employee_id.department_id"/>
                                     </td>
                                 </th>
-                                <th scope="col">Location: 
-                                 <td>
+                                <th scope="col">Location:
+                                    <td>
                                         <span t-field="doc.employee_id.work_location"/>
                                     </td>
                                 </th>
-                                <th scope="col">Emp type: 
-                                <td>
+                                <th scope="col">Emp type:
+                                    <td>
                                         <span t-field="doc.employee_id.emp_type"/>
                                     </td>
                                 </th>
-                                <th scope="col">Grade: 
-                                <td>
+                                <th scope="col">Grade:
+                                    <td>
                                         <span t-field="doc.employee_id.grade_designation"/>
                                     </td>
                                 </th>
-                                <th scope="col">Grade Type: 
-                                <td>
-                                    <span t-field="doc.employee_id.grade_type"/>
+                                <th scope="col">Grade Type:
+                                    <td>
+                                        <span t-field="doc.employee_id.grade_type"/>
                                     </td>
                                 </th>
                             </tr>
@@ -113,7 +113,7 @@
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
-<!--                             <th scope="col">Period</th> -->
+                            <!--                             <th scope="col">Period</th> -->
                             <th scope="col">O.T Hours</th>
                             <th scope="col">Gross Pay</th>
                             <th scope="col">Car Allowance</th>
@@ -123,130 +123,139 @@
                             <th scope="col">Others</th>
                             <th scope="col">Incentive</th>
                             <th scope="col">Mobile Allowance</th>
-<!--                             <th scope="col">Earned Leaves</th> -->
+                            <!--                             <th scope="col">Earned Leaves</th> -->
                             <th scope="col">Taxable amount</th>
                             <th scope="col">Income tax</th>
-<!--                             <th scope="col">Surch.Tax</th> -->
+                            <!--                             <th scope="col">Surch.Tax</th> -->
                             <th scope="col">Total Inc.Tax</th>
                         </tr>
                     </thead>
                     <tbody style="color:black">
-                          <t t-set='tot_ot_amount' t-value='0'/>
+                        <t t-set='tot_ot_amount' t-value='0'/>
                         <t t-set='tot_gross_pay' t-value='0'/>
-                        
-                         <t t-set='tot_bonus_amount' t-value='0'/>
-                         <t t-set='tot_car_allow' t-value='0'/>
-                         <t t-set='tot_arrears' t-value='0'/>
-                         <t t-set='tot_overtime' t-value='0'/>
-                         <t t-set='tot_others' t-value='0'/>
-                         <t t-set='tot_incentive' t-value='0'/>
-                         <t t-set='tot_mobile_allow' t-value='0'/>
+
+                        <t t-set='tot_bonus_amount' t-value='0'/>
+                        <t t-set='tot_car_allow' t-value='0'/>
+                        <t t-set='tot_arrears' t-value='0'/>
+                        <t t-set='tot_overtime' t-value='0'/>
+                        <t t-set='tot_others' t-value='0'/>
+                        <t t-set='tot_incentive' t-value='0'/>
+                        <t t-set='tot_mobile_allow' t-value='0'/>
                         <t t-set='incom_tax' t-value='0'/>
-                         <t t-set='tot_incom_tax' t-value='0'/>
-                          <t t-foreach="payslip" t-as="entry">
-                                                                   
-                                        <tr>
-<!--                                             <td><t t-esc="entry['date']"/></td> -->
-                                            
-                                             <td><t t-esc="entry['gross_pay']"/>
-                                                <t t-set='tot_gross_pay' t-value="tot_gross_pay + entry['gross_pay']"/>
-                                             </td>
-                                            
-                                             <td><t t-esc="entry['ot_amount']"/>
-                                                <t t-set='tot_ot_amount' t-value="tot_ot_amount + entry['ot_amount']"/>
-                                             </td>
-                                             <td><t t-esc="entry['car_allowance']"/>
-                                                <t t-set='tot_car_allow' t-value="tot_car_allow + entry['car_allowance']"/>
-                                             </td>
-                                              <td><t t-esc="entry['bonus']"/>
-                                                <t t-set='tot_bonus_amount' t-value="tot_bonus_amount + entry['bonus']"/>
-                                             </td>
-                                             
-                                              <td><t t-esc="entry['arrears']"/>
-                                                <t t-set='tot_arrears' t-value="tot_arrears + entry['arrears']"/>
-                                             </td>
-                                              <td><t t-esc="entry['overtime']"/>
-                                                <t t-set='tot_overtime' t-value="tot_overtime + entry['overtime']"/>
-                                             </td>
-                                             <td><t t-esc="entry['others']"/>
-                                                <t t-set='tot_others' t-value="tot_others + entry['others']"/>
-                                             </td>
-                                             <td><t t-esc="entry['incentive']"/>
-                                                <t t-set='tot_incentive' t-value="tot_incentive + entry['incentive']"/>
-                                             </td>
-                                             <td><t t-esc="entry['mobile_allowance']"/>
-                                            <t t-set='tot_mobile_allow' t-value="tot_mobile_allow + entry['mobile_allowance']"/>
-                                             </td>
-                                            <td><t t-esc="entry['incom_tax']"/>
-                                                <t t-set='incom_tax' t-value="incom_tax + entry['incom_tax']"/>
-                                             </td>
-                                              <td><t t-esc="entry['incom_tax']"/>
-                                                <t t-set='tot_incom_tax' t-value="tot_incom_tax + entry['incom_tax']"/>
-                                             </td>
-                                           
-                                        </tr>
-<!--                                <t t-set='tot_net_wage' t-value='tot_net_wage + gross_pay'/> -->
-                                    </t>
+                        <t t-set='tot_incom_tax' t-value='0'/>
+                        <t t-foreach="payslip" t-as="entry">
+
+                            <tr>
+                                <!--                                             <td><t t-esc="entry['date']"/></td> -->
+
+                                <td>
+                                    <t t-esc="entry['gross_pay']"/>
+                                    <t t-set='tot_gross_pay' t-value="tot_gross_pay + entry['gross_pay']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="entry['ot_amount']"/>
+                                    <t t-set='tot_ot_amount' t-value="tot_ot_amount + entry['ot_amount']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['car_allowance']"/>
+                                    <t t-set='tot_car_allow' t-value="tot_car_allow + entry['car_allowance']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['bonus']"/>
+                                    <t t-set='tot_bonus_amount' t-value="tot_bonus_amount + entry['bonus']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="entry['arrears']"/>
+                                    <t t-set='tot_arrears' t-value="tot_arrears + entry['arrears']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['overtime']"/>
+                                    <t t-set='tot_overtime' t-value="tot_overtime + entry['overtime']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['others']"/>
+                                    <t t-set='tot_others' t-value="tot_others + entry['others']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['incentive']"/>
+                                    <t t-set='tot_incentive' t-value="tot_incentive + entry['incentive']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['mobile_allowance']"/>
+                                    <t t-set='tot_mobile_allow' t-value="tot_mobile_allow + entry['mobile_allowance']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['incom_tax']"/>
+                                    <t t-set='incom_tax' t-value="incom_tax + entry['incom_tax']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="entry['incom_tax']"/>
+                                    <t t-set='tot_incom_tax' t-value="tot_incom_tax + entry['incom_tax']"/>
+                                </td>
+
+                            </tr>
+                            <!--                                <t t-set='tot_net_wage' t-value='tot_net_wage + gross_pay'/> -->
+                        </t>
                     </tbody>
                 </table>
-                
-                    <br>
-                        <table class="table">
-                            <tr>
-                                <th scope="col">Total:
-                                </th>
-                                
-                                   <td> 
-                                   <span t-esc="tot_gross_pay"/>
-                                </td>
-                                <td> 
-                                   <span t-esc="tot_ot_amount"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="tot_bonus_amount"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="tot_car_allow"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="tot_arrears"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="tot_overtime"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="tot_others"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="tot_incentive"/>
-                                </td>
-                                <td> 
-                                   <span t-esc="tot_mobile_allow"/>
-                                </td>
-                                  <td> 
-                                   <span t-esc="incom_tax"/>
-                                </td>
-                                <td> 
-                                   <span t-esc="tot_incom_tax"/>
-                                </td>
-                                 
-                            </tr>
-                        </table>
 
-                    </br>
-                
-                   <br>
-                        <center>
-                            <div style="float:left; width: 110%">
-                                <h3>Provident Fund exceeding limit (150,000): 118092 </h3>
-                            </div>
-                        </center>
+                <br>
+                    <table class="table">
+                        <tr>
+                            <th scope="col">Total:
+                            </th>
 
-                    </br>
-                
-                
-                
-                
+                            <td>
+                                <span t-esc="tot_gross_pay"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_ot_amount"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_bonus_amount"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_car_allow"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_arrears"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_overtime"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_others"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_incentive"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_mobile_allow"/>
+                            </td>
+                            <td>
+                                <span t-esc="incom_tax"/>
+                            </td>
+                            <td>
+                                <span t-esc="tot_incom_tax"/>
+                            </td>
+
+                        </tr>
+                    </table>
+
+                </br>
+
+                <br>
+                    <center>
+                        <div style="float:left; width: 110%">
+                            <h3>Provident Fund exceeding limit (150,000): 118092</h3>
+                        </div>
+                    </center>
+
+                </br>
+
+
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
@@ -257,33 +266,32 @@
                         </tr>
                     </thead>
                     <tbody style="color:black">
-                          <t t-foreach="payslip" t-as="entry">
-                                        <tr>
-                                            
-                                            
-<!--                                              <td><t t-esc="entry['overtime']"/></td> 
-                                             -->
-                                        </tr>
-                                    </t>
+                        <t t-foreach="payslip" t-as="entry">
+                            <tr>
+
+
+                                <!--                                              <td><t t-esc="entry['overtime']"/></td>
+                                                                             -->
+                            </tr>
+                        </t>
                     </tbody>
                 </table>
-                
-                
-                  <br>
-                        <table class="table">
-                            <tr>
-                                <th scope="col">Total:
-                                </th>
-                                <td> 
-                                   <span t-esc="tot_net_wage"/>
-                                </td>
-                             
-                            </tr>
-                        </table>
 
-                    </br>
 
-              
+                <br>
+                    <table class="table">
+                        <tr>
+                            <th scope="col">Total:
+                            </th>
+                            <td>
+                                <span t-esc="tot_net_wage"/>
+                            </td>
+
+                        </tr>
+                    </table>
+
+                </br>
+
 
                 <table class="table">
                     <thead class="thead-light">
@@ -293,31 +301,31 @@
                     </thead>
 
                 </table>
-                
-              
-                    <table>
-                             <thead class="thead-light">
+
+
+                <table>
+                    <thead class="thead-light">
                         <tr>
                             <th scope="col">Taxable Income</th>
                             <th scope="col">Rates %</th>
                         </tr>
-                                 
+
                     </thead>
-                              <t t-foreach="payslip_fild" t-as="entri">
-                            <tr>
-                                <td>
-                                 <span t-field="entri.taxable_income"/>
-                                    </td>
-                                 <td>
-                                 <span t-field="entri.rate"/>
-                                    </td>
-                             </tr>
-                            </t>
-                    </table>
+                    <t t-foreach="payslip_fild" t-as="entri">
+                        <tr>
+                            <td>
+                                <span t-field="entri.taxable_income"/>
+                            </td>
+                            <td>
+                                <span t-field="entri.rate"/>
+                            </td>
+                        </tr>
+                    </t>
+                </table>
             </t>
         </t>
     </template>
 
 </odoo>
 
-<!--                                             <td> <span t-field="doc.employee_id.date_from"/></td> -->
+        <!--                                             <td> <span t-field="doc.employee_id.date_from"/></td> -->

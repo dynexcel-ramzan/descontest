@@ -21,8 +21,7 @@ class ComputationTax(models.TransientModel):
     employee_id = fields.Many2one('hr.employee', string="Employee")
     date_from = fields.Date(string="Date from", default=datetime.today())
     date_to = fields.Date(string="Date to", default=datetime.today())
-    bank_name = fields.Char(string="Bank Name")
-    branch_address = fields.Char(string="Branch address")
+
 
 
 
