@@ -1,0 +1,13 @@
+<odoo>
+  <data>
+        <report 
+            id="open_hr_long_service_action"
+            string="Long Service Award"
+            model="report.de_employee_service_award.long_service_report"
+            report_type="qweb-pdf"
+            file="de_employee_service_award.long_service_report"
+            name="de_employee_service_award.long_service_report"
+        />
+     
+  </data>
+</odoo>
