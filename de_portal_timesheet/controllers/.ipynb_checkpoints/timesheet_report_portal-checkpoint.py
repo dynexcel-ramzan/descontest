@@ -80,8 +80,7 @@ class CreateTimesheet(http.Controller):
         for ptime in timesheet_attendance_list:
             count += 1
             if count > 1:
-                raise UserError(str(ptime['include']))
-                if ptime['include']=='on':
+                if ptime['include']=='true':
                     line_vals = {
                         'timesheet_repo_id': sheet_report.id,
                         'project_id': int(kw.get('project_id')),

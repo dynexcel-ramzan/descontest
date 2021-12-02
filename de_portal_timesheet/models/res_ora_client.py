@@ -13,3 +13,8 @@ class ResORAClient(models.Model):
     
     name = fields.Char(string='Description')
     code = fields.Char(string='Code')
+    
+    
+    
+class ShiftScheduleLine(models.Model):
+    _inherit='hr.shift.schedule.line'
