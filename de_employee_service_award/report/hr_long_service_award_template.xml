@@ -115,7 +115,7 @@
                                  <td style="border: 1px solid black; font-size: 10px" scope="col" width="80" class="text-center"> <span t-field="employee.name"/></td>
                                  <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-field="employee.department_id.name"/></td>
                                 <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-field="employee.date"/></td>
-                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-esc="(docs.date-employee.date)/365"/></td>
+                                <td style="border: 1px solid black; font-size: 10px" scope="col" width="300" class="text-center"> <span t-esc="get_date(docs.date,employee.date)"/></td>
                                 
                                
 

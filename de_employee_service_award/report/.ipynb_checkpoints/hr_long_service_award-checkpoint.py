@@ -4,7 +4,7 @@ import time
 from odoo import api, models, _ , fields 
 from dateutil.parser import parse
 from odoo.exceptions import UserError
-from datetime import date, datetime, timedelta
+from datetime import date
 from odoo import exceptions
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError, ValidationError
@@ -16,6 +16,10 @@ class OvertimeReport(models.AbstractModel):
     _description = 'Employee Overtime Report Deparmtent Wise'
 
     
+    def _get_date(self,doc_date,employee_date):
+        
+        rdelta = relativedelta(doc_date, employee_date)
+        return str(rdelta.years)+"Y-"+str(rdelta.months)+"M-"+str(rdelta.days)+"D"
     
     
     def _get_report_values(self, docids, data=None):
@@ -25,4 +29,5 @@ class OvertimeReport(models.AbstractModel):
         
         return {
             'docs': docs,
+            'get_date':self._get_date
         }
