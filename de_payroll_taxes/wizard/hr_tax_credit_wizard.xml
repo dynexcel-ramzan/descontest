@@ -11,9 +11,10 @@
                         <group>
                               <field name="employee_id" />
                               <field name="date" />
+                              <field name="remarks" />
                         </group>
                         <group>
-                            
+                             <field name="credit_type_id"  require='1'/>
                              <field name="credit_amount" />
                             <field name="number_of_month" />
                         </group>

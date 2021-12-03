@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_hr_tax_credit,access.hr.tax.credit,model_hr_tax_credit,,1,1,1,1
 access_hr_tax_credit_wizard,access.hr.tax.credit.wizard,model_hr_tax_credit_wizard,,1,1,1,1
+access_tax_credit_type,access.tax.credit.type,model_tax_credit_type,,1,1,1,1
 

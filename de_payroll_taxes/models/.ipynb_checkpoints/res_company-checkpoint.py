@@ -21,7 +21,7 @@ class ResCompany(models.Model):
         ('11', 'Nov'),
         ('12', 'Dec'),    
          ],
-         string='Fiscal Year', default='6')
+         string='Fiscal Year', default='06')
     fiscalyear_last_day = fields.Integer(string='Days', default=30)
     
     

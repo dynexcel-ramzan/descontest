@@ -22,14 +22,16 @@
     'version': '14.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr_payroll'],
+    'depends': ['base','hr_payroll','report_xlsx','de_employee_enhancement'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'report/hr_tax_credit_report.xml',
         'wizard/hr_tax_credit_wizard.xml',
         'views/hr_tax_credit_views.xml',
         'views/res_company_views.xml',
+        'views/tax_credit_type_views.xml',
         'views/hr_salary_rule_category_views.xml',
         'views/hr_payslip_views.xml',
         'views/hr_payslip_input_type_views.xml',
