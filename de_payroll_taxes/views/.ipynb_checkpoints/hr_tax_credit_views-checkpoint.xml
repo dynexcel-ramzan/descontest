@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="view_hr_tax_credit_form" model="ir.ui.view">
+            <field name="name">hr.tax.credit.form</field>
+            <field name="model">hr.tax.credit</field>
+            <field name="arch" type="xml">
+                <form string="Tax Credit" create='0' delete='0' edit='0'>
+                    <sheet>
+                       <group>
+                        <group>
+                              <field name="name" readonly='1'/>
+                              <field name="employee_id" readonly='1'/>
+                              <field name="date" readonly='1'/>
+                              <field name="reconcile_amount" readonly='1'/>
+                              
+                        </group>
+                        <group>
+                             <label for="period" string="Period" />
+                                <div class="d-flex" >
+                                    <field name="period" force_save="1" />
+                                    <span class="o_form_label mx-3 oe_edit_only" >  </span>
+                                    <field name="tax_year" />
+                                </div>
+                             <field name="tax_amount" readonly='1'/>
+                            <field name="company_id" readonly='1'/>
+                            <field name="remaining_amount" readonly='1'/>
+                            
+                        </group>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_hr_tax_credits_tree">
+            <field name="name">hr.tax.credit.tree</field>
+            <field name="model">hr.tax.credit</field>
+            <field name="arch" type="xml">
+                <tree string="Tax Credit" create='0' delete='0' edit='0'>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="period"/>
+                    <field name="tax_year"/>
+                    <field name="tax_amount"/>
+                    <field name="reconcile_amount"/>
+                    <field name="remaining_amount"/>
+                    <field name="company_id" readonly='1'/>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_tax_credit" model="ir.actions.act_window">
+            <field name="name">Tax Credit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.tax.credit</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="view_hr_tax_credits_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Records Here.......
+                </p>
+            </field>
+        </record>
+        
+     
+        <menuitem id="hr_tax_credit_menuitem"
+                  name="Tax Credit"
+                  parent="hr_payroll.menu_hr_payroll_employees_root"
+                  action="action_hr_tax_credit"
+                  sequence="18"/>
+        
+    </data>
+</odoo>
