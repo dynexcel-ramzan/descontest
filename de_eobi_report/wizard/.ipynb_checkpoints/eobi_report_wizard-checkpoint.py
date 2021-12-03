@@ -24,7 +24,7 @@ class EobiReport(models.TransientModel):
         string="Employee")
     department_id = fields.Many2one('hr.department', string="Department")
     location_id = fields.Many2one('hr.work.location', string="location")
-    section_id = fields.Many2one('hr.employee', string="Section Type")
+    employee_id = fields.Many2one('hr.employee', string="Employee Type")
 
     def check_report(self):
         data = {}

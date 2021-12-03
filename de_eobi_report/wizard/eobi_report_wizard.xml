@@ -8,12 +8,13 @@
                 <form string="Employee Eobi wizard">
                     <group>
                       <group>
-                          <field name="employee_type" widget='selection'/>
+                           <field name="employee_id"/>
                            <field name="department_id"/>
                       </group>
                       <group>
                           <field name="location_id"/>
-                           <field name="section_id"/>
+                           <field name="employee_type" widget='selection'/>
+                          
                       </group>
                     </group>
                     <footer>
