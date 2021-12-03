@@ -8,7 +8,7 @@ class TaxCreditType(models.Model):
     _description = 'Tax Credit Type'
     
     
-    name = fields.Char(string='Name')
+    name = fields.Char(string='Name', required=True)
     company_id = fields.Many2one('res.company', string='Company')
     
     

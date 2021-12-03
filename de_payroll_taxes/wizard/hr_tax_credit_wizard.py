@@ -13,7 +13,7 @@ class HrTaxCreditWizard(models.TransientModel):
     credit_amount = fields.Float(string='Credit Amount')
     number_of_month = fields.Integer(string='Number Of Month', default=1)
     remarks = fields.Char(string='Remarks')
-    credit_type_id = fields.Many2one('tax.credit.type', string='Tax Credit Type')
+    credit_type_id = fields.Many2one('tax.credit.type', string='Tax Credit Type', required=True)
 
     
     def action_create_tax_credit(self):
@@ -35,6 +35,7 @@ class HrTaxCreditWizard(models.TransientModel):
                     'remarks': line.remarks,
                     'dist_month': line.number_of_month,
                     'post': 'N',
+                    'credit_type_id': line.credit_type_id.id,
                 }
                 tax_credit=self.env['hr.tax.credit'].create(vals)
     
