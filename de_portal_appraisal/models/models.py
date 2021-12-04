@@ -3,6 +3,7 @@
 from odoo import models, fields, api, _
 
 
+
 class PortalAppraisal(models.Model):
     _inherit = 'hr.appraisal.feedback'
     
