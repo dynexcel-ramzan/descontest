@@ -555,6 +555,10 @@ class CreateAppraisal(http.Controller):
     def appraisal_objective_template(self, **kw):
         global appraisal_objective_list
         appraisal_objective_list = []
+        active_user = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+        active_employee = request.env['hr.employee'].search([('user_id','=',active_user.id)], limit=1)
+        if active_employee.company_id.id==2:
+            return request.render("de_portal_appraisal.re_appraisal_submited_expire",{})
         return request.render("de_portal_appraisal.submit_appraisal_objective",appraisal_page_content()) 
     
     @http.route('/add/obj/line/save',type="http", website=True, auth='user')

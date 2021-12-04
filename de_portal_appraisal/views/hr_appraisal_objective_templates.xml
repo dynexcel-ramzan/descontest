@@ -172,7 +172,7 @@
                                         <t t-if="appraisal.state == 'waiting'">
                                             <i class="badge badge-pill badge-warning" >Submitted</i>
                                         </t>
-                                        <t t-if="appraisal.state == 'confirmed'">
+                                        <t t-if="appraisal.state == 'confirm'">
                                             <i class="badge badge-pill badge-success" >Approved</i>
                                         </t>
                                        
@@ -1304,6 +1304,40 @@
                     </div>
                 </div>
             </div>
+         </t>
+    </template>
+
+    
+     <template id="de_portal_appraisal.re_appraisal_submited_expire" name="Received Objective Expire">
+        <t t-call="portal.portal_layout">
+            
+                  <div id="wrap">
+                    <div class="oe_structure" id="oe_structure_website_form_contact_us_thanks_1"/>
+                    <div class="container mt-4">
+                        <div class="row">
+                            <div class="col-lg-7 col-xl-6 mr-lg-auto oe_structure">
+                                <section class="pt40 s_text_block pb40 o_colored_level o_cc o_cc1" data-snippet="s_text_block" data-name="Text">
+                                    <div class="container">
+                                        <span class="d-block fa fa-4x fa-thumbs-up mx-auto rounded-circle bg-primary"/><br/>
+                                        <h1 class="text-center">Deadline Expired!</h1>
+                                        <div class="pb16 pt16 s_hr" data-snippet="s_hr" data-name="Separator">
+                                            <hr class="mx-auto border-top w-50 border-dark text-center"/>
+                                        </div>
+                                        <h5 class="text-center">
+                                            <span class="fa fa-check-circle"/>
+                                            <span>Your Objective Setting Entry Deadline Expired! You are not allow to enter Objective.For more Information consult with your concern <b>HR Deparment</b></span>
+                                        </h5>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-lg-4">
+                                <t t-call="website.company_description"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oe_structure" id="oe_structure_website_form_contact_us_thanks_2"/>
+                  </div>
+           
          </t>
     </template>
     
