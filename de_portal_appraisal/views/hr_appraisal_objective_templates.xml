@@ -24,40 +24,48 @@
     </template>
     
     
-    <template id="portal_appraisal" name="Appraisals">
-         <t t-set="foo" t-value="2 + 1"/>
+       <template id="portal_appraisal" name="Appraisals">
          <t t-call="portal.portal_layout">
-             <br/>
-             <br/>  
-           <div class="card-deck">
-          <div class="card bg-primary">
-            <div class="card-body text-center">
-              <p class="card-text">
-                <a t-attf-href="/appraisal/objectives">Objective Setting</a>
-                </p>
+             <section class="s_banner parallax s_parallax_is_fixed pt96 pb96 o_colored_level" data-scroll-background-ratio="1" data-snippet="s_banner" data-name="Banner">
+        <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_banner_default_image'); background-position: 50% 0;"/>
+        <div class="container">
+          <div class="row s_nb_column_fixed">
+            <div class="col-lg-3 jumbotron rounded o_cc o_cc1 pt32 pb32  o_colored_level"  style='margin:10px;' data-name="Box">
+              <h3>
+                <font style="font-size: 25px;" class="o_default_snippet_text"><a t-attf-href="/appraisal/objectives">Objective</a></font>
+              </h3>
+              <p class="lead o_default_snippet_text">By clicking below view button, you can see and set your objective.If you have subordinate's than you can also review and approve their Objective from here!</p>
+              <a t-attf-href="/appraisal/objectives" class="btn btn-primary mb-2 o_default_snippet_text">View</a>
             </div>
-          </div>
-          <div class="card bg-warning">
-            <div class="card-body text-center">
-              <a t-attf-href="/appraisals/feedback">Appraisal</a>
+            <div class="col-lg-3 jumbotron rounded o_cc o_cc1 pt32 pb32 o_colored_level" style='margin:10px;' data-name="Box">
+              <h3>
+                <font style="font-size: 25px;" class="o_default_snippet_text"><a t-attf-href="/appraisals/feedback">Appraisal</a></font>
+              </h3>
+              <p class="lead o_default_snippet_text">By clicking below view button, you can see and review your appraisal and submit your feedback.If you have subordinate's than you can also review and rate their Appraisal from here!</p>
+              <a t-attf-href="/appraisals/feedback" class="btn btn-primary mb-2 o_default_snippet_text">View</a>
             </div>
-          </div>
-           <div class="card bg-success">
-            <div class="card-body text-center">
-              <a t-attf-href="/appraisal/probations">Probation</a>
+           
+            <div class="col-lg-3 jumbotron rounded o_cc o_cc1 pt32 pb32 o_colored_level" style='margin:10px;' data-name="Box">
+              <h3>
+                <font style="font-size: 25px;" class="o_default_snippet_text"><a t-attf-href="/appraisal/probations">Probation</a></font>
+              </h3>
+              <p class="lead o_default_snippet_text">By clicking below view button, If you are on probation than you can review your probation and submit your remarks.If you have subordinate's than you can also review and rate their Probation from here!</p>
+              <a t-attf-href="/appraisal/probations" class="btn btn-primary mb-2 o_default_snippet_text">View</a>
             </div>
-          </div>
-         <div class="card bg-danger">
-            <div class="card-body text-center">
-              <a t-attf-href="/appraisal/improvements">Improvements</a>  
+             <div class="col-lg-3 jumbotron rounded o_cc o_cc1 pt32 pb32 o_colored_level" style='margin:10px;' data-name="Box">
+              <h3>
+                <font style="font-size: 25px;" class="o_default_snippet_text"><a t-attf-href="/appraisal/improvements">Improvement</a></font>
+              </h3>
+              <p class="lead o_default_snippet_text">By clicking below view button, you can review your improvement suggested from your Manager.If you have subordinate's than you can also create your subordinate's improvements  from here!</p>
+              <a t-attf-href="/appraisal/improvements" class="btn btn-primary mb-2 o_default_snippet_text">View</a>
             </div>
+            
           </div>
         </div>
-                 
-           
+      </section>
         </t>
     </template>
-       
+
 
     <template id="portal_appraisal_objectives" name="Appraisals Objective">
          <t t-set="foo" t-value="2 + 1"/>

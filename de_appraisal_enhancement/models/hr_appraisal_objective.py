@@ -1,8 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
-
-
 class HrAppraisalObjective(models.Model):
     _name = 'hr.appraisal.objective'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
