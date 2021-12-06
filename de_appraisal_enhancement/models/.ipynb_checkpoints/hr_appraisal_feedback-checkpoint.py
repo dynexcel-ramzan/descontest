@@ -67,6 +67,10 @@ class HrAppraisalFeedback(models.Model):
     rating_score = fields.Float(string='Manager Rating Score', compute='compute_rating_level')
     rating_score_calc = fields.Float(string='Rating Score')
     
+    
+
+    
+    
     def compute_rating_level(self):
         for line in self:
             total_grand = 0
@@ -337,10 +341,139 @@ class HrAppraisalFeedback(models.Model):
             self.behavioral_rating = 'Unacceptable'
         else:
             self.behavioral_rating = ' '
-        
+            
+    def action_send_mail_appraisal(self):
+        mail_template = self.env.ref('de_appraisal_enhancement.mail_template_appraisal_feedback_m_create')
+        ctx = {
+            'employee_to_name': self.name.name,
+            'recipient_users': self.name.user_id,
+            'url': '/appraisal/feedback/%s' % (self.id),
+        }
+        RenderMixin = self.env['mail.render.mixin'].with_context(**ctx)
+        subject = RenderMixin._render_template(mail_template.subject, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        body = RenderMixin._render_template(mail_template.body_html, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        mail_values = {
+            'email_from': self.env.user.email_formatted,
+            'author_id': self.env.user.partner_id.id,
+            'model': None,
+            'res_id': None,
+            'subject': subject,
+            'body_html': body,
+            'auto_delete': True,
+            'email_to': self.name.work_email
+        }
+        activity= self.env['mail.mail'].sudo().create(mail_values)
+#         activity.send()
+
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # OVERRIDE
+        rslt = super(HrAppraisalFeedback, self).create(vals_list)
+        rslt.action_send_mail_appraisal()
+        return rslt
+            
+    
+    def action_send_manager_mail(self):
+        mail_template = self.env.ref('de_appraisal_enhancement.mail_template_appraisal_feedback_m1')
+        ctx = {
+            'employee_to_name': self.name.parent_id.name,
+            'recipient_users': self.name.parent_id.user_id,
+            'url': '/appraisal/feedback/%s' % (self.id),
+        }
+        RenderMixin = self.env['mail.render.mixin'].with_context(**ctx)
+        subject = RenderMixin._render_template(mail_template.subject, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        body = RenderMixin._render_template(mail_template.body_html, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        mail_values = {
+            'email_from': self.env.user.email_formatted,
+            'author_id': self.env.user.partner_id.id,
+            'model': None,
+            'res_id': None,
+            'subject': subject,
+            'body_html': body,
+            'auto_delete': True,
+            'email_to': self.name.parent_id.work_email
+        }
+        activity= self.env['mail.mail'].sudo().create(mail_values)
+#         activity.send()
+
+    def action_send_manager_mail_reply(self):
+        mail_template = self.env.ref('de_appraisal_enhancement.mail_template_appraisal_feedback_m2')
+        ctx = {
+            'employee_to_name': self.name.name,
+            'recipient_users': self.name.user_id,
+            'url': '/appraisal/feedback/%s' % (self.id),
+        }
+        RenderMixin = self.env['mail.render.mixin'].with_context(**ctx)
+        subject = RenderMixin._render_template(mail_template.subject, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        body = RenderMixin._render_template(mail_template.body_html, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        mail_values = {
+            'email_from': self.env.user.email_formatted,
+            'author_id': self.env.user.partner_id.id,
+            'model': None,
+            'res_id': None,
+            'subject': subject,
+            'body_html': body,
+            'auto_delete': True,
+            'email_to': self.name.work_email
+        }
+        activity= self.env['mail.mail'].sudo().create(mail_values)
+#         activity.send()
+
+    def action_send_hod_mail(self):
+        mail_template = self.env.ref('de_appraisal_enhancement.mail_template_appraisal_feedback_m3')
+        ctx = {
+            'employee_to_name': self.name.department_id.manager_id.name,
+            'recipient_users': self.name.department_id.manager_id.user_id,
+            'url': '/appraisal/feedback/%s' % (self.id),
+        }
+        RenderMixin = self.env['mail.render.mixin'].with_context(**ctx)
+        subject = RenderMixin._render_template(mail_template.subject, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        body = RenderMixin._render_template(mail_template.body_html, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        mail_values = {
+            'email_from': self.env.user.email_formatted,
+            'author_id': self.env.user.partner_id.id,
+            'model': None,
+            'res_id': None,
+            'subject': subject,
+            'body_html': body,
+            'auto_delete': True,
+            'email_to': self.name.department_id.manager_id.work_email
+        }
+        activity= self.env['mail.mail'].sudo().create(mail_values)
+#         activity.send()
+
+
+    def action_send_mail_appraisal_done(self):
+        mail_template = self.env.ref('de_appraisal_enhancement.mail_template_appraisal_feedback_m4')
+        ctx = {
+            'employee_to_name': self.name.name,
+            'recipient_users': self.name.user_id,
+            'url': '/appraisal/feedback/%s' % (self.id),
+        }
+        RenderMixin = self.env['mail.render.mixin'].with_context(**ctx)
+        subject = RenderMixin._render_template(mail_template.subject, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        body = RenderMixin._render_template(mail_template.body_html, 'hr.appraisal.feedback', self.ids, post_process=True)[self.id]
+        mail_values = {
+            'email_from': self.env.user.email_formatted,
+            'author_id': self.env.user.partner_id.id,
+            'model': None,
+            'res_id': None,
+            'subject': subject,
+            'body_html': body,
+            'auto_delete': True,
+            'email_to': self.name.work_email
+        }
+        activity= self.env['mail.mail'].sudo().create(mail_values)
+#         activity.send()
+
+
+    
     def action_confirm(self):
         self.state = 'confirm'
-        
+        self.action_send_manager_mail()
+    
+
     def employee_done(self):
         self.state = 'done'
     
@@ -349,34 +482,45 @@ class HrAppraisalFeedback(models.Model):
         
     def action_Sent_for_Employee_Review(self):
         self.state = 'sent'
+        self.action_send_manager_mail_reply()
+
         
     def action_endorsed_employee(self):
         self.state = 'endorsed_employee'
+        self.action_send_hod_mail()
         
     def action_endorsed_hod(self):
         self.state = 'endorsed_hod'
         
     def action_done(self):
         self.state = 'done'
+        self.action_send_mail_appraisal_done()
 #         States After Done Controlled Here
 
     def action_end_year_appraisee_review(self):
         self.state = 'end_year_appraisee_review'
+        self.action_send_mail_appraisal()
         
     def action_end_year_appraiser_review(self):
         self.state = 'end_year_appraiser_review'
-    
+        self.action_send_manager_mail()
+        
     def action_end_year_sent_emp_view(self):
         self.state = 'end_year_sent_emp_view'
+        self.action_send_manager_mail_reply()
         
     def action_end_year_endorsed_emp(self):
         self.state = 'end_year_endorsed_emp'
+        self.action_send_hod_mail()
+
         
     def action_end_year_endorse_hod(self):
         self.state = 'end_year_endorse_hod'
         
     def action_closed(self):
         self.state = 'closed'
+        self.action_send_mail_appraisal_done()
+
         
     
 

@@ -53,6 +53,34 @@ class HrAppraisalObjective(models.Model):
     work_location_id = fields.Many2one('hr.work.location',string='Work Location')
     cwork_location_id = fields.Many2one('hr.work.location',string='cWork Location', compute='_compute_work_locationn')
     
+    
+    
+    
+    def action_send_mail(self):
+        mail_template = self.env.ref('de_appraisal_enhancement.mail_template_appraisal_objective')
+        ctx = {
+            'employee_to_name': self.employee_id.parent_id.name,
+            'recipient_users': self.employee_id.user_id,
+            'url': '/mail/view?model=%s&res_id=%s' % ('hr.appraisal.objective', self.id),
+        }
+        RenderMixin = self.env['mail.render.mixin'].with_context(**ctx)
+        subject = RenderMixin._render_template(mail_template.subject, 'hr.appraisal.objective', self.ids, post_process=True)[self.id]
+        body = RenderMixin._render_template(mail_template.body_html, 'hr.appraisal.objective', self.ids, post_process=True)[self.id]
+        
+        mail_values = {
+            'email_from': self.env.user.email_formatted,
+            'author_id': self.env.user.partner_id.id,
+            'model': None,
+            'res_id': None,
+            'subject': subject,
+            'body_html': body,
+            'auto_delete': True,
+            'email_to': self.employee_id.parent_id.work_email
+        }
+        activity= self.env['mail.mail'].sudo().create(mail_values)
+#         activity.send()
+    
+    
     @api.depends('employee_id')
     def _compute_work_locationn(self):
         for obj in self:
@@ -147,6 +175,7 @@ class HrAppraisalObjective(models.Model):
             obj.update({
                 'state': 'waiting'
             })
+            obj.action_send_mail()
         
     def action_reset(self):
         self.state = 'draft'     
