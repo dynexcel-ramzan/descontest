@@ -18,6 +18,7 @@
         <field name="arch" type="xml">
             <search string="Hr Overtime Search">
                 <field name="employee_id"/>
+                <field name="employee_number"/>
                 <filter string="My Attendances" name="myattendances" domain="[('employee_id.user_id.id', '=', uid)]" />
                 <separator/>
                 <filter string="Date_from" name="date_from_filter" date="date_from" default_period="last_month"/>
@@ -132,19 +133,20 @@
             <field name="model">hr.overtime.request</field>
             <field name="arch" type="xml">
                 <tree string="Overtime Request"  create="1" edit="false" decoration-danger="overtime_hours > 4">
-                      <field name="employee_id" readonly="0"/>
+                      <field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                      <field name="employee_number" readonly="1"/> 
                       <field name="work_location_id" invisible="1"/>
                       <field name="workf_location_id" readonly="1"/>
                       <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
                       <field name="date_from" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                       <field name="date_to" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                       <field name="overtime_hours" attrs="{'readonly': [('state', '!=', 'draft')]}" widget="float_time"/>
-                      <field name="actual_ovt_hours" readonly="0" widget="float_time" />
+                      <field name="actual_ovt_hours" attrs="{'readonly': [('state', '!=', 'draft')]}" widget="float_time" />
                       <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
                       <field name="overtime_type_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
                    
-                    <field name="remarks" optional="hide"/>
-                    <field name="hours" readonly="1" widget="float_time"/>
+                    <field name="remarks" optional="hide" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="hours"  widget="float_time" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                      <field name="state" readonly="1"/>
                    
                 </tree>
