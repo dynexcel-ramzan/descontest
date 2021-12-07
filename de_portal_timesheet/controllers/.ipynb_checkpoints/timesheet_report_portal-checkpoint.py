@@ -36,10 +36,12 @@ def timesheet_page_content(flag=0):
     }
 
 def timesheet_line_page_content(project,datefrom,dateto):
-    uprojects = request.env['project.project'].sudo().search([('id','=',project)])
-    employees = request.env['hr.employee'].sudo().search([('timesheet_incharge_id.user_id','=',http.request.env.context.get('uid'))])
-    upartner = request.env['res.ora.client'].search([('id','=',uprojects.ora_client_id.id)])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
+    incharge_dept = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))], limit=1)
+    uprojects = request.env['project.project'].sudo().search([('id','=',project)])
+    employees = request.env['hr.employee'].sudo().search([('department_id','=', incharge_dept.department_id.id),('id','!=',incharge_dept.id)])
+    upartner = request.env['res.ora.client'].search([('id','=',uprojects.ora_client_id.id)])
+    
     return {
         'partner': upartner,
         'project': uprojects,

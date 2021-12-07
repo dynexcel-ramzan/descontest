@@ -410,6 +410,14 @@
                      else {
                         event.target.value=false;  
                      }
+                     if (selected_include=='on') {
+                        event.target.value=true;
+                        console.log(event.target.value)
+                      } 
+                     else {
+                        event.target.value=false;
+                        console.log(event.target.value)
+                     }
                    }
                     window.addEventListener('DOMContentLoaded', (event) => {
                         [...document.getElementsByClassName("date_from")].map(el=>{el.addEventListener("change",validatedateForm)}); 

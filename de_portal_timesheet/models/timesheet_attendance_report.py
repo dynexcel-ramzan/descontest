@@ -66,22 +66,22 @@ class PortalTimesheet(models.Model):
     def action_timesheet_validation(self):
         for line in self:
             for rec_line in line.timesheet_attendance_ids:
-                exist_timesheet_portal=self.env['hr.timesheet.report.line'].search([('employee_id','=',line.employee_id.id),('date_from','>=',rec_line.date_from),('date_to','<=', rec_line.date_to)])
-                exist_in_timesheet_portal=self.env['hr.timesheet.report.line'].search([('employee_id','=',line.employee_id.id),('date_from','<=',rec_line.date_from),('date_to','>=', rec_line.date_from)])
-                exist_out_timesheet_portal=self.env['hr.timesheet.report.line'].search([('employee_id','=',line.employee_id.id),('date_from','<=',rec_line.date_to),('date_to','>=', rec_line.date_to)])
+                exist_timesheet_portal=self.env['hr.timesheet.report.line'].search([('employee_id','=',rec_line.employee_id.id),('date_from','>=',rec_line.date_from),('date_to','<=', rec_line.date_to),('timesheet_repo_id.state','in',('submitted','approved'))], limit=1)
+                exist_in_timesheet_portal=self.env['hr.timesheet.report.line'].search([('employee_id','=',rec_line.employee_id.id),('date_from','<=',rec_line.date_from),('date_to','>=', rec_line.date_from),('timesheet_repo_id.state','in',('submitted','approved'))], limit=1)
+                exist_out_timesheet_portal=self.env['hr.timesheet.report.line'].search([('employee_id','=',rec_line.employee_id.id),('date_from','<=',rec_line.date_to),('date_to','>=', rec_line.date_to),('timesheet_repo_id.state','in',('submitted','approved'))], limit=1)
                 if exist_timesheet_portal:
-                    raise UserError(_('Project Timesheet already created for this range! Date From: '+str(exist_timesheet_portal.date_from)+' Date To: '+str(exist_timesheet_portal.date_to)))
+                    raise UserError(_('Project Timesheet already created for this range! Date From: '+str(exist_timesheet_portal.date_from)+' Date To: '+str(exist_timesheet_portal.date_to)+' For Employee'+str(exist_timesheet_portal.employee_id.name)))
                 if exist_in_timesheet_portal:
-                    raise UserError(_('Project Timesheet already created for this range! Date From: '+str(exist_in_timesheet_portal.date_from)+' Date To: '+str(exist_in_timesheet_portal.date_to)))
-                if out_timesheet_portal:
-                    raise UserError(_('Project Timesheet already created for this range! Date From: '+str(exist_out_timesheet_portal.date_from)+' Date To: '+str(exist_out_timesheet_portal.date_to))) 
+                    raise UserError(_('Project Timesheet already created for this range! Date From: '+str(exist_in_timesheet_portal.date_from)+' Date To: '+str(exist_in_timesheet_portal.date_to)+' For Employee'+str(exist_in_timesheet_portal.employee_id.name)))
+                if exist_out_timesheet_portal:
+                    raise UserError(_('Project Timesheet already created for this range! Date From: '+str(exist_out_timesheet_portal.date_from)+' Date To: '+str(exist_out_timesheet_portal.date_to)+' For Employee'+str(exist_out_timesheet_portal.employee_id.name))) 
 
                 if rec_line.date_from > rec_line.date_to:
                     raise UserError(_('Not Allow to Enter Date From '+str(rec_line.date_from)+' greater than Date To '+str(rec_line.date_to)+' For Employee '+str(rec_line.employee_id.name)))
                     
-            timesheet_portal=self.env['hr.timesheet.report'].search([('project_id','=',line.project_id.id),('incharge_id','=',line.incharge_id.id),('state','in',('submitted','approved')),('date_from','>=',line.date_from),('date_to','<=', line.date_to)])
-            in_timesheet_portal=self.env['hr.timesheet.report'].search([('project_id','=',line.project_id.id),('incharge_id','=',line.incharge_id.id),('state','in',('submitted','approved')),('date_from','<=',line.date_from),('date_to','>=', line.date_from)])
-            out_timesheet_portal=self.env['hr.timesheet.report'].search([('project_id','=',line.project_id.id),('incharge_id','=',line.incharge_id.id),('state','in',('submitted','approved')),('date_from','<=',line.date_to),('date_to','>=', line.date_to)])
+            timesheet_portal=self.env['hr.timesheet.report'].search([('project_id','=',line.project_id.id),('incharge_id','=',line.incharge_id.id),('state','in',('submitted','approved')),('date_from','>=',line.date_from),('date_to','<=', line.date_to)], limit=1)
+            in_timesheet_portal=self.env['hr.timesheet.report'].search([('project_id','=',line.project_id.id),('incharge_id','=',line.incharge_id.id),('state','in',('submitted','approved')),('date_from','<=',line.date_from),('date_to','>=', line.date_from)], limit=1)
+            out_timesheet_portal=self.env['hr.timesheet.report'].search([('project_id','=',line.project_id.id),('incharge_id','=',line.incharge_id.id),('state','in',('submitted','approved')),('date_from','<=',line.date_to),('date_to','>=', line.date_to)], limit=1)
             if timesheet_portal:
                 raise UserError(_('Project Timesheet already created for this range! Date From: '+str(timesheet_portal.date_from)+' Date To: '+str(timesheet_portal.date_to)))
             if in_timesheet_portal:
@@ -107,10 +107,12 @@ class PortalTimesheet(models.Model):
 
     def action_submit(self):
         for line in self:
+            line.action_timesheet_validation()
             line.action_create_approval_request_timesheet()
             line.update({
                 'state': 'submitted',
             })
+            
 
     def action_create_approval_request_timesheet(self):
         approver_ids = []

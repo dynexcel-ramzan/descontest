@@ -39,7 +39,7 @@ def timesheet_line_page_content(project,datefrom,dateto):
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
     incharge_dept = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))], limit=1)
     uprojects = request.env['project.project'].sudo().search([('id','=',project)])
-    employees = request.env['hr.employee'].sudo().search([('department_id','=', incharge_dept.department_id.id)])
+    employees = request.env['hr.employee'].sudo().search([('department_id','=', incharge_dept.department_id.id),('id','!=',incharge_dept.id)])
     upartner = request.env['res.ora.client'].search([('id','=',uprojects.ora_client_id.id)])
     
     return {
@@ -82,7 +82,7 @@ class CreateTimesheet(http.Controller):
         for ptime in timesheet_attendance_list:
             count += 1
             if count > 1:
-                if ptime['include']=='True':
+                if ptime['include']=='true':
                     line_vals = {
                         'timesheet_repo_id': sheet_report.id,
                         'project_id': int(kw.get('project_id')),

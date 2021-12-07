@@ -403,11 +403,20 @@
                     }
                    function validateInclude(event) {
                      const selected_include=event.target.value;
-                     if (selected_include=='true') {
+                     console.log(selected_include)
+                     if (selected_include=='false') {
                         event.target.value=true;
                       } 
                      else {
+                        event.target.value=false;  
+                     }
+                     if (selected_include=='on') {
+                        event.target.value=true;
+                        console.log(event.target.value)
+                      } 
+                     else {
                         event.target.value=false;
+                        console.log(event.target.value)
                      }
                    }
                     window.addEventListener('DOMContentLoaded', (event) => {
@@ -459,7 +468,7 @@
                                         <input id='date_to'  type="date" class="form-control s_website_form_input" name="date_to"     t-options='{"widget": "date"}'  t-att-value="dateto" />
                                     </td>
                                     <td class="include">
-                                        <input id='include'  type="checkbox" class="form-control s_website_form_input" name="include"       value='true' checked='1'/>
+                                        <input id='include'  type="checkbox" class="form-control s_website_form_input" name="include" t-att-value='false' />
                                     </td>
 
                                 </tr>
