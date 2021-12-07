@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import time
 from odoo import api, models, _ , fields 
 from dateutil.parser import parse
@@ -34,41 +33,47 @@ class HrAttendanceReport(models.AbstractModel):
             """
               Employee Attendance Days
             """ 
-            emp_attendance = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','>=', date_from),('att_date','<=', date_to)])
-            previous_date = fields.date.today()
+            days = (date_to - date_from).days + 1
             work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','WORK100')], limit=1)
-            for attendance in emp_attendance:
-                if attendance.check_out and attendance.check_in:
-                    new_date = attendance.att_date
-                    if new_date != previous_date:
-                        daily_leave = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', attendance.att_date),('request_date_to','>=',  attendance.att_date),('state','in',('validate','confirm'))])
-                        if daily_leave:
-                            for dleave in daily_leave:
-                                if dleave.number_of_days == 0.5:
-                                    work_days += 0.5
-                                    work_hours += attendance.worked_hours / 2
-
-                                elif  dleave.number_of_days == 0.25:
-                                    work_days += 0.75
-                                    att_hours = attendance.worked_hours / 4
-                                    work_hours += attendance.worked_hours - att_hours
-                                else:
-                                    if (attendance.shift_id.hours_per_day - 1.5) > attendance.worked_hours and (attendance.worked_hours > 0.0):
-                                        work_days += 0.5
-                                        work_hours += attendance.worked_hours/2
-                                    else:
-                                        if (attendance.worked_hours > (attendance.shift_id.hours_per_day - 1.5)):
-                                            work_days += 1
-                                            work_hours += attendance.worked_hours
-                        else:
-                            if (attendance.shift_id.hours_per_day - 1.5) > attendance.worked_hours and (attendance.worked_hours > (attendance.shift_id.hours_per_day/2)):
+            for d_days in range(days):
+                start_date_from = date_from + timedelta(d_days)
+                day_hours = 0.0
+                shift = ' '
+                emp_attendance = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','=', start_date_from)])
+                for em_att in emp_attendance:
+                    if em_att.check_out and em_att.check_in:
+                        day_hours += em_att.worked_hours
+                        shift = em_att.shift_id
+                if  day_hours > 0.0:                           
+                    daily_leave = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', start_date_from),('request_date_to','>=',  start_date_from),('state','in',('validate','confirm'))])
+                    if daily_leave:
+                        for dleave in daily_leave:
+                            if dleave.number_of_days == 0.5:
                                 work_days += 0.5
-                                work_hours += attendance.worked_hours/2
+                                work_hours += day_hours / 2
+
+                            elif  dleave.number_of_days == 0.25:
+                                work_days += 0.75
+                                att_hours = day_hours / 4
+                                work_hours += day_hours - att_hours
                             else:
-                                if (attendance.worked_hours > (attendance.shift_id.hours_per_day - 1.5)):
-                                    work_days += 1
-                                    work_hours += attendance.worked_hours
-                    previous_date = attendance.att_date
+                                if (shift.hours_per_day - 1.5) > day_hours and (day_hours > shift.hours_per_day/2):
+                                    work_days += 0.5
+                                    work_hours += day_hours/2
+                                else:
+                                    if (day_hours > (shift.hours_per_day - 1.5)):
+                                        work_days += 1
+                                        work_hours += day_hours
+                    else:
+                        if (shift.hours_per_day - 1.5) > day_hours and (day_hours > (shift.hours_per_day/2)):
+                            work_days += 0.5
+                            work_hours += day_hours/2
+                            
+                        else:
+                            if (day_hours > (shift.hours_per_day - 1.5)):
+                                work_days += 1
+                                work_hours += day_hours
+
             work_day_line.append({
                'work_entry_type_id' : work_entry_type.id ,
                'name': work_entry_type.name ,
@@ -113,7 +118,6 @@ class HrAttendanceReport(models.AbstractModel):
                     else:
                         unsettle_day_in_count = 0
                         uniq_in_diff = (date_to - start_day_in_leaves_type.request_date_from).days+1
-#                         raise UserError(str(uniq_in_diff))
                         unsettle_day_in_date = start_day_in_leaves_type.request_date_from
                         for unsettle_in_day in range(uniq_in_diff):
                             unsettle_day_in_date = unsettle_day_in_date + timedelta(1)
@@ -596,41 +600,50 @@ class PortalAttendanceReport(models.AbstractModel):
             """
               Employee Attendance Days
             """ 
-            emp_attendance = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','>=', date_from),('att_date','<=', date_to)])
-            previous_date = fields.date.today()
             work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','WORK100')], limit=1)
-            for attendance in emp_attendance:
-                if attendance.check_out and attendance.check_in:
-                    new_date = attendance.att_date
-                    if new_date != previous_date: 
-                        daily_leave = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', attendance.att_date),('request_date_to','>=', attendance.att_date),('state','in',('validate','confirm'))])
-                        if daily_leave:
-                            for dleave in daily_leave:
-                                if dleave.number_of_days == 0.5:
-                                    work_days += 0.5
-                                    work_hours += attendance.worked_hours / 2
-
-                                elif  dleave.number_of_days == 0.25:
-                                    work_days += 0.75
-                                    att_hours = attendance.worked_hours / 4
-                                    work_hours += attendance.worked_hours - att_hours
-                                else:
-                                    if (attendance.shift_id.hours_per_day - 1.5) > attendance.worked_hours and (attendance.worked_hours > 0.0):
-                                        work_days += 0.5
-                                        work_hours += attendance.worked_hours/2
-                                    else:
-                                        if (attendance.worked_hours > (attendance.shift_id.hours_per_day - 1.5)):
-                                            work_days += 1
-                                            work_hours += attendance.worked_hours
-                        else:
-                            if (attendance.shift_id.hours_per_day - 1.5) > attendance.worked_hours and (attendance.worked_hours > (attendance.shift_id.hours_per_day/2)):
+            days = (date_to - date_from).days + 1
+            inner_count = 0
+            for d_days in range(days):
+                start_date_from = date_from + timedelta(d_days)
+                day_hours = 0.0
+                shift = ' '
+                emp_attendance = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','=', start_date_from)])
+                for em_att in emp_attendance:
+                    if em_att.check_out and em_att.check_in:
+                        day_hours += em_att.worked_hours
+                        shift = em_att.shift_id
+                if  day_hours > 0.0:       
+                    
+                    daily_leave = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', start_date_from),('request_date_to','>=',  start_date_from),('state','in',('validate','confirm'))])
+                    if daily_leave:
+                        for dleave in daily_leave:
+                            if dleave.number_of_days == 0.5:
                                 work_days += 0.5
-                                work_hours += attendance.worked_hours/2
+                                work_hours += day_hours / 2
+
+                            elif  dleave.number_of_days == 0.25:
+                                work_days += 0.75
+                                att_hours = day_hours / 4
+                                work_hours += day_hours - att_hours
+
                             else:
-                                if (attendance.worked_hours > (attendance.shift_id.hours_per_day - 1.5)):
-                                    work_days += 1
-                                    work_hours += attendance.worked_hours
-                    previous_date = attendance.att_date
+                                if (shift.hours_per_day - 1.5) > day_hours and (day_hours > shift.hours_per_day/2):
+                                    work_days += 0.5
+                                    work_hours += day_hours/2
+                                else:
+                                    if (day_hours > (shift.hours_per_day - 1.5)):
+                                        work_days += 1
+                                        work_hours += day_hours
+                    else:
+                        if (shift.hours_per_day - 1.5) > day_hours and (day_hours > (shift.hours_per_day/2)):
+                            work_days += 0.5
+                            work_hours += day_hours/2
+                            
+                        else:
+                            if (day_hours > (shift.hours_per_day - 1.5)):
+                                work_days += 1
+                                work_hours += day_hours
+                                
             work_day_line.append({
                'work_entry_type_id' : work_entry_type.id ,
                'name': work_entry_type.name ,
