@@ -29,20 +29,30 @@ class HrOverTime(models.Model):
         leave_type = 0
         leave_total_hours = 0
         leave_period = ' '
+        shift = []
         for line in self:
+            shift_line=self.env['hr.shift.schedule.line'].search([('employee_id','=', line.employee_id.id),('date','=',line.date),('state','=','posted')], limit=1)
+            if shift_line:
+                shift= shift_line.first_shift_id
+            if not shift:
+                shift =  line.employee_id.shift_id
+            if not shift:
+                shift =  self.env['resource.calendar'].search([('company_id','=', line.employee_id.company_id.id)], limit=1)
             for ovt_type_line in line.overtime_type_id.type_line_ids:
                 if ovt_type_line.compansation == 'leave':
-                    if leave_period != 'full_day':
+                    if (shift.hours_per_day/2) <= line.hours and ovt_type_line.leave_type=='half_day':
                         leave_type = ovt_type_line.leave_type_id.id     
-                        leave_period = ovt_type_line.leave_type 
-                
+                        leave_period = ovt_type_line.leave_type
+                    elif (shift.hours_per_day) <= line.hours and ovt_type_line.leave_type=='full_day':
+                        leave_type = ovt_type_line.leave_type_id.id     
+                        leave_period = ovt_type_line.leave_type    
         if leave_type > 0:
             leave_total_hours = 0
         if leave_period == 'half_day':
-            leave_total_hours = (line.employee_id.shift_id.hours_per_day/2) 
+            leave_total_hours = ((shift.hours_per_day)/2)  
         elif leave_period == 'full_day':
-            leave_total_hours = line.employee_id.shift_id.hours_per_day 
-        if leave_total_hours > 0:    
+            leave_total_hours = shift.hours_per_day
+        if leave_total_hours > 0: 
             vals = {
                 'holiday_status_id': leave_type,
                 'employee_id': line.employee_id.id, 
@@ -50,13 +60,18 @@ class HrOverTime(models.Model):
                 'request_date': fields.date.today(),
                 'holiday_type': 'employee',
                 'allocation_type': 'regular',
+                'ovt_date': line.date,
                 'number_of_hours_calc': leave_total_hours,
-                'name':  "Timeoff  Allocation Created From Employee Overtime Compansation Type "+str(line.overtime_type_id.name), 
-
+                'name':  "Allocation Created From Overtime Compensation Type "+str(line.overtime_type_id.name)+' ('+str(line.date)+')', 
                         }
             timeoff = self.env['hr.leave.allocation'].create(vals)
-
-    
+            if leave_period == 'half_day':
+                timeoff.update({
+               'number_of_days_display': 0.5,
+                'number_of_days': 0.5,
+               'number_of_hours_calc': leave_total_hours,
+               })
+            timeoff.action_create_approval_request_allocation()
     
     def action_submit(self):
         for line in self:
@@ -121,63 +136,17 @@ class HrOverTime(models.Model):
          1- By Using Overtime type
         """
         for line in self:
-            gazetted_hours = 0
-            leave_period = ' '
-            leave_type = 0
-            only_cpl = False
-            singl_hours = 0.0 
-            single_ot_amount = 0.0
-            double_ot_amount = 0.0
-            grate = 0
-            grate2 = 0
-            double_rate_ot_hours = 0.0 
-            single_hour_limit = 0.0 
-            only_cpl = line.employee_id.cpl
-            for compansation in line.overtime_type_id.type_line_ids:
-                if line.hours >= compansation.ot_hours:
-                    if compansation.compansation == 'leave':
-                        gazetted_hours = line.hours 
-                        if leave_period != 'full_day':
-                            leave_type = compansation.leave_type_id.id     
-                            leave_period = compansation.leave_type  
-                    elif compansation.compansation == 'payroll':
-                        if compansation.rate_type == 'fix_amount':
-                            ot_amount = compansation.rate * line.overtime_hours 
-                            grate =  compansation.rate
-                        elif compansation.rate_type == 'percent' and compansation.entry_type_id == 'single' and singl_hours < compansation.ot_hours:
-                            contract = self.env['hr.contract'].search([('employee_id','=',line.employee_id.id),('state','=','open')], limit=1) 
-                            single_ot_hour_amount = (contract.wage * compansation.rate_percent ) /(compansation.hours_per_day * compansation.month_day)             
-                                    
-                            grate =  compansation.rate_percent
-                            double_hours_limit = 0.0
-                            singl_hours = line.hours
-                            for compansation1 in line.overtime_type_id.type_line_ids:
-                                if line.hours >= compansation1.ot_hours:
-                                    if compansation1.rate_type == 'percent' and compansation1.entry_type_id == 'double' and double_hours_limit < compansation1.ot_hours:
-                                        double_hours_limit =  compansation1.ot_hours
-                            single_hour_limit1  =   line.hours - singl_hours            
-                            single_hour_limit = line.hours - single_hour_limit1
-                            
-                            single_ot_amount = single_ot_hour_amount * single_hour_limit
-                                    
-                                    
-                                    
-                        elif compansation.rate_type == 'percent' and compansation.entry_type_id == 'double' and double_rate_ot_hours < compansation.ot_hours:
-                                    
-                            contract = self.env['hr.contract'].search([('employee_id','=',line.employee_id.id),('state','=','open')], limit=1)
-                            double_ot_hour_amount = (contract.wage * compansation.rate_percent ) /(compansation.hours_per_day * compansation.month_day)  
-                            grate2 =  compansation.rate_percent
-
-                            double_rate_ot_hours = 0
-                            single_rate_ot_hours = 0.0
-                            single_hourss_limit  = 0.0
-                            for compansationin in line.overtime_type_id.type_line_ids:
-                                if compansationin.rate_type == 'percent' and compansationin.entry_type_id == 'single' and single_hourss_limit < compansationin.ot_hours:
-                                    single_hourss_limit =  compansationin.ot_hours
-                            double_rate_ot_hours =   line.hours - single_hourss_limit                                   
-                            double_ot_amount = double_ot_hour_amount * double_rate_ot_hours
+            single_ot_amount = 0
+            double_ot_amount = 0
+            single_hour_limit = 0
+            double_rate_ot_hours = 0
+            grate2 = ' '
+            grate = ' '
+            double_rate_line=self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<', line.overtime_hours),('entry_type_id','=','double')])
+            single_rate_line=self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<', line.overtime_hours),('entry_type_id','=','single')], order='ot_hours desc')
+            raise UserError(str(single_rate_line.ot_hours)+' '+str(double_rate_line.ot_hours))
             if single_ot_amount > 0:
-                if only_cpl == False:
+                if line.employee_id.cpl == False:
                     entry_vals = {
                             'employee_id': line.employee_id.id,
                             'date': line.date,
@@ -212,6 +181,7 @@ class HrOverTime(models.Model):
             leave_type = 0
             only_cpl = False
             rate = 0
+            d_rate = 0
             rest_singl_hours = 0.0 
             rest_single_ot_amount = 0.0
             rest_double_ot_amount = 0.0
@@ -219,9 +189,9 @@ class HrOverTime(models.Model):
             rest_single_hour_limit = 0.0 
             for rest_compansation in line.overtime_type_id.type_line_ids:
                 only_cpl = line.employee_id.cpl
-                if line.hours >= rest_compansation.ot_hours:
+                if line.overtime_hours >= rest_compansation.ot_hours:
                     if rest_compansation.compansation == 'leave':
-                        rest_hours = line.hours 
+                        rest_hours = line.overtime_hours 
                         if leave_period != 'full_day':
                             leave_type = rest_compansation.leave_type_id.id     
                             leave_period = rest_compansation.leave_type  
@@ -234,15 +204,12 @@ class HrOverTime(models.Model):
                             rest_single_ot_hour_amount = (contract.wage * rest_compansation.rate_percent ) /(rest_compansation.hours_per_day * rest_compansation.month_day)
                             rate = rest_compansation.rate_percent
                             rest_double_hours_limit = 0.0
-                            rest_singl_hours = line.hours
+                            rest_singl_hours = line.overtime_hours
                             for compansation1rest in line.overtime_type_id.type_line_ids:
-                                if line.hours >= compansation1rest.ot_hours:
+                                if line.overtime_hours >= compansation1rest.ot_hours:
                                     if compansation1rest.rate_type == 'percent' and compansation1rest.entry_type_id == 'double' and rest_double_hours_limit < compansation1rest.ot_hours:
-                                        rest_double_hours_limit =  compansation1.ot_hours
-
-                            rest_single_hour_limit1  =   line.hours - rest_singl_hours            
-                            rest_single_hour_limit = line.hours - rest_single_hour_limit1
-                                    
+                                        rest_double_hours_limit =  compansation1rest.ot_hours
+                            rest_single_hour_limit = rest_compansation.ot_hours       
                             rest_single_ot_amount = rest_single_ot_hour_amount * rest_single_hour_limit
                                     
                                     
@@ -251,7 +218,8 @@ class HrOverTime(models.Model):
                                     
                             contract = self.env['hr.contract'].search([('employee_id','=',line.employee_id.id),('state','=','open')], limit=1)
                             rest_double_ot_hour_amount = (contract.wage * rest_compansation.rate_percent ) /(rest_compansation.hours_per_day * rest_compansation.month_day)  
-                            rate = rest_compansation.rate_percent
+                            d_rate = rest_compansation.rate_percent
+                            
                             rest_double_rate_ot_hours = 0
                             rest_single_rate_ot_hours = 0.0
                             rest_single_hourss_limit  = 0.0
@@ -259,11 +227,11 @@ class HrOverTime(models.Model):
                             for compansationinrest in line.overtime_type_id.type_line_ids:
                                 if compansationinrest.rate_type == 'percent' and compansationinrest.entry_type_id == 'single' and rest_single_hourss_limit < compansationinrest.ot_hours:
                                     rest_single_hourss_limit =  compansationinrest.ot_hours
-                                    raise UserError(('test '+str(compansationinrest.ot_hours))) 
+                                    
                                 if compansationinrest.compansation == 'leave': 
                                     leave_period_rest = compansationinrest.leave_type
                                     rest_single_hourss_limit =  compansationinrest.ot_hours     
-                            rest_double_rate_ot_hours =   line.hours - rest_single_hourss_limit
+                            rest_double_rate_ot_hours =   line.overtime_hours - rest_single_hourss_limit
                             rest_double_ot_amount = rest_double_ot_hour_amount * rest_double_rate_ot_hours
                                     
             if rest_single_ot_amount > 0:
@@ -288,7 +256,7 @@ class HrOverTime(models.Model):
                             'company_id':  line.company_id.id,
                             'overtime_hours': rest_double_rate_ot_hours,
                             'overtime_type_id': line.overtime_type_id.id,
-                            'remarks': '@rate '+ str(rate),
+                            'remarks': '@rate '+ str(d_rate),
                             }
                     overtime_entry = self.env['hr.overtime.entry'].create(entry_vals)
                 
@@ -301,25 +269,25 @@ class HrOverTime(models.Model):
                         
     def action_approve(self):
         for line in self:
-            if line.state == 'to_approve':
+            if line.state == 'to_approve' and line.employee_id.cpl==False:
                 ot_amount = 0
                 gazetted_hours = 0
                 nrate = 0
                 leave_period = ' '
                 leave_type = 0
                 if line.overtime_type_id.type == 'normal':
-                    line.generate_normal_overtime_compansation() 
-                    
+                    line.generate_normal_overtime_compansation()    
                 elif line.overtime_type_id.type == 'rest_day':
-                    line.generate_rest_days_overtime_compansation() 
-                                                    
+                    line.generate_rest_days_overtime_compansation()                                    
                 elif  line.overtime_type_id.type == 'gazetted': 
                     line.generate_overtime_compansation() 
-    
                 line.update({
                         'state': 'approved'
                         })     
-                
+            else:
+                line.update({
+                   'state': 'approved'
+                })  
                 
     
     def action_refuse(self):
@@ -330,6 +298,7 @@ class HrOverTime(models.Model):
      
     
     employee_id = fields.Many2one('hr.employee', string="Name")
+    employee_number = fields.Char(string='Employee Number')
     date_from = fields.Datetime('Date From', required=True)
     company_id = fields.Many2one('res.company', string="Company")
     date = fields.Date('Date', required=True)
@@ -359,7 +328,14 @@ class HrOverTime(models.Model):
                'work_location_id': line.employee_id.work_location_id.id,
                'workf_location_id': line.employee_id.work_location_id.id,
                 }) 
-    
+     
+    @api.constrains('employee_id')
+    def _check_employee_id(self):  
+        for line in self:
+            line.update({
+                'employee_number': line.employee_id.emp_number,
+            })  
+
     @api.constrains('overtime_hours')
     def _check_leave_type(self):
         for line in self:
