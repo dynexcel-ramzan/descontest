@@ -36,10 +36,12 @@ def timesheet_page_content(flag=0):
     }
 
 def timesheet_line_page_content(project,datefrom,dateto):
-    uprojects = request.env['project.project'].sudo().search([('id','=',project)])
-    employees = request.env['hr.employee'].sudo().search([('timesheet_incharge_id.user_id','=',http.request.env.context.get('uid'))])
-    upartner = request.env['res.ora.client'].search([('id','=',uprojects.ora_client_id.id)])
     company_info = request.env['res.users'].sudo().search([('id', '=', http.request.env.context.get('uid'))])
+    incharge_dept = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))], limit=1)
+    uprojects = request.env['project.project'].sudo().search([('id','=',project)])
+    employees = request.env['hr.employee'].sudo().search([('department_id','=', incharge_dept.department_id.id)])
+    upartner = request.env['res.ora.client'].search([('id','=',uprojects.ora_client_id.id)])
+    
     return {
         'partner': upartner,
         'project': uprojects,
@@ -80,7 +82,7 @@ class CreateTimesheet(http.Controller):
         for ptime in timesheet_attendance_list:
             count += 1
             if count > 1:
-                if ptime['include']=='true':
+                if ptime['include']=='True':
                     line_vals = {
                         'timesheet_repo_id': sheet_report.id,
                         'project_id': int(kw.get('project_id')),

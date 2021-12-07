@@ -18,3 +18,7 @@ class ResORAClient(models.Model):
     
 class ShiftScheduleLine(models.Model):
     _inherit='hr.shift.schedule.line'
+
+
+class ShiftGazettedLine(models.Model):
+    _inherit='shift.gazetted.line'
