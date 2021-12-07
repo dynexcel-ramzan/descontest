@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from dateutil import relativedelta
-
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.addons.resource.models.resource import HOURS_PER_DAY
 import math
-
-
 
 class HrOverTime(models.Model):
     _name = 'hr.overtime.request'
@@ -20,7 +17,6 @@ class HrOverTime(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         rslt = super(HrOverTime, self).create(vals_list)
-
         rslt.action_leave_allocation()
         return rslt   
     
@@ -134,139 +130,73 @@ class HrOverTime(models.Model):
         """
          Generate Overtime Entries 
          1- By Using Overtime type
+         2- Gazetted and Rest Day
         """
         for line in self:
-            single_ot_amount = 0
-            double_ot_amount = 0
-            single_hour_limit = 0
-            double_rate_ot_hours = 0
-            grate2 = ' '
-            grate = ' '
-            double_rate_line=self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<', line.overtime_hours),('entry_type_id','=','double')])
-            single_rate_line=self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<', line.overtime_hours),('entry_type_id','=','single')], order='ot_hours desc')
-            raise UserError(str(single_rate_line.ot_hours)+' '+str(double_rate_line.ot_hours))
-            if single_ot_amount > 0:
-                if line.employee_id.cpl == False:
-                    entry_vals = {
-                            'employee_id': line.employee_id.id,
-                            'date': line.date,
-                            'amount': round(single_ot_amount) ,
-                            'company_id':  line.company_id.id,
-                            'overtime_hours': single_hour_limit,
-                            'overtime_type_id': line.overtime_type_id.id,
-                            'remarks': '@rate '+str(grate)                                    
-                                          }
-                    overtime_entry = self.env['hr.overtime.entry'].create(entry_vals)
-            if double_ot_amount > 0:
-                if only_cpl == False:
-                    entry_vals = {
-                            'employee_id': line.employee_id.id,
-                            'date': line.date,
-                            'amount': round(double_ot_amount) ,
-                            'company_id':  line.company_id.id,
-                            'overtime_hours': double_rate_ot_hours,
-                            'overtime_type_id': line.overtime_type_id.id,
-                            'remarks': '@rate '+str(grate2) ,
-                                            }
-                    overtime_entry = self.env['hr.overtime.entry'].create(entry_vals)
+            if line.employee_id.cpl == False:
+                single_ot_amount = 0
+                double_ot_amount = 0
+                single_hour_limit = 0
+                double_rate_ot_hours = 0
+                single_ot_hour_amount = 0
+                double_ot_hour_amount = 0
+                grate2 = ' '
+                grate = ' '
+                double_rate_line=self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<=', line.overtime_hours),('entry_type_id','=','double'),('rate_type','=','percent')], order='ot_hours desc', limit=1)
+                single_rate_line=self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<=', line.overtime_hours),('entry_type_id','=','single'),('rate_type','=','percent')], order='ot_hours desc', limit=1)    
+                contract = self.env['hr.contract'].search([('employee_id','=',line.employee_id.id),('state','=','open')], limit=1)
+                single_fixed_amount =self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<=', line.overtime_hours),('entry_type_id','=','single'),('rate_type','=','fix_amount')], order='ot_hours desc', limit=1)
+                double_fixed_amount =self.env['hr.overtime.type.line'].search([('overtime_type_id','=',line.overtime_type_id.id),('compansation','=', 'payroll'),('ot_hours','<=', line.overtime_hours),('entry_type_id','=','double'),('rate_type','=','fix_amount')], order='ot_hours desc', limit=1)
+                if double_rate_line and single_rate_line:
+                    single_hour_limit =  single_rate_line.ot_hours
+                    double_rate_ot_hours = line.overtime_hours - single_rate_line.ot_hours
+                    double_ot_hour_amount = (contract.wage * double_rate_line.rate_percent ) /(double_rate_line.hours_per_day * double_rate_line.month_day)
+                    single_ot_hour_amount = (contract.wage * single_rate_line.rate_percent ) /(single_rate_line.hours_per_day * single_rate_line.month_day)
+                    grate2 = double_rate_line.rate_percent
+                    grate  = single_rate_line.rate_percent
+                elif  single_rate_line:
+                    single_hour_limit =  line.overtime_hours
+                    single_ot_hour_amount = (contract.wage * single_rate_line.rate_percent ) /(single_rate_line.hours_per_day * single_rate_line.month_day)
+                    grate  = single_rate_line.rate_percent
+                else:
+                    if single_fixed_amount and double_fixed_amount:
+                        single_hour_limit =  single_fixed_amount.ot_hours
+                        double_rate_ot_hours = line.overtime_hours - single_fixed_amount.ot_hours 
+                        single_ot_hour_amount = single_fixed_amount.rate
+                        double_ot_hour_amount = double_fixed_amount.rate
+                    elif single_fixed_amount:
+                        single_hour_limit =  line.overtime_hours 
+                        single_ot_hour_amount = single_fixed_amount.rate                    
 
-                
-      
-    
-    
-    
-    def generate_rest_days_overtime_compansation(self):
-        for line in self:
-            leave_period = ' '
-            leave_type = 0
-            only_cpl = False
-            rate = 0
-            d_rate = 0
-            rest_singl_hours = 0.0 
-            rest_single_ot_amount = 0.0
-            rest_double_ot_amount = 0.0
-            rest_double_rate_ot_hours = 0.0 
-            rest_single_hour_limit = 0.0 
-            for rest_compansation in line.overtime_type_id.type_line_ids:
-                only_cpl = line.employee_id.cpl
-                if line.overtime_hours >= rest_compansation.ot_hours:
-                    if rest_compansation.compansation == 'leave':
-                        rest_hours = line.overtime_hours 
-                        if leave_period != 'full_day':
-                            leave_type = rest_compansation.leave_type_id.id     
-                            leave_period = rest_compansation.leave_type  
-                    elif rest_compansation.compansation == 'payroll':
-                        if rest_compansation.rate_type == 'fix_amount':
-                            ot_amount = rest_compansation.rate * line.overtime_hours 
-                            rate = rest_compansation.rate
-                        elif rest_compansation.rate_type == 'percent' and rest_compansation.entry_type_id == 'single' and rest_singl_hours < rest_compansation.ot_hours:
-                            contract = self.env['hr.contract'].search([('employee_id','=',line.employee_id.id),('state','=','open')], limit=1) 
-                            rest_single_ot_hour_amount = (contract.wage * rest_compansation.rate_percent ) /(rest_compansation.hours_per_day * rest_compansation.month_day)
-                            rate = rest_compansation.rate_percent
-                            rest_double_hours_limit = 0.0
-                            rest_singl_hours = line.overtime_hours
-                            for compansation1rest in line.overtime_type_id.type_line_ids:
-                                if line.overtime_hours >= compansation1rest.ot_hours:
-                                    if compansation1rest.rate_type == 'percent' and compansation1rest.entry_type_id == 'double' and rest_double_hours_limit < compansation1rest.ot_hours:
-                                        rest_double_hours_limit =  compansation1rest.ot_hours
-                            rest_single_hour_limit = rest_compansation.ot_hours       
-                            rest_single_ot_amount = rest_single_ot_hour_amount * rest_single_hour_limit
-                                    
-                                    
-                                    
-                        elif rest_compansation.rate_type == 'percent' and rest_compansation.entry_type_id == 'double' and rest_double_rate_ot_hours < rest_compansation.ot_hours:
-                                    
-                            contract = self.env['hr.contract'].search([('employee_id','=',line.employee_id.id),('state','=','open')], limit=1)
-                            rest_double_ot_hour_amount = (contract.wage * rest_compansation.rate_percent ) /(rest_compansation.hours_per_day * rest_compansation.month_day)  
-                            d_rate = rest_compansation.rate_percent
-                            
-                            rest_double_rate_ot_hours = 0
-                            rest_single_rate_ot_hours = 0.0
-                            rest_single_hourss_limit  = 0.0
-                            leave_period_rest = ' '
-                            for compansationinrest in line.overtime_type_id.type_line_ids:
-                                if compansationinrest.rate_type == 'percent' and compansationinrest.entry_type_id == 'single' and rest_single_hourss_limit < compansationinrest.ot_hours:
-                                    rest_single_hourss_limit =  compansationinrest.ot_hours
-                                    
-                                if compansationinrest.compansation == 'leave': 
-                                    leave_period_rest = compansationinrest.leave_type
-                                    rest_single_hourss_limit =  compansationinrest.ot_hours     
-                            rest_double_rate_ot_hours =   line.overtime_hours - rest_single_hourss_limit
-                            rest_double_ot_amount = rest_double_ot_hour_amount * rest_double_rate_ot_hours
-                                    
-            if rest_single_ot_amount > 0:
-                if only_cpl == False:
-                    entry_vals = {
-                            'employee_id': line.employee_id.id,
-                            'date': line.date,
-                            'amount': round(rest_single_ot_amount) ,
-                            'company_id':  line.company_id.id,
-                            'overtime_hours': rest_single_hour_limit,
-                            'overtime_type_id': line.overtime_type_id.id,
-                            'remarks': '@rate '+str(rate),
-                            }
-                    overtime_entry = self.env['hr.overtime.entry'].create(entry_vals)
-                
-            if rest_double_ot_amount > 0:
-                if only_cpl == False:
-                    entry_vals = {
-                            'employee_id': line.employee_id.id,
-                            'date': line.date,
-                             'amount': round(rest_double_ot_amount) ,
-                            'company_id':  line.company_id.id,
-                            'overtime_hours': rest_double_rate_ot_hours,
-                            'overtime_type_id': line.overtime_type_id.id,
-                            'remarks': '@rate '+ str(d_rate),
-                            }
-                    overtime_entry = self.env['hr.overtime.entry'].create(entry_vals)
-                
+                single_ot_amount =  single_ot_hour_amount * single_hour_limit
+                double_ot_amount =  double_ot_hour_amount * double_rate_ot_hours
+                if single_ot_amount > 0:
+                    if line.employee_id.cpl == False:
+                        entry_vals = {
+                                'employee_id': line.employee_id.id,
+                                'date': line.date,
+                                'amount': round(single_ot_amount) ,
+                                'company_id':  line.company_id.id,
+                                'overtime_hours': single_hour_limit,
+                                'overtime_type_id': line.overtime_type_id.id,
+                                'remarks': '@rate '+str(grate)                                    
+                                              }
+                        overtime_entry_single = self.env['hr.overtime.entry'].create(entry_vals)
+                if double_ot_amount > 0:
+                    if line.employee_id.cpl == False:
+                        entry_vals = {
+                                'employee_id': line.employee_id.id,
+                                'date': line.date,
+                                'amount': round(double_ot_amount) ,
+                                'company_id':  line.company_id.id,
+                                'overtime_hours': double_rate_ot_hours,
+                                'overtime_type_id': line.overtime_type_id.id,
+                                'remarks': '@rate '+str(grate2) ,
+                                                }
+                        overtime_entry_double = self.env['hr.overtime.entry'].create(entry_vals)
 
-            
-            
-            
-            
-                    
-                        
+
+
     def action_approve(self):
         for line in self:
             if line.state == 'to_approve' and line.employee_id.cpl==False:
@@ -278,7 +208,7 @@ class HrOverTime(models.Model):
                 if line.overtime_type_id.type == 'normal':
                     line.generate_normal_overtime_compansation()    
                 elif line.overtime_type_id.type == 'rest_day':
-                    line.generate_rest_days_overtime_compansation()                                    
+                    line.generate_overtime_compansation()                                    
                 elif  line.overtime_type_id.type == 'gazetted': 
                     line.generate_overtime_compansation() 
                 line.update({
