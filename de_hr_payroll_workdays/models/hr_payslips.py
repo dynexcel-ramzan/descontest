@@ -5,8 +5,6 @@ import base64
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 
-
-
 from odoo import api, fields, models, _
 from odoo.addons.hr_payroll.models.browsable_object import BrowsableObject, InputLine, WorkedDays, Payslips, ResultRules
 from odoo.exceptions import UserError, ValidationError

@@ -11,8 +11,6 @@ from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 
 
-
-
 class HrAttendanceReport(models.AbstractModel):
     _name = 'report.de_hr_attendance_report.attendance_report'
     _description = 'Hr Attendance Report'
