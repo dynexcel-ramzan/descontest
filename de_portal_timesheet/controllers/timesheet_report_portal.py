@@ -1,7 +1,7 @@
 # # -*- coding: utf-8 -*-
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, SUPERUSER_ID
 from odoo.osv import expression
 from odoo.exceptions import UserError
 from collections import OrderedDict
@@ -100,7 +100,7 @@ class CreateTimesheet(http.Controller):
 class CustomerPortal(CustomerPortal):
     
     
-    def _show_report_portal(self, model, report_type, employee, start_date, project, end_date, report_ref, download=False):
+    def _show_timesheet_report_portal(self, model, report_type, project, employee, start_date, end_date, report_ref, download=False):
         if report_type not in ('html', 'pdf', 'text'):
             raise UserError(_("Invalid report type: %s", report_type))
 
@@ -113,7 +113,7 @@ class CustomerPortal(CustomerPortal):
             report_sudo = report_sudo.with_company(model.company_id)
 
         method_name = '_render_qweb_%s' % (report_type)
-        report = getattr(report_sudo, method_name)([model], data={'report_type': report_type,'employee':employee,'start_date':start_date,'end_date':end_date})[0]
+        report = getattr(report_sudo, method_name)([model], data={'report_type': report_type,'employee':employee,'project':project ,'start_date':start_date,'end_date':end_date})[0]
         reporthttpheaders = [
             ('Content-Type', 'application/pdf' if report_type == 'pdf' else 'text/html'),
             ('Content-Length', len(report)),
@@ -134,7 +134,7 @@ class CustomerPortal(CustomerPortal):
         project = int(kw.get('project_id'))
         start_date = kw.get('date_from')
         end_date = kw.get('date_to')
-        return self._show_report_portal(model=order_sudo, report_type=report_type,employee=employee, start_date=start_date, project=project, end_date=end_date, report_ref='de_portal_timesheet.timesheet_report', download=download)
+        return self._show_timesheet_report_portal(model=order_sudo, report_type=report_type,project=project, employee=employee, start_date=start_date, end_date=end_date, report_ref='de_portal_timesheet.timesheet_report', download=download)
 
 
     def _prepare_home_portal_values(self, counters):

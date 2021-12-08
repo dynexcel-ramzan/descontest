@@ -2,8 +2,7 @@
 <odoo>
     <template id="timesheet_report">
         <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
-                <t t-call="web.internal_layout">
+          <t t-call="web.internal_layout">
                     <div class="page">
                     <div  style="position: relative; max-width: 400px;">
                            <table>
@@ -45,7 +44,7 @@
                                             <th style="border: 1px solid black;">Employee</th>
                                             <th style="border: 1px solid black;">Remarks</th>
                                             <t t-set="todays" t-value="0"/>
-                                            <t t-set="todays" t-value="(o.date_to - o.date_from).days+1"/>
+                                            <t t-set="todays" t-value="days"/>
                                             <t t-set="datelabel" t-value="[]"/>
                                                 <t t-foreach="todays" t-as="t">
                                                     <t t-set="datelabel" t-value="datelabel+[t]"/>
@@ -53,8 +52,8 @@
                                             <t t-foreach="set(datelabel)" t-as="ta">
                                                 <t t-if="datelabel">
                                                   <th style="border: 1px solid black;">
-                                                      <span t-esc="(docs.date_from + datetime.timedelta(ta)).strftime('%b')"/>
-                                                      <span t-esc="(docs.date_from + datetime.timedelta(ta)).strftime('%d')"/>
+                                                      <span t-esc="(docs_date_from + datetime.timedelta(ta)).strftime('%b')"/>
+                                                      <span t-esc="(docs_date_from + datetime.timedelta(ta)).strftime('%d')"/>
                                                   </th>
                                                 </t>
                                             </t>
@@ -67,7 +66,7 @@
                                       <t t-set="tot_line_total" t-value="0"/>  
                                       <t t-set="tot_extra_days_total" t-value="0"/>  
                                       <t t-set="tot_ot_total" t-value="0"/>  
-                                      <t t-foreach="o.timesheet_attendance_ids" t-as="line">
+                                      <t t-foreach="employees" t-as="line">
                                         <tr>
                                             <td style="border: 1px solid black;">
                                                 <span t-field="line.employee_id.name" /><br/>(<span t-field="line.employee_id.emp_number" />)
@@ -80,10 +79,12 @@
                                             </td>
                                             
                                             
+                                             <t t-foreach="request.env['hr.timesheet.report.line'].sudo().search([('employee_id','=',line.employee_id.id),('project_id','=',project.id),('date_from','&gt;=', start_date_from),('date_to','&lt;=', start_date_from)], limit=1)" t-as="sheet_line"> 
+                                                 <t t-set="startday" t-value="(sheet_line.date_from).strftime('%d')"/>
+                                                 <t t-set="start_date" t-value="sheet_line.date_from"/>
+                                             </t>
                                             
-                                             <t t-set="startday" t-value="(line.date_from).strftime('%d')"/>
-                                             <t t-set="start_date" t-value="line.date_from"/>
-                                             <t t-set="docs_start_date" t-value="docs.date_from"/>
+                                             <t t-set="docs_start_date" t-value="docs_date_from"/>
                                               <t t-set="line_total" t-value="0"/>
                                               <t t-set="extra_days_total" t-value="0"/>
                                               <t t-set="ot_total" t-value="0"/>
@@ -107,7 +108,7 @@
                                                     <t t-set="docs_start_date" t-value="docs_start_date + datetime.timedelta(1)"/>
                                                         <t t-if="var_rest_day==1" >
                                                             <td style="border: 1px solid black;background-color:LightGreen;">
-                                                             <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
+                                                             <t t-if="(docs_date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="attr">
                                                                     <t t-if='attr.worked_hours > (attr.shift_id.hours_per_day/2)' >  
                                                                       P
@@ -133,7 +134,7 @@
                                                         <t t-if="var_gazetted_day==1" >
                                                          <t t-if="not var_rest_day ==1" >
                                                             <td style="border: 1px solid black;background-color:#C4A484;">
-                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >                                                       
+                                                              <t t-if="(docs_date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >                                                       
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
                                                                 <t t-if='att.worked_hours > (att.shift_id.hours_per_day/2)' >      
                                                                       P
@@ -158,7 +159,7 @@
                                                         <t t-if="not var_gazetted_day==1" >
                                                          <t t-if="not var_rest_day ==1" >
                                                             <td style="border: 1px solid black;">
-                                                              <t t-if="(docs.date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >                                                                                                      
+                                                              <t t-if="(docs_date_from + datetime.timedelta(lineta)).strftime('%d')==startday" >                                                                                                      
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
                                                                  <t t-if='att.worked_hours > (att.shift_id.hours_per_day/2)' >  
                                                                   P    
@@ -215,18 +216,18 @@
                                 <br/>
                                <table class="table" style="table-layout: fixed">
                                         <tr>
-                                            <th colspan="4"> <span t-esc="o.incharge_id.company_id.name"/></th>
+                                            <th colspan="4"> <span t-esc="timesheet_report.incharge_id.company_id.name"/></th>
                                             <th >Approved By</th>
                                         </tr>
                                         <tr>
                                             <th>Name</th>
-                                            <td><u><span t-esc="o.incharge_id.name"/></u></td>
+                                            <td><u><span t-esc="timesheet_report.incharge_id.name"/></u></td>
                                             <th>Signature</th>
                                             <td>------------</td>
                                             <th>Name</th>
                                             <td><u>
-                                                <t t-if='o.state=="approved"'>
-                                                   <span t-esc="o.incharge_id.parent_id.name"/>
+                                                <t t-if='timesheet_report.state=="approved"'>
+                                                   <span t-esc="timesheet_report.incharge_id.parent_id.name"/>
                                                 </t> 
                                                 </u></td>
 
@@ -239,7 +240,7 @@
                                             <th>Position</th>
                                             <td><u>
                                                 
-                                                  <span t-esc="o.incharge_id.job_id.name"/>
+                                                  <span t-esc="timesheet_report.incharge_id.job_id.name"/>
                                                    
                                                 </u>
                                             
@@ -248,8 +249,8 @@
                                             <td>-----------</td>
                                             <th>Position</th>
                                             <td><u>
-                                                <t t-if='o.state=="approved"'>
-                                                <span t-esc="o.incharge_id.parent_id.job_id.name"/>
+                                                <t t-if='timesheet_report.state=="approved"'>
+                                                <span t-esc="timesheet_report.incharge_id.parent_id.job_id.name"/>
                                                 </t>    
                                                 </u></td>
                                             <th>Date</th>
@@ -261,7 +262,7 @@
                     </div>
                 </t>
             </t>
-        </t>
+        
     </template>
 
 </odoo>

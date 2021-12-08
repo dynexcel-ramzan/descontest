@@ -3,7 +3,7 @@
       
       
   <report
-            id="timehseet_attendance_report_portal"
+            id="timesheet_report"
             string="Project Timesheet (PDF)"
             model="report.de_portal_timesheet.timesheet_report"
             report_type="qweb-pdf"

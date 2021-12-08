@@ -26,8 +26,9 @@
     'data': [
         'security/ir.model.access.csv',
         'security/security.xml',
-        'report/timesheet_attendance_report.xml',
         'report/timesheet_attendance_report_template.xml',
+        'report/timesheet_attendance_report.xml',
+        'wizard/timesheet_incharge_report.xml',
         'wizard/timesheet_incharge_wizard.xml',
         'views/approval_request_views.xml',
         'views/res_ora_client_views.xml',

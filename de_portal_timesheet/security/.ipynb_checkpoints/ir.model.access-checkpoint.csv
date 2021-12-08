@@ -6,4 +6,5 @@ access_res_ora_client,access.res.ora.client,model_res_ora_client,,1,1,1,1
 access_project_project,access.project.project,model_project_project,,1,1,1,1
 access_res_ora_category,access.res.ora.category,model_res_ora_category,,1,1,1,1
 access_hr_shift_schedule_line,access.hr.shift.schedule.line,model_hr_shift_schedule_line,,1,1,1,1
-
+access_shift_gazetted_line,access.shift.gazetted.line,model_shift_gazetted_line,,1,1,1,1
+access_timesheet_reprot_wizard,access.timesheet.reprot.wizard,model_timesheet_reprot_wizard,,1,1,1,1
