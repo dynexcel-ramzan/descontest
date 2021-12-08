@@ -1,0 +1,19 @@
+<odoo>
+  <data>
+      
+<!--       <record id="hr_expense_sheet_form_view_ora_category" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.form.view.ora.category</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='validity_stop']" position="after">
+                <group string="Accural Probation">
+                  <field name="allocated_during_probation"/>
+                </group>
+                
+            </xpath>
+        </field>
+    </record> -->
+   
+  </data>
+</odoo>

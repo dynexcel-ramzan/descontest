@@ -2,6 +2,11 @@
 
 from odoo import models, fields, api, _
 
+class HrExpenseSheet(models.Model):
+    _inherit = 'hr.expense.sheet'
+    
+    ora_category_id = fields.Many2one('ora.expense.category', string='Expense Category')
+    
 
 class hr_expense(models.Model):
     _inherit = 'hr.expense'

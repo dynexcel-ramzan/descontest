@@ -27,6 +27,8 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'views/ora_expense_category_views.xml',
+        'views/hr_expense_sheet_views.xml',
         'views/hr_employee_views.xml',
         'views/hr_expense_views.xml',
         'views/portal_expense_templates.xml',
