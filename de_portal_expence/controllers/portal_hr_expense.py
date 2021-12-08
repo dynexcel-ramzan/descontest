@@ -18,17 +18,21 @@ from odoo.osv.expression import OR
 
 def expense_page_content(flag = 0, expense=0):
     sheet = 0
+    sheet_categ= 0
     if expense != 0:
-        sheet = request.env['hr.expense.sheet'].sudo().search([('id','=',expense.id)])
+        sheet = request.env['hr.expense.sheet'].sudo().search([('id','=',expense)])
+        sheet_categ = sheet.ora_category_id.id
     managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
     expense_categories = request.env['ora.expense.category'].sudo().search([])
+    products = request.env['product.product'].sudo().search([('ora_category_id','=',sheet_categ)])
     emp_members = request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     return {
         'managers': employees.parent_id.name,
         'employees' : employees,
-        'sheet': sheet,
+        'products': products,
+        'sheet': sheet.id if sheet!=0 else 0,
         'emp_members': emp_members,
         'employee_name': employees,
         'expense_types': expense_categories,
@@ -51,18 +55,18 @@ class CreateApproval(http.Controller):
     @http.route('/expense/create/',type="http", website=True, auth='user')
     def approvals_create_template(self, **kw):
         return request.render("de_portal_expence.create_expense",expense_page_content()) 
-       
-   
+          
+
     @http.route('/my/expense/save', type="http", auth="public", website=True)
     def create_expenses(self, **kw):
         expense_val = {
             'name': kw.get('description'),
-            'ora_category_id': int(('expense_type')),
-            'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]),
+            'ora_category_id': int(kw.get('cateory_id')),
+            'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]).id,
             'accounting_date':  fields.date.today(),
         }
         record = request.env['hr.expense.sheet'].sudo().create(expense_val)
-        return request.render("de_portal_expence.create_expense_line", expense_page_content() )
+        return request.render("de_portal_expence.create_expense_line", expense_page_content(expense=record.id) )
     
     @http.route('/my/expense/line/save', type="http", auth="public", website=True)
     def create_expense_line(self, **kw):
@@ -70,66 +74,105 @@ class CreateApproval(http.Controller):
             'name': kw.get('description'),
             'reference': kw.get('reference'),
             'sheet_id':  int(kw.get('sheet_id')),
+            'unit_amount': float(kw.get('amount')),
             'product_id': int(kw.get('product_id')),
             'sheet_id': int(kw.get('sheet_id')),
-            'member_id': int(kw.get('member_id')),
-            'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]),
+            'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]).id,
             'date':  fields.date.today(),
         }
         record = request.env['hr.expense'].sudo().create(expense_line)
+        if kw.get('member_id') !='blank':    
+            record.update({
+                'member_id': int(kw.get('member_id')),
+            })    
+        return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
+    
+    
+    @http.route('/update/expense/line/save', type="http", auth="public", website=True)
+    def action_update_expense_line(self, **kw):
+        record = request.env['hr.expense'].sudo().search([('id','=', int(kw.get('expense_id')))])
+        if kw.get('product_id')!='blank':
+            record.update({
+                'product_id': int(kw.get('product_id')),
+            })
+        if kw.get('member_id')!='blank':
+            record.update({
+                'member_id': int(kw.get('member_id')),
+            })  
+        record.update({
+            'unit_amount': float(kw.get('amount')),
+            'reference': kw.get('reference'),
+            'name': kw.get('description'),
+        })    
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     
     
     
     
-    @http.route('/hr/expense/edit', type="http", auth="public", website=True)
-    def edit_expenses(self, **kw):
-        edit_record = request.env['hr.expense'].search([('id','=',int(kw.get('id')))])
-        if kw.get('description'):
-            edit_expense_val = {
-                'name': kw.get('description'),
-                'employee_id': int(kw.get('employee_id')),
-                'product_id':  int(kw.get('product_id')),
-                'unit_amount': kw.get('unit_expense'),
-                'reference': kw.get('reference'),
-                'date':  fields.date.today(),
-            }
-            edit_record.update(edit_expense_val)
-            edit_record.action_submit()
-            edit_record.sheet_id.action_submit_sheet()
-        else:
-            edit_expense_val = {
-                'employee_id': int(kw.get('employee_id')),
-                'product_id':  int(kw.get('product_id')),
-                'unit_amount': kw.get('unit_expense'),
-                'reference': kw.get('reference'),
-                'date':  fields.date.today(),
-            }
-            edit_record.update(edit_expense_val)
-            edit_record.action_submit()
-            edit_record.sheet_id.action_submit_sheet()
-        return request.render("de_portal_expence.re_expense_submited", {})
-        
+   
 
 class CustomerPortal(CustomerPortal):
     
-    @http.route(['/expense/edit/<int:expense_id>'], type='http', auth="public", website=True)
-    def approvals_edit_template(self,expense_id, access_token=None ,**kw):
-        id = expense_id
+    
+    @http.route(['/add/expense/line/<int:expense_id>'], type='http', auth="public", website=True)
+    def action_add_expense_line(self,expense_id , access_token=None, **kw):
+        recrd = request.env['hr.expense.sheet'].sudo().browse(expense_id)
         try:
-            expense_sudo = self._document_check_access('hr.expense', id, access_token)
+            expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
         except (AccessError, MissingError):
             return request.redirect('/my')
+        
         values = self._expense_get_page_view_values(expense_sudo, **kw) 
-        exist_expense = request.env['hr.expense'].sudo().browse(id)
-        employees = request.env['hr.employee'].search([('user_id','=',http.request.env.context.get('uid'))])
-        expense_types = request.env['product.product'].search([('can_be_expensed','=',True)])
+        return request.render("de_portal_expence.create_expense_line", expense_page_content(expense=expense_sudo.id))
+    
+    
+    @http.route(['/action/submit/expense/<int:expense_id>'], type='http', auth="public", website=True)
+    def action_expense_submit(self,expense_id , access_token=None, **kw):
+        recrd = request.env['hr.expense.sheet'].sudo().browse(expense_id)
+        recrd.action_submit_sheet()
+        try:
+            expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._expense_get_page_view_values(expense_sudo, **kw) 
+        return request.render("de_portal_expence.portal_my_expense", values)
+    
+    @http.route(['/delete/expense/line/<int:expense_id>'], type='http', auth="public", website=True)
+    def action_expense_delete(self,expense_id , access_token=None, **kw):
+        recrd = request.env['hr.expense'].sudo().browse(expense_id)
+        sheet=recrd.sheet_id.id
+        recrd.unlink()
+        try:
+            expense_sudo = self._document_check_access('hr.expense.sheet', sheet, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._expense_get_page_view_values(expense_sudo, **kw) 
+        return request.render("de_portal_expence.portal_my_expense", values)
+    
+    
+    @http.route(['/edit/expense/line/<int:expense_id>'], type='http', auth="public", website=True)
+    def action_expense_edit_line(self,expense_id , access_token=None, **kw):
+        recrd = request.env['hr.expense'].sudo().browse(expense_id)
+        try:
+            expense_sudo = self._document_check_access('hr.expense', expense_id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._expense_get_page_view_values(expense_sudo, **kw) 
+        employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
         values.update({
-            'exist_expense': exist_expense,
-             'employees' : employees,
-             'expense_types': expense_types,
+            'expense':expense_sudo,
+            'emp_members': request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)]),
+            'products': request.env['product.product'].sudo().search([('ora_category_id','=',expense_sudo.sheet_id.ora_category_id.id)]),
+            'managers': employees.parent_id.name,
+            'employee_name': employees,
         })
-        return request.render("de_portal_expence.edit_expense", values) 
+        return request.render("de_portal_expence.update_expense_line", values)
+    
+    
+    
     
     @http.route(['/expense/accept/<int:expense_id>'], type='http', auth="public", website=True)
     def accept_approval(self,expense_id ,**kw):
@@ -162,18 +205,7 @@ class CustomerPortal(CustomerPortal):
         return request.render("de_portal_expence.portal_my_expense", values)
         
         
-    @http.route(['/hr/expense/submit/<int:expense_id>'], type='http', auth="public", website=True)
-    def expense_draft(self,expense_id , access_token=None, **kw):
-        id=expense_id
-        recrd = request.env['hr.expense'].sudo().browse(id)
-        recrd.action_draft()
-        try:
-            expense_sudo = self._document_check_access('hr.expense', id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        values = self._expense_get_page_view_values(expense_sudo, **kw) 
-        return request.render("de_portal_expence.portal_my_expense", values)
+    
     
     
 
@@ -183,15 +215,15 @@ class CustomerPortal(CustomerPortal):
             values['expense_count'] = request.env['hr.expense'].search_count([('employee_id.user_id', '=', http.request.env.context.get('uid') )])
         return values
   
-    def _expense_get_page_view_values(self,expense, next_id = 0,pre_id= 0, expense_user_flag = 0, access_token = None, **kwargs):
-        company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+    def _expense_get_page_view_values(self,expense, access_token = None, **kwargs):
+        company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+        employee =  request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
         values = {
             'page_name' : 'expense',
+            'employee_name': employee,
+            'managers': employee.parent_id.name,
             'expense' : expense,
-            'expense_user_flag': expense_user_flag,
-            'next_id' : next_id,
             'company_info': company_info,
-            'pre_id' : pre_id,
         }
         return self._get_page_view_values(expense, access_token, values, 'my_expenses_history', False, **kwargs)
 
@@ -304,33 +336,6 @@ class CustomerPortal(CustomerPortal):
             expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
         except (AccessError, MissingError):
             return request.redirect('/my')        
-
-        expense_user_flag = 0
-                
-        expense_id_list = paging(0,1,0)
-        next_id = 0
-        pre_id = 0
-        next_next_id = 0
-        expense_id_list.sort()
-        length_list = len(expense_id_list)
-        length_list = length_list - 1
-        if length_list != 0:
-            if expense_id in expense_id_list:
-                expense_id_loc = expense_id_list.index(expense_id)
-                if expense_id_loc == 0:
-                    next_id = 1
-                    pre_id = 0
-                elif expense_id_loc == length_list:
-                    next_id = 0
-                    pre_id = 1
-                else:
-                    next_id = 1
-                    pre_id = 1
-        else:
-            next_id = 0
-            pre_id = 0
-            
-
-        values = self._expense_get_page_view_values(expense_sudo,next_id, pre_id, expense_user_flag,access_token, **kw) 
+        values = self._expense_get_page_view_values(expense_sudo,access_token, **kw) 
         return request.render("de_portal_expence.portal_my_expense", values)
 

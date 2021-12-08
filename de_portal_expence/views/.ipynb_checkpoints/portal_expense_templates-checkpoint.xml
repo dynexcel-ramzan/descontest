@@ -119,12 +119,32 @@
                         </div>
                     </section>
                 </div>
+                <div class='pull-left'>
+                      <t t-if='expense.state=="draft"'>
+                       <t t-if='expense.employee_id.user_id.id==uid'>
+                        <a class="mb-5" id="submit-object" t-attf-href="/action/submit/expense/#{expense.id}?">
+                            <button class="btn btn-primary pull-right">Submit</button>
+                        </a>
+                       </t>
+                       </t>
+                 </div> 
+                    <div class='pull-right'>
+                       <t t-if='expense.state=="draft"'>
+                           <t t-if='expense.employee_id.user_id.id==uid'>
+                            <a class="mb-5" id="submit-object" t-attf-href="/add/expense/line/#{expense.id}?">
+                                <button class="btn btn-primary pull-right">Add Expense</button>
+                            </a>
+                           </t>
+                       </t>
+                     </div> 
+                <br/>
+                <br/>
                 
                 <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_name">
-                                         <span class="s_website_form_label_content">Employee</span>
+                                <span class="s_website_form_label_content"><b>Employee</b></span>
                             </label>
                         <div class="col-sm">
                             <t t-esc="employee_name.name"    />
@@ -136,7 +156,7 @@
                 <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                 <div class="row s_col_no_resize s_col_no_bgcolor">
                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="manager_manager">
-                                <span class="s_website_form_label_content">Manager</span>
+                            <span class="s_website_form_label_content"><b>Manager</b></span>
                         </label>
                         <div class="col-sm">
                                 <t t-esc="managers"    />
@@ -149,7 +169,7 @@
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_number">
-                                         <span class="s_website_form_label_content">Employee Number</span>
+                                         <span class="s_website_form_label_content"><b>Employee Number</b></span>
                             </label>
                         <div class="col-sm">
                             <t t-esc="employee_name.name"    />
@@ -161,7 +181,7 @@
                 <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                   <div class="row s_col_no_resize s_col_no_bgcolor">
                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_grade">
-                                <span class="s_website_form_label_content">Grade</span>
+                            <span class="s_website_form_label_content"><b>Grade</b></span>
                         </label>
                         <div class="col-sm">
                                 <t t-esc="employee_name.grade_designation.name"    />
@@ -174,7 +194,7 @@
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_number">
-                                         <span class="s_website_form_label_content">Expense Category</span>
+                                         <span class="s_website_form_label_content"><b>Expense Category</b></span>
                             </label>
                         <div class="col-sm">
                             <t t-esc="expense.ora_category_id.name"    />
@@ -186,7 +206,7 @@
                 <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                   <div class="row s_col_no_resize s_col_no_bgcolor">
                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_grade">
-                                <span class="s_website_form_label_content">Description</span>
+                            <span class="s_website_form_label_content"><b>Description</b></span>
                         </label>
                         <div class="col-sm">
                                 <t t-esc="expense.name"  />
@@ -216,8 +236,8 @@
                             <p class="o_default_snippet_text" style='text-color:#666666;'>Expense Date: <t t-esc='line.date.strftime("%d-%b-%Y")'/></p>
                               <div>                                  
                                  <div data-snippet="s_share"  data-name="Share">
-                                    <t t-if='appraisal.state=="draft"'>
-                                     <t t-if="appraisal.employee_id.user_id.id==uid">  
+                                    <t t-if='line.sheet_id.state=="draft"'>
+                                     <t t-if="line.employee_id.user_id.id==uid">  
                                      <a t-attf-href="/delete/expense/line/#{line.id}?" class="fa fa-trash pull-right" style="font-size:20px;color:red"></a>                    
                                      <a t-attf-href="/edit/expense/line/#{line.id}?" class="fa fa-pencil-square-o pull-right" style="font-size:20px;color:green"></a>
                                       </t>
@@ -310,7 +330,7 @@
                                             </label>
                                             <div class="col-sm">
                                             
-                                                <select class="form-control  o_website_form_input" name="product_id"  required="1">
+                                                <select class="form-control  o_website_form_input" name="cateory_id"  required="1">
                                                     <t t-foreach="expense_types" t-as="expense_type">
                                                         <option t-att-value="expense_type.id">
                                                             <t t-esc="expense_type.name"    />
@@ -452,11 +472,12 @@
                                             </label>
                                             <div class="col-sm">
                                                 <select class="form-control  o_website_form_input" name="product_id"  required="1">
-                                                    <t t-foreach="expense_types" t-as="expense_type">
+                                                    <t t-foreach="products" t-as="expense_type">
                                                         <option t-att-value="expense_type.id">
                                                             <t t-esc="expense_type.name"    />
                                                         </option>
                                                     </t>
+                                                    
                                                 </select>
                                             </div>
                                         </div> 
@@ -466,10 +487,12 @@
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="dependent">
                                                 <span class="s_website_form_label_content">Dependent</span>
-                                                <span class="s_website_form_mark"> *</span>
+                                                <span class="s_website_form_mark"> </span>
                                             </label>
                                             <div class="col-sm">
                                                 <select class="form-control  o_website_form_input" name="member_id"  required="1">
+                                                    <option value="blank">   
+                                                    </option>
                                                     <t t-foreach="emp_members" t-as="emp_dep">
                                                         <option t-att-value="emp_dep.id">
                                                             <t t-esc="emp_dep.name"    />
@@ -500,7 +523,7 @@
                                             </label>
                                             <div class="col-sm">
                                                 <input id="bill_ref" type='float' class="form-control s_website_form_input" name="reference"  />
-                                                <input id="sheet_id" type='hidden' class="form-control s_website_form_input" name="sheet_id"  t-att-value='sheet.id'/>
+                                                <input id="sheet_id" type='hidden' class="form-control s_website_form_input" name="sheet_id"  t-att-value='sheet'/>
                                             </div>
                                         </div>
                                     </div>
@@ -571,6 +594,198 @@
                         </div>  
                    </t>
     </template>
+    
+    
+    
+    
+                <template id="update_expense_line" name="Update Expense line">
+        <t t-call="portal.portal_layout">
+               <div id="wrap">
+                            <div class="oe_structure" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[1]">
+                                <section class="s_title parallax s_parallax_is_fixed bg-white-100 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+                                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_banner_default_image'); background-position: 50% 0;"></span>
+                                    <div class="o_we_bg_filter bg-white-50"></div>
+                                    <div class="container">
+                                        <h1 style="margin-left:10px">Expense</h1>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="container mt-4 mb-5">
+                                <div class="row">
+                                    <div class="col-lg-7 col-xl-6 mr-lg-auto">
+                                        <div class="oe_structure" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[2]/div[1]/div[1]/div[1]">
+                                           
+                                        </div>
+                                        <span class="hidden" data-for="contactus_form" data-oe-id="2822" data-oe-xpath="/data/xpath/span" data-oe-model="ir.ui.view" data-oe-field="arch" data-values="{'employee_id': '', 'manager': '', 'date_end': '', 'description': ''}"></span>
+            <div id="leave_section" data-oe-id="3374" data-oe-xpath="/data/xpath[2]/div" data-oe-model="ir.ui.view" data-oe-field="arch">
+                    <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                        <div class="container">
+                            <form id="portal_expense_form" data-toggle="validator" action="/update/expense/line/save">
+
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                   
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="expense1">
+                                                <span class="s_website_form_label_content">Employee</span>
+                                                <span class="s_website_form_mark"> </span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                            
+                                                <t t-esc='employee_name.name'/>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="expense1">
+                                                <span class="s_website_form_label_content">Manager</span>
+                                                <span class="s_website_form_mark"> </span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                            
+                                                <t t-esc='managers'/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="expense2">
+                                                <span class="s_website_form_label_content">Expense Type</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select class="form-control  o_website_form_input" name="product_id"  required="1">
+                                                    <option value="blank">   
+                                                    </option>
+                                                    <t t-foreach="products" t-as="expense_type">
+                                                        <option t-att-value="expense_type.id">
+                                                            <t t-esc="expense_type.name"    />
+                                                        </option>
+                                                    </t>
+                                                    <i class="badge badge-pill badge-success" ><t t-esc='expense.product_id.name' /> </i>
+                                                    
+                                                </select>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="dependent">
+                                                <span class="s_website_form_label_content">Dependent</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select class="form-control  o_website_form_input" name="member_id"  required="1">
+                                                    <option value="blank">   
+                                                    </option>
+                                                    <t t-foreach="emp_members" t-as="emp_dep">
+                                                        <option t-att-value="emp_dep.id">
+                                                            <t t-esc="emp_dep.name"    />
+                                                        </option>
+                                                    </t>
+                                                    <i class="badge badge-pill badge-success" ><t t-esc='expense.member_id.name' /> </i>
+                                                </select>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="amount">
+                                                <span class="s_website_form_label_content">Amount</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id="amount" type='integer' class="form-control s_website_form_input" name="amount" required="1"  t-att-value='expense.unit_amount'/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="bill_reference">
+                                                <span class="s_website_form_label_content">Bill Reference</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id="reference" type='text' class="form-control s_website_form_input" name="reference"  t-att-value='expense.reference' />
+                                                <input id="expense_id" type='hidden' class="form-control s_website_form_input" name="expense_id"  t-att-value='expense.id'/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                   
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="expense5">
+                                                <span class="s_website_form_label_content">Description</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id="description" class="form-control s_website_form_input" name="description" required="1"  t-att-value="expense.name"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
+                                        <div style="width: 200px;" class="s_website_form_label"></div>
+                                        <button type="submit" class="btn btn-primary pull-left">Update Expense</button>
+                                        <span id="s_website_form_result"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+			</div>
+                                    <div class="col-lg-4 mt-4 mt-lg-0">
+                                   <div class='section-custom col-md-12'>
+                                                   <a class="mb-5" id="submit-leave" t-attf-href="/my/expenses">
+                                                        <button t-attf-class="btn btn-primary #{'col-md-10' if multi_type else 'col-md-12'} mb-2">View my Expenses</button>
+                                                    </a>
+                                                </div>      
+                                        
+                                        
+                                        
+    <address itemscope="itemscope" itemtype="http://schema.org/Organization">
+        <div data-oe-model="res.company" data-oe-id="1" data-oe-field="partner_id" data-oe-type="contact" data-oe-expression="res_company.partner_id" data-oe-many2one-id="1" data-oe-many2one-model="res.partner" data-oe-contact-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;, &quot;address&quot;, &quot;phone&quot;, &quot;mobile&quot;, &quot;email&quot;], &quot;tagName&quot;: &quot;div&quot;, &quot;expression&quot;: &quot;res_company.partner_id&quot;, &quot;type&quot;: &quot;contact&quot;, &quot;inherit_branding&quot;: true, &quot;translate&quot;: false}" data-oe-field-xpath="/t[1]/address[1]/div[1]">
+    <address class="mb-0" itemscope="itemscope" itemtype="http://schema.org/Organization">     
+    <div>  
+    </div>  
+    <div itemprop="address" itemscope="itemscope" itemtype="http://schema.org/PostalAddress">
+           
+            
+          
+            
+           
+        </div>
+        <div>
+             
+            
+
+        </div>
+    
+        
+        
+    </address>
+</div>
+        
+          
+    </address>
+        
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="oe_structure mt-2" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[3]"></div>
+                        </div>  
+                   </t>
+    </template>
+    
     
 
     
