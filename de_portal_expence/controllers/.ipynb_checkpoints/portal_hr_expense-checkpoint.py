@@ -16,15 +16,22 @@ from odoo.addons.portal.controllers.portal import CustomerPortal, pager as porta
 from odoo.tools import groupby as groupbyelem
 from odoo.osv.expression import OR
 
-def expense_page_content(flag = 0):
-    managers = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
-    employees = request.env['hr.employee'].search([('user_id','=',http.request.env.context.get('uid'))])
-    expense_types = request.env['product.product'].search([('can_be_expensed','=',True)])
-    company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+def expense_page_content(flag = 0, expense=0):
+    sheet = 0
+    if expense != 0:
+        sheet = request.env['hr.expense.sheet'].sudo().search([('id','=',expense.id)])
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    expense_categories = request.env['ora.expense.category'].sudo().search([])
+    emp_members = request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     return {
-        'managers': managers,
+        'managers': employees.parent_id.name,
         'employees' : employees,
-        'expense_types': expense_types,
+        'sheet': sheet,
+        'emp_members': emp_members,
+        'employee_name': employees,
+        'expense_types': expense_categories,
         'success_flag' : flag,
         'company_info': company_info,
     }
@@ -44,23 +51,35 @@ class CreateApproval(http.Controller):
     @http.route('/expense/create/',type="http", website=True, auth='user')
     def approvals_create_template(self, **kw):
         return request.render("de_portal_expence.create_expense",expense_page_content()) 
-    
-    
+       
    
-    
-    
     @http.route('/my/expense/save', type="http", auth="public", website=True)
     def create_expenses(self, **kw):
         expense_val = {
             'name': kw.get('description'),
-            'employee_id': int(kw.get('employee_id')),
-            'product_id':  int(kw.get('product_id')),
-            'unit_amount': kw.get('unit_expense'),
+            'ora_category_id': int(('expense_type')),
+            'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]),
+            'accounting_date':  fields.date.today(),
+        }
+        record = request.env['hr.expense.sheet'].sudo().create(expense_val)
+        return request.render("de_portal_expence.create_expense_line", expense_page_content() )
+    
+    @http.route('/my/expense/line/save', type="http", auth="public", website=True)
+    def create_expense_line(self, **kw):
+        expense_line = {
+            'name': kw.get('description'),
             'reference': kw.get('reference'),
+            'sheet_id':  int(kw.get('sheet_id')),
+            'product_id': int(kw.get('product_id')),
+            'sheet_id': int(kw.get('sheet_id')),
+            'member_id': int(kw.get('member_id')),
+            'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]),
             'date':  fields.date.today(),
         }
-        record = request.env['hr.expense'].sudo().create(expense_val)
-        return request.render("de_portal_expence.expense_submited", {})
+        record = request.env['hr.expense'].sudo().create(expense_line)
+        return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
+    
+    
     
     
     @http.route('/hr/expense/edit', type="http", auth="public", website=True)
@@ -147,9 +166,7 @@ class CustomerPortal(CustomerPortal):
     def expense_draft(self,expense_id , access_token=None, **kw):
         id=expense_id
         recrd = request.env['hr.expense'].sudo().browse(id)
-
         recrd.action_draft()
-
         try:
             expense_sudo = self._document_check_access('hr.expense', id, access_token)
         except (AccessError, MissingError):
@@ -190,20 +207,19 @@ class CustomerPortal(CustomerPortal):
         }
         
         searchbar_filters = {
-            'all': {'label': _('All'), 'domain': [('state', 'in', ['draft', 'reported','approved','done','refused'])]},
+            'all': {'label': _('All'), 'domain': [('state', 'in', ['draft', 'submit','approve','done','post','cancel'])]},
             'draft': {'label': _('Draft'), 'domain': [('state', '=', 'draft')]},
-            'reported': {'label': _('Submitted'), 'domain': [('state', '=', 'reported')]},  
-            'approved': {'label': _('Approved'), 'domain': [('state', '=', 'approved')]},
+            'submit': {'label': _('Submitted'), 'domain': [('state', '=', 'submit')]},  
+            'approve': {'label': _('Approved'), 'domain': [('state', '=', 'approve')]},
             'done': {'label': _('Posted'), 'domain': [('state', '=', 'done')]}, 
-            'refused': {'label': _('Paid'), 'domain': [('state', '=', 'refused')]},
+            'post': {'label': _('Paid'), 'domain': [('state', '=', 'post')]},
+            'cancel': {'label': _('Cancel'), 'domain': [('state', '=', 'cancel')]},
         }
            
         searchbar_inputs = {
             'id': {'input': 'id', 'label': _('Search in No#')},
             'name': {'input': 'name', 'label': _('Search in Name')},
             'employee_id.name': {'input': 'employee_id.name', 'label': _('Search in Employee')}, 
-            'total_amount': {'input': 'total_amount', 'label': _('Search in Payment By')},
-            'date': {'input': 'date', 'label': _('Search in Expense Date')},
             'all': {'input': 'all', 'label': _('Search in All')},
         }
         
@@ -211,7 +227,7 @@ class CustomerPortal(CustomerPortal):
             'none': {'input': 'none', 'label': _('None')},
         }
 
-        expense_groups = request.env['hr.expense'].search([])
+        expense_groups = request.env['hr.expense.sheet'].search([])
 
         # default sort by value
         if not sortby:
@@ -235,13 +251,11 @@ class CustomerPortal(CustomerPortal):
                 search_domain = OR([search_domain, [('id', 'ilike', search)]])
             if search_in in ('employee_id.name', 'all'):
                 search_domain = OR([search_domain, [('employee_id.name', 'ilike', search)]])
-            if search_in in ('unit_amount', 'all'):
-                search_domain = OR([search_domain, [('unit_amount', 'ilike', search)]])
             if search_in in ('state', 'all'):
                 search_domain = OR([search_domain, [('state', 'ilike', search)]])
             domain += search_domain
  
-        expense_count = request.env['hr.expense'].search_count(domain)
+        expense_count = request.env['hr.expense.sheet'].search_count(domain)
 
         pager = portal_pager(
             url="/my/expenses",
@@ -252,7 +266,7 @@ class CustomerPortal(CustomerPortal):
             step=self._items_per_page
         )
 
-        _expenses = request.env['hr.expense'].search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        _expenses = request.env['hr.expense.sheet'].search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
         request.session['my_expenses_history'] = _expenses.ids[:100]
 
         grouped_expenses = [_expenses]
@@ -287,7 +301,7 @@ class CustomerPortal(CustomerPortal):
         expense_user = []
         id = expense_id
         try:
-            expense_sudo = self._document_check_access('hr.expense', expense_id, access_token)
+            expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
         except (AccessError, MissingError):
             return request.redirect('/my')        
 
@@ -320,135 +334,3 @@ class CustomerPortal(CustomerPortal):
         values = self._expense_get_page_view_values(expense_sudo,next_id, pre_id, expense_user_flag,access_token, **kw) 
         return request.render("de_portal_expence.portal_my_expense", values)
 
-    @http.route(['/expense/next/<int:expense_id>'], type='http', auth="user", website=True)
-    def portal_my_next_expense(self, expense_id, access_token=None, **kw):
-        
-        expense_id_list = paging(0,1,0)
-        next_next_id = 0
-        expense_id_list.sort()
-        
-        length_list = len(expense_id_list)
-        if length_list == 0:
-            return request.redirect('/my')
-        length_list = length_list - 1
-        
-        if expense_id in expense_id_list:
-            expense_id_loc = expense_id_list.index(expense_id)
-            next_next_id = expense_id_list[expense_id_loc + 1] 
-            next_next_id_loc = expense_id_list.index(next_next_id)
-            if next_next_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            else:
-                next_id = 1
-                pre_id = 1      
-        else:
-            buffer_larger = 0
-            buffer_smaller = 0
-            buffer = 0
-            for ids in expense_id_list:
-                if ids < expense_id:
-                    buffer_smaller = ids
-                if ids > expense_id:
-                    buffer_smaller = ids
-                if buffer_larger and buffer_smaller:
-                    break
-            if buffer_larger:
-                next_next_id = buffer_smaller
-            elif buffer_smaller:
-                next_next_id = buffer_larger
-                
-            next_next_id_loc = expense_id_list.index(next_next_id)
-            length_list = len(expense_id_list)
-            length_list = length_list + 1
-            if next_next_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            elif next_next_id_loc == 0:
-                next_id = 1
-                pre_id = 0
-            else:
-                next_id = 1
-                pre_id = 1
-         
-        values = []
-        active_user = http.request.env.context.get('uid')
-        expense_user = []
-        id = expense_id
-        try:
-            expense_sudo = self._document_check_access('hr.expense', next_next_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        expense_user_flag = 0
-
-
-        values = self._expense_get_page_view_values(expense_sudo,next_id, pre_id, access_token, **kw) 
-        return request.render("de_portal_expence.portal_my_expense", values)
-
-  
-    @http.route(['/expense/pre/<int:expense_id>'], type='http', auth="user", website=True)
-    def portal_my_pre_expense(self, expense_id, access_token=None, **kw):
-        
-        expense_id_list = paging(0,1,0)
-        pre_pre_id = 0
-        expense_id_list.sort()
-        length_list = len(expense_id_list)
-    
-        if length_list == 0:
-            return request.redirect('/my')
-        
-        length_list = length_list - 1
-        if expense_id in expense_id_list:
-            expense_id_loc = expense_id_list.index(expense_id)
-            pre_pre_id = expense_id_list[expense_id_loc - 1] 
-            pre_pre_id_loc = expense_id_list.index(expense_id)
-
-            if expense_id_loc == 1:
-                next_id = 1
-                pre_id = 0
-            else:
-                next_id = 1
-                pre_id = 1      
-        else:
-            buffer_larger = 0
-            buffer_smaller = 0
-            buffer = 0
-            for ids in expense_id_list:
-                if ids < expense_id:
-                    buffer_smaller = ids
-                if ids > expense_id:
-                    buffer_smaller = ids
-                if buffer_larger and buffer_smaller:
-                    break
-            if buffer_smaller:
-                pre_pre_id = buffer_smaller
-            elif buffer_larger:
-                pre_pre_id = buffer_larger
-                
-            pre_pre_id_loc = expense_id_list.index(pre_pre_id)
-            length_list = len(expense_id_list)
-            length_list = length_list -1
-            if pre_pre_id_loc == 0:
-                next_id = 1
-                pre_id = 0
-            elif pre_pre_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            else:
-                next_id = 1
-                pre_id = 1
-   
-        values = []
-        active_user = http.request.env.context.get('uid')
-        expense_user = []
-        id = pre_pre_id
-        try:
-            expense_sudo = self._document_check_access('hr.expense', pre_pre_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        expense_user_flag = 0
-        
-        values = self._expense_get_page_view_values(expense_sudo, next_id,pre_id, access_token, **kw) 
-        return request.render("de_portal_expence.portal_my_expense", values)

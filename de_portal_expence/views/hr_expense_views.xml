@@ -11,7 +11,10 @@
 				<xpath expr="//button[@name='action_submit_expenses']" position="after">
                   <button name="action_draft" string="Reset To Draft" type="object" class="oe_highlight" 
                           states="refused"/>
-				</xpath>				
+				</xpath>
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name='member_id' />
+				</xpath>
 			</field>
 		</record> 
   

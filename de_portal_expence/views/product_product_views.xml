@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+      
+      <record id="product_product_form_view_ora_category" model="ir.ui.view">
+        <field name="name">product.product.form.view.ora.category</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="hr_expense.product_product_expense_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='taxes_id']" position="after">
+                  <field name="ora_category_id"/>
+            </xpath>
+        </field>
+    </record>
+   
+  </data>
+</odoo>

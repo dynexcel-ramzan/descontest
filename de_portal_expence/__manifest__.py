@@ -21,12 +21,13 @@
     'version': '14.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr_expense', 'hr','web','de_hr_portal_user','de_expense_enhancement'],
+    'depends': ['base','hr_expense', 'hr','web','de_hr_portal_user','de_expense_enhancement','de_employee_family'],
 
     # always loaded
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'views/product_product_views.xml',
         'views/ora_expense_category_views.xml',
         'views/hr_expense_sheet_views.xml',
         'views/hr_employee_views.xml',
