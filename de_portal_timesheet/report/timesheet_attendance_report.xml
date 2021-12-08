@@ -1,11 +1,13 @@
 <odoo>
   <data>
+      
+      
   <report
-            id="timehseet_attendance_report"
+            id="timehseet_attendance_report_portal"
             string="Project Timesheet (PDF)"
-            model="hr.timesheet.report"
+            model="report.de_portal_timesheet.timesheet_report"
             report_type="qweb-pdf"
-            file="de_portal_timesheet.report_timesheet_att_templated"
-            name="de_portal_timesheet.report_timesheet_att_templated" />
+            file="de_portal_timesheet.timesheet_report"
+            name="de_portal_timesheet.timesheet_report" />
   </data>
 </odoo>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <template id="report_timesheet_att_templated">
+    <template id="timesheet_report">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.internal_layout">
@@ -25,15 +25,15 @@
                         <table class="table" style="table-layout: fixed">
                             <tr>
                                 <th>Client</th>
-                                <td><span t-esc="o.partner_id.name" /></td>
+                                <td><span t-esc="project.ora_client_id.name" /></td>
                                 <th>Project</th>
-                                <td><span t-esc="o.project_id.name" /></td>
+                                <td><span t-esc="project.name" /></td>
                             </tr>
                             <tr>
                                 <th>Date From</th>
-                                <td><span t-esc="o.date_from" t-options='{"widget": "date"}' /></td>
+                                <td><span t-esc="date_from" /></td>
                                 <th>Date To</th>
-                                <td><span t-esc="o.date_to" t-options='{"widget": "date"}' /></td>
+                                <td><span t-esc="date_to"  /></td>
                             </tr>
                         </table>
 
@@ -137,6 +137,7 @@
                                                                 <t t-foreach="request.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=',start_date),('check_in','!=',False),('check_out','!=',False)], limit=1)" t-as="att">
                                                                 <t t-if='att.worked_hours > (att.shift_id.hours_per_day/2)' >      
                                                                       P
+                                                                 <hr/>
                                                                  <t t-set="gazetted_ovt_hours" t-value="(att.worked_hours - att.shift_id.hours_per_day)"/>   
                                                                  <t t-if='gazetted_ovt_hours > 1'>   
                                                                     <span t-esc='round(gazetted_ovt_hours,2)'/>

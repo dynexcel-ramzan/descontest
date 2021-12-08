@@ -54,9 +54,11 @@ def timesheet_line_page_content(project,datefrom,dateto):
 
 class CreateTimesheet(http.Controller):
 
-    @http.route('/timesheet/create/', type="http", website=True, auth='user')
-    def timesheet_create_template(self, **kw):
-        return request.render("de_portal_timesheet.project_timesheet_template", timesheet_page_content())
+    @http.route('/timesheet/report/', type="http", website=True, auth='user')
+    def timesheet_report_template(self, **kw):
+        return request.render("de_portal_timesheet.project_timesheet_template_report", timesheet_page_content())
+    
+    
 
     @http.route('/project/timesheet/next', type="http", auth="public", website=True)
     def project_timesheet_next_forms(self, **kw):
@@ -96,6 +98,43 @@ class CreateTimesheet(http.Controller):
 
 
 class CustomerPortal(CustomerPortal):
+    
+    
+    def _show_report_portal(self, model, report_type, employee, start_date, project, end_date, report_ref, download=False):
+        if report_type not in ('html', 'pdf', 'text'):
+            raise UserError(_("Invalid report type: %s", report_type))
+
+        report_sudo = request.env.ref(report_ref).with_user(SUPERUSER_ID)
+
+        if not isinstance(report_sudo, type(request.env['ir.actions.report'])):
+            raise UserError(_("%s is not the reference of a report", report_ref))
+
+        if hasattr(model, 'company_id'):
+            report_sudo = report_sudo.with_company(model.company_id)
+
+        method_name = '_render_qweb_%s' % (report_type)
+        report = getattr(report_sudo, method_name)([model], data={'report_type': report_type,'employee':employee,'start_date':start_date,'end_date':end_date})[0]
+        reporthttpheaders = [
+            ('Content-Type', 'application/pdf' if report_type == 'pdf' else 'text/html'),
+            ('Content-Length', len(report)),
+        ]
+        if report_type == 'pdf' and download:
+            filename = "%s.pdf" % (re.sub('\W+', '-', model._get_report_base_filename()))
+            reporthttpheaders.append(('Content-Disposition', content_disposition(filename)))
+        return request.make_response(report, headers=reporthttpheaders)
+
+
+    
+    @http.route('/project/timesheet/report',type="http", website=True,download=False, auth='user')
+    def action_print_timesheet_report(self, **kw):
+        report_type='pdf'
+        order_sudo = 'hr.timesheet.report'
+        download = False
+        employee = request.env['hr.employee'].search([('user_id','=',http.request.env.context.get('uid'))]).id
+        project = int(kw.get('project_id'))
+        start_date = kw.get('date_from')
+        end_date = kw.get('date_to')
+        return self._show_report_portal(model=order_sudo, report_type=report_type,employee=employee, start_date=start_date, project=project, end_date=end_date, report_ref='de_portal_timesheet.timesheet_report', download=download)
 
 
     def _prepare_home_portal_values(self, counters):
