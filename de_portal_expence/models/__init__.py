@@ -6,3 +6,4 @@ from . import ora_expense_category
 from . import product_product
 from . import hr_expense
 from . import vehicle_meter_detail
+from . import grade_designation_line

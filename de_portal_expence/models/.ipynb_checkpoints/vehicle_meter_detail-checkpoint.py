@@ -11,5 +11,5 @@ class VehicleMeterDetail(models.Model):
     vehicle_name = fields.Char(string='Vehicle Name')
     meter_reading = fields.Integer(string='Meter Reading', required=True)
     company_id  = fields.Many2one('res.company', string='Company')
-    employee_id = fields.Many2one('hr.employee', string='Employee')
+    grade_id = fields.Many2one('grade.designation', string='Designation')
 

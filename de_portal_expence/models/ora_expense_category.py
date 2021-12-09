@@ -2,6 +2,10 @@
 
 from odoo import models, fields, api, _
 
+CATEGORY_SELECTION = [
+    ('required', 'Required'),
+    ('optional', 'Optional'),
+    ('no', 'None')]
 
 class OraExpenseCategory(models.Model):
     _name = 'ora.expense.category'
@@ -9,8 +13,8 @@ class OraExpenseCategory(models.Model):
     
     name = fields.Char(string='Name', required=True)
     company_id  = fields.Many2one('res.company', string='Company')
-    category = fields.Selection(selection=[
-            ('medical', 'Medical'),
-            ('travel', 'Travelling'),
-        ], string='Category', required=True,
-       )
+    has_vehicle = fields.Selection(CATEGORY_SELECTION, string="Vehicle Name", default="no", required=True)
+    has_reading = fields.Selection(CATEGORY_SELECTION, string="Vehicle Reading", default="no", required=True)
+
+    
+    

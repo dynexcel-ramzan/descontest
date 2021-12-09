@@ -19,7 +19,8 @@
                         </div>
                         <group>
                             <group>
-                              <field name="category" />
+                              <field name="has_vehicle"  widget="radio" />
+                              <field name="has_reading" widget="radio" />  
                             </group>
                             <group>
                                 <field name="company_id" />
@@ -38,7 +39,6 @@
             <field name="arch" type="xml">
                 <tree string="Expense Category">
                      <field name="name" />
-                     <field name="category" />
                      <field name="company_id" />
                 </tree>
             </field>
