@@ -202,9 +202,9 @@ class CustomerPortal(CustomerPortal):
             expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
         except (AccessError, MissingError):
             return request.redirect('/my')
-        
         values = self._expense_get_page_view_values(expense_sudo, **kw) 
         return request.render("de_portal_expence.portal_my_expense", values)
+    
     
     @http.route(['/delete/expense/line/<int:expense_id>'], type='http', auth="public", website=True)
     def action_expense_delete(self,expense_id , access_token=None, **kw):
@@ -232,6 +232,7 @@ class CustomerPortal(CustomerPortal):
         employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
         values.update({
             'expense':expense_sudo,
+            'sheet': expense_sudo.sheet_id,
             'emp_members': request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)]),
             'products': request.env['product.product'].sudo().search([('ora_category_id','=',expense_sudo.sheet_id.ora_category_id.id)]),
             'managers': employees.parent_id.name,
