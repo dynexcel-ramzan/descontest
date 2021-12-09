@@ -6,7 +6,7 @@ from odoo import models, fields, api
 class ApprovalRequest(models.Model):
     _inherit = 'approval.request'
     
-    expense_id = fields.Many2one('hr.expense', string='Expense', required=False)
+    expense_id = fields.Many2one('hr.expense.sheet', string='Expense Claim', required=False)
     
     def action_refuse(self, approver=None):
         res = super(ApprovalRequest, self).action_refuse()
@@ -25,8 +25,7 @@ class ApprovalRequest(models.Model):
                     
             if tot_refused_count ==  tot_approver_count:
                 if self.expense_id:
-                    self.expense_id.sheet_id.sudo().refuse_sheet('Not Approved')        
-                    self.expense_id.sudo().refuse_expense('Not Approved')        
+                    self.expense_id.sudo().refuse_sheet('Not Approved')        
       
         return res
     
@@ -48,7 +47,7 @@ class ApprovalRequest(models.Model):
                     
             if tot_approver_count ==  tot_approved_count: 
                 if self.expense_id:
-                    self.expense_id.sheet_id.sudo().approve_expense_sheets()       
+                    self.expense_id.sudo().approve_expense_sheets()       
                         
         return res
     
@@ -69,12 +68,12 @@ class ApprovalRequest(models.Model):
                 elif status_lst.count('approved') >= minimal_approver:
                     status = 'approved'
                     if request.expense_id:
-                        request.expense_id.sheet_id.sudo().approve_expense_sheets()
+                        request.expense_id.sudo().approve_expense_sheets()
                     
                 elif status_lst.count('refused') >= minimal_approver:
                     status = 'refused'
                     if request.expense_id:
-                        request.expense_id.sheet_id.sudo().action_refuse()    
+                        request.expense_id.sudo().action_refuse()    
                 else:
                     status = 'pending'
             else:

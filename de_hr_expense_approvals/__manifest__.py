@@ -15,8 +15,7 @@
     'data': [
         'data/expense_sequence.xml',
         'security/ir.model.access.csv',
-        'views/product_product_views.xml',
         'views/approval_request_views.xml',
-        'views/hr_expense_views.xml',
+        'views/hr_expense_sheet_views.xml',
     ],
 }

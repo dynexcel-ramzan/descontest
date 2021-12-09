@@ -4,8 +4,62 @@ from odoo import models, fields, api, _
 
 
 
-class HrExpense(models.Model):
+class HrExpenseSheet(models.Model):
     _inherit = 'hr.expense.sheet'
+    
+    
+    @api.model
+    def create(self, vals):
+        if vals.get('code',_('New')) == _('New'):
+            vals['code'] = self.env['ir.sequence'].next_by_code('hr.expense.sheet') or _('New')  
+        sheet = super(HrExpenseSheet, self.with_context(mail_create_nosubscribe=True, mail_auto_subscribe_no_notify=True)).create(vals)
+        sheet.activity_update()
+        return sheet
+    
+    
+    
+    def action_submit_sheet(self):
+        sheet = super(HrExpenseSheet, self).action_submit_sheet()
+        self.action_approval_category()
+        self.action_submit()
+        return sheet
+    
+    code = fields.Char(
+        'Reference', copy=False, readonly=True, default=lambda x: _('New'))
+    category_id = fields.Many2one('approval.category', string="Category", required=False)
+    approval_request_id = fields.Many2one('approval.request', string='Approval Request', copy=False, readonly=True)
+    request_status = fields.Selection(related='approval_request_id.request_status')
+    
+    def action_approval_category(self):
+        for line in self:
+            expense_category=self.env['approval.category'].search([('name','=','Expense Claim'),('company_id','=', line.company_id.id)], limit=1)
+            if not expense_category:
+                category = {
+                    'name': 'Expense Claim',
+                    'company_id': line.employee_id.company_id.id,
+                    'is_parent_approver': True,
+                }
+                expense_category = self.env['approval.category'].sudo().create(category)
+            line.category_id=expense_category.id
+    
+    
+    def action_submit(self):
+        approver_ids  = []
+        request_list = []
+        for line in self:            
+            request_list.append({
+                'name': line.employee_id.name + ' Has Expense Request on ' + str(line.accounting_date),
+                'request_owner_id': line.employee_id.user_id.id,
+                'category_id': line.category_id.id,
+                'expense_id': line.id,
+                'reason': line.employee_id.name + ' Has Expense Request on ' + str(line.accounting_date)+ ' For Amount ' + str(line.total_amount) + ' Expense Category# ' +' ' + str(line.ora_category_id.name), 
+                'request_status': 'new',
+            })
+            approval_request_id = self.env['approval.request'].create(request_list)
+            approval_request_id._onchange_category_id()
+            approval_request_id.action_confirm()
+            line.approval_request_id = approval_request_id.id
+            
     
 
     def approve_expense_sheets(self):
@@ -68,18 +122,6 @@ class HrExpense(models.Model):
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
     
-    @api.model
-    def create(self,vals):
-        if vals.get('code',_('New')) == _('New'):
-            vals['code'] = self.env['ir.sequence'].next_by_code('hr.expense') or _('New')    
-        res = super(HrExpense,self).create(vals)
-        return res 
-    
-    code = fields.Char(
-        'Reference', copy=False, readonly=True, default=lambda x: _('New'))
-    category_id = fields.Many2one('approval.category', related='product_id.category_id', string="Category", required=False)
-    approval_request_id = fields.Many2one('approval.request', string='Approval Request', copy=False, readonly=True)
-    request_status = fields.Selection(related='approval_request_id.request_status')
     
     
     
@@ -87,31 +129,3 @@ class HrExpense(models.Model):
     
     
     
-    @api.model
-    def create(self, vals):
-        sheet = super(HrExpense, self.with_context(mail_create_nosubscribe=True, mail_auto_subscribe_no_notify=True)).create(vals)
-        sheet.action_submit_expenses()
-        sheet.action_submit()
-        return sheet
-    
-
-    
-    
-    def action_submit(self):
-        approver_ids  = []
-        
-        request_list = []
-        for line in self:
-            
-            request_list.append({
-                'name': line.employee_id.name + ' Has Expense Request on ' + str(line.date)+ ' For Amount ' + str(line.total_amount) + ' Sequence# ' +' ' + str(line.code) ,
-                'request_owner_id': line.employee_id.user_id.id,
-                'category_id': line.category_id.id,
-                'expense_id': line.id,
-                'reason': line.employee_id.name + ' Has Expense Request on ' + str(line.date)+ ' For Amount ' + str(line.total_amount) + ' Sequence# ' +' ' + str(line.code), 
-                'request_status': 'new',
-            })
-            approval_request_id = self.env['approval.request'].create(request_list)
-            approval_request_id._onchange_category_id()
-            approval_request_id.action_confirm()
-            line.approval_request_id = approval_request_id.id
