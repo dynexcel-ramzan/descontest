@@ -161,6 +161,11 @@
                                         <a t-attf-href="/hr/site/attendance/#{approval.site_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
                                     </t>
                                  </t>
+                                 <t t-if="approval.expense_id ">
+                                    <t class="col-lg-7 col-md-8" >
+                                        <a t-attf-href="/my/expense/#{approval.expense_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
+                                    </t>
+                                 </t>
                                   <t t-if="approval.timesheet_id">
                                     <t class="col-lg-7 col-md-8" >
                                         <a t-attf-href="/project/timesheet/#{approval.timesheet_id.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">View</div> </a> 
