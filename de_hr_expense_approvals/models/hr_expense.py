@@ -56,6 +56,44 @@ class HrExpenseSheet(models.Model):
                 'request_status': 'new',
             })
             approval_request_id = self.env['approval.request'].create(request_list)
+            if line.employee_id.company_id.is_fbp_approval==True:
+                if line.employee_id.company_id.finance_partner_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.finance_partner_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals)
+                if line.employee_id.company_id.finance_partner_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.shared_finance_partner_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals) 
+            if line.ora_category_id.is_special==True:
+                if line.employee_id.company_id.hr_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.hr_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals)
+                if line.employee_id.company_id.finance_partner_id.user_id:    
+                    vals ={
+                        'user_id': line.employee_id.company_id.finance_partner_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals)    
+                if line.employee_id.company_id.manager_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.manager_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals)         
+                    
             approval_request_id._onchange_category_id()
             approval_request_id.action_confirm()
             line.approval_request_id = approval_request_id.id

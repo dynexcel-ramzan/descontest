@@ -16,16 +16,20 @@ class ApprovalRequest(models.Model):
             tot_approver_count = tot_approver_count + 1
         approver_count = 0
         for approverid in self.approver_ids:
+            if  approverid.status == 'refused': 
+                self.expense_id.sudo().refuse_sheet('Not Approved')
+                
             if approverid.status == 'new':                
                 approver_count = approver_count + 1
         if approver_count == 0:
             for approved in self.approver_ids:
                 if  approved.status == 'refused': 
                     tot_refused_count = tot_refused_count + 1
+                    self.expense_id.sudo().refuse_sheet('Not Approved')      
                     
             if tot_refused_count ==  tot_approver_count:
                 if self.expense_id:
-                    self.expense_id.sudo().refuse_sheet('Not Approved')        
+                    self.expense_id.sudo().refuse_sheet('Not Approved')         
       
         return res
     
