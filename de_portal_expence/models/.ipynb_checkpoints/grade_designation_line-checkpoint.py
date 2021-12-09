@@ -18,6 +18,8 @@ class GradeDesignation(models.Model):
         for line in self:
             if line.expense_type:
                 line.ora_unit = line.expense_type.ora_unit
+                if line.expense_type.meter_reading > 0.0:
+                    line.limit = line.expense_type.meter_reading
         
     
         

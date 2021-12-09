@@ -28,6 +28,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/product_product_views.xml',
+        'views/res_company_views.xml',
         'views/grade_designation_line_views.xml',
         'views/ora_expense_category_views.xml',
         'views/hr_expense_sheet_views.xml',

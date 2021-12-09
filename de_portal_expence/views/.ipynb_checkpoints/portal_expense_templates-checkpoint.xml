@@ -20,7 +20,7 @@
     
     <template id="portal_my_home" name="Show expenses / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-call="portal.portal_docs_entry"  groups="de_portal_expence.group_expense">
+            <t t-call="portal.portal_docs_entry"  >
                 <t t-set="title">Expenses</t>
                 <t t-set="url" t-value="'/my/expenses'"/>
                 <t t-set="placeholder_count" t-value="'expense_count'"/>
@@ -127,6 +127,21 @@
                         </a>
                        </t>
                        </t>
+                      <t t-if='expense.state=="cancel"'>
+                       <t t-if='expense.employee_id.user_id.id==uid'>
+                        <a class="mb-5" id="submit-object" t-attf-href="/action/reset/expense/#{expense.id}?">
+                            <button class="btn btn-primary pull-right">Reset to Draft</button>
+                        </a>
+                       </t>
+                       </t>
+                    
+                       <t t-if='expense.employee_id.company_id.hr_id.user_id.id==uid'>
+                           <p>Click the button below to add Vice-Chanceller Approval</p>
+                           <a class="mb-5" id="submit-object" t-attf-href="/action/vc/approval/#{expense.id}?">
+                             <button class="btn btn-primary pull-right">Vice-Chanceller</button>
+                           </a>
+                       </t>
+                      
                  </div> 
                     <div class='pull-right'>
                        <t t-if='expense.state=="draft"'>
@@ -572,18 +587,14 @@
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity7">
                                                 <span class="s_website_form_label_content">Attachment</span>
-                                               <t t-if='sheet.ora_category_id.category=="medical"'>
-                                                  <span class="s_website_form_mark"> *</span>
-                                                </t>  
+                                              
+                                                  <span class="s_website_form_mark"> </span>
+                                               
                                             </label>
                                              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                            <div class="col-sm">
-                                             <t t-if='sheet.ora_category_id.category=="medical"'>    
-                                                <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*"  require="1"/>
-                                            </t>  
-                                            <t t-if='sheet.ora_category_id.category=="travel"'>    
+                                            <div class="col-sm"> 
+                                            
                                                 <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*" />
-                                            </t>  
 
                                             </div>
                                         </div>
@@ -743,7 +754,7 @@
                                         </div> 
                                     </div>
                                     
-                                     <t t-if='sheet.ora_category_id.category=="travel"'> 
+                                     <t t-if='sheet.ora_category_id.has_vehicle=="optional"'> 
                                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_name">
@@ -755,7 +766,8 @@
                                             </div>
                                         </div> 
                                     </div>
-                                    
+                                    </t>
+                                    <t t-if='sheet.ora_category_id.has_reading=="optional"'>
                                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_reading">
@@ -807,18 +819,18 @@
                                         </div>
                                     </div>
                                     
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
+                                      <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity7">
                                                 <span class="s_website_form_label_content">Attachment</span>
-                                               
+                                              
                                                   <span class="s_website_form_mark"> </span>
-                                                
+                                               
                                             </label>
                                              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                            <div class="col-sm">   
-                                                <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*" />
+                                            <div class="col-sm"> 
                                             
+                                                <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*" />
 
                                             </div>
                                         </div>
@@ -913,7 +925,7 @@
                         <t t-if="expense">
                             <h1 class="text-center">Your Expense Request Number is <a t-if="request.session.uid" t-attf-href="/my/timeoff/page/#{leave.id}">#<span t-field="expense.id"/></a><t t-if="not request.session.get('uid')">#<span t-field="expense.id"/></t>.</h1>
                         </t>
-                        <h1 class="text-center">Thank you for Re-Submitting your Expense request!</h1>
+                        <h1 class="text-center">Thank you for Adding Chanceller Approval!</h1>
                     </div>
                 </div>
             </div>

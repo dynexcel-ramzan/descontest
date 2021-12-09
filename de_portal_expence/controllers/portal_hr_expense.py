@@ -170,6 +170,38 @@ class CreateApproval(http.Controller):
 
 class CustomerPortal(CustomerPortal):
     
+    @http.route(['/action/reset/expense/<int:expense_id>'], type='http', auth="public", website=True)
+    def action_reset_exepnse_line(self,expense_id , access_token=None, **kw):
+        recrd = request.env['hr.expense.sheet'].sudo().browse(expense_id)
+        recrd.reset_expense_sheets()
+        try:
+            expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._expense_get_page_view_values(expense_sudo, **kw) 
+        return request.redirect('/my/expense/%s'%(recrd.id)) 
+    
+    @http.route(['/action/vc/approval/<int:expense_id>'], type='http', auth="public", website=True)
+    def action_add_vc_approval(self,expense_id , access_token=None, **kw):
+        recrd = request.env['hr.expense.sheet'].sudo().browse(expense_id)
+        if line.employee_id.company_id.chanceller_id:
+            if line.employee_id.company_id.chanceller_id.user_id:
+                vals ={
+                    'user_id': line.employee_id.company_id.chanceller_id.user_id.id,
+                    'request_id': approval_request_id.id,
+                    'status': 'new',
+                }
+                approvers=self.env['approval.approver'].sudo().create(vals)
+        try:
+            expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._expense_get_page_view_values(expense_sudo, **kw) 
+        return request.render("de_portal_expence.re_expense_submited", {})
+    
+    
     
     @http.route(['/add/expense/line/<int:expense_id>'], type='http', auth="public", website=True)
     def action_add_expense_line(self,expense_id , access_token=None, **kw):

@@ -21,6 +21,7 @@
                             <group>
                               <field name="has_vehicle"  widget="radio" />
                               <field name="has_reading" widget="radio" />  
+                              <field name="is_special"  />    
                             </group>
                             <group>
                                 <field name="company_id" />

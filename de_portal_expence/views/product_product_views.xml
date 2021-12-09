@@ -9,6 +9,9 @@
             <xpath expr="//field[@name='taxes_id']" position="after">
                   <field name="ora_category_id"/>
             </xpath>
+             <xpath expr="//field[@name='list_price']" position="before">
+                  <field name="is_special"/>
+            </xpath>
             <xpath expr="//field[@name='company_id']" position="after">
                   <field name="meter_reading"/>
                   <field name="ora_unit"/>

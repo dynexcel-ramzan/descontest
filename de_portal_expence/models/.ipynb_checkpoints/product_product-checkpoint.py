@@ -12,5 +12,6 @@ class ProductProduct(models.Model):
             ('km', 'Km'),
         ], string='Unit', required=True,
         )
-    
+    is_special = fields.Boolean(string='Special')
+
 
