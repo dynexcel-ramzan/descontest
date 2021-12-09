@@ -19,9 +19,10 @@
                         </div>
                         <group>
                             <group>
-                              <field name="company_id" />
+                              <field name="category" />
                             </group>
                             <group>
+                                <field name="company_id" />
                             </group>
                         </group> 
                     </sheet>
@@ -37,6 +38,7 @@
             <field name="arch" type="xml">
                 <tree string="Expense Category">
                      <field name="name" />
+                     <field name="category" />
                      <field name="company_id" />
                 </tree>
             </field>

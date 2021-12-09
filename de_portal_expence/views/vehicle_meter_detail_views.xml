@@ -4,11 +4,11 @@
     <data>
         <!-- Views -->
         <!-- Form View -->
-        <record id="ora_expense_category_form_view" model="ir.ui.view">
-            <field name="name">ora.expense.category.form</field>
-            <field name="model">ora.expense.category</field>
+        <record id="vehicle_meter_detail_form_view" model="ir.ui.view">
+            <field name="name">vehicle.meter.detail.form</field>
+            <field name="model">vehicle.meter.detail</field>
             <field name="arch" type="xml">
-                <form string="ORA Expense Cateogry">
+                <form string="Vehicle Meter Detail">
                   
                     <sheet>
                          <div class="oe_title">
@@ -19,10 +19,12 @@
                         </div>
                         <group>
                             <group>
-                              <field name="category" />
+                                <field name="meter_reading" />
+                                <field name="vehicle_name" />
                             </group>
                             <group>
                                 <field name="company_id" />
+                                <field name="employee_id"  invisible="1"/>
                             </group>
                         </group> 
                     </sheet>
@@ -32,34 +34,35 @@
         </record>
 
         <!-- Tree View -->
-        <record id="ora_expense_category_tree_view" model="ir.ui.view">
-            <field name="name">ora.expense.category.tree</field>
-            <field name="model">ora.expense.category</field>
+        <record id="vehicle_meter_detail_tree_view" model="ir.ui.view">
+            <field name="name">vehicle.meter.detail.tree</field>
+            <field name="model">vehicle.meter.detail</field>
             <field name="arch" type="xml">
-                <tree string="Expense Category">
+                <tree string="Vehicle Meter Detail">
                      <field name="name" />
-                     <field name="category" />
+                     <field name="vehicle_name" />
+                     <field name="meter_reading" />
                      <field name="company_id" />
                 </tree>
             </field>
         </record>
         
-         <record id="ora_expense_category_action" model="ir.actions.act_window">
-            <field name="name">Expense Category</field>
-            <field name="res_model">ora.expense.category</field>
+         <record id="vehicle_meter_detail_action" model="ir.actions.act_window">
+            <field name="name">vehicle Meter Detail</field>
+            <field name="res_model">vehicle.meter.detail</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                    Click to create new Expense Category.
+                    Click to create new Vehicle Meter Detail.
                 </p>
             </field>
         </record>
 
         <!-- MenuItems -->
          
-        <menuitem id="ora_expense_category_menu" name="Expense Category"
-                  parent="hr_expense.menu_hr_expense_configuration"
-                  action="ora_expense_category_action"
+        <menuitem id="vehicle_meter_detail_menu" name="Vehicle Meter"
+                  parent="hr.menu_human_resources_configuration"
+                  action="vehicle_meter_detail_action"
                   sequence="10"
                   />
         

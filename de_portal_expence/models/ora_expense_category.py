@@ -9,4 +9,8 @@ class OraExpenseCategory(models.Model):
     
     name = fields.Char(string='Name', required=True)
     company_id  = fields.Many2one('res.company', string='Company')
-
+    category = fields.Selection(selection=[
+            ('medical', 'Medical'),
+            ('travel', 'Travelling'),
+        ], string='Category', required=True,
+       )

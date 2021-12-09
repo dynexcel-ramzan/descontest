@@ -354,6 +354,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
                                         <div style="width: 200px;" class="s_website_form_label"></div>
                                         <button type="submit" class="btn btn-primary pull-left">Add Expense</button>
@@ -502,6 +503,31 @@
                                             </div>
                                         </div> 
                                     </div>
+                                   <t t-if='sheet.ora_category_id.category=="travel"'> 
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_name">
+                                                <span class="s_website_form_label_content">Vehicle Name(If any)</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                               <input id="vehicle_name" type='text' class="form-control s_website_form_input" name="vehicle_name" />
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_reading">
+                                                <span class="s_website_form_label_content">Vehicle Reading(If any)</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                               <input id="meter_reading" type='float' class="form-control s_website_form_input" name="meter_reading" />
+                                            </div>
+                                        </div> 
+                                    </div>
+                                  </t>
                                     
                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -523,7 +549,7 @@
                                             </label>
                                             <div class="col-sm">
                                                 <input id="bill_ref" type='float' class="form-control s_website_form_input" name="reference"  />
-                                                <input id="sheet_id" type='hidden' class="form-control s_website_form_input" name="sheet_id"  t-att-value='sheet'/>
+                                                <input id="sheet_id" type='hidden' class="form-control s_website_form_input" name="sheet_id"  t-att-value='sheet.id'/>
                                             </div>
                                         </div>
                                     </div>
@@ -540,6 +566,28 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity7">
+                                                <span class="s_website_form_label_content">Attachment</span>
+                                               <t t-if='sheet.ora_category_id.category=="medical"'>
+                                                  <span class="s_website_form_mark"> *</span>
+                                                </t>  
+                                            </label>
+                                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <div class="col-sm">
+                                             <t t-if='sheet.ora_category_id.category=="medical"'>    
+                                                <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*"  require="1"/>
+                                            </t>  
+                                            <t t-if='sheet.ora_category_id.category=="travel"'>    
+                                                <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*" />
+                                            </t>  
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
                                         <div style="width: 200px;" class="s_website_form_label"></div>
                                         <button type="submit" class="btn btn-primary pull-left">Add Expense</button>
@@ -694,6 +742,32 @@
                                         </div> 
                                     </div>
                                     
+                                     <t t-if='sheet.ora_category_id.category=="travel"'> 
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_name">
+                                                <span class="s_website_form_label_content">Vehicle Name(If any)</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                               <input id="vehicle_name" type='text' class="form-control s_website_form_input" name="vehicle_name"  t-att-value='expense.vehicle_name'/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_reading">
+                                                <span class="s_website_form_label_content">Vehicle Reading(If any)</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                               <input id="meter_reading" type='float' class="form-control s_website_form_input" name="meter_reading"  t-att-value='expense.meter_reading'/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                  </t>
+                                    
                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="amount">
@@ -731,6 +805,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="text" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="opportunity7">
+                                                <span class="s_website_form_label_content">Attachment</span>
+                                               
+                                                  <span class="s_website_form_mark"> </span>
+                                                
+                                            </label>
+                                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <div class="col-sm">   
+                                                <input type="file" class="form-control s_website_form_input" name="attachment" multiple="true"  accept="image/*,application/pdf,video/*" />
+                                            
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
                                         <div style="width: 200px;" class="s_website_form_label"></div>
                                         <button type="submit" class="btn btn-primary pull-left">Update Expense</button>
