@@ -127,40 +127,30 @@ class CreateApproval(http.Controller):
             'reference': kw.get('reference'),
             'name': kw.get('description'),
         })
-        if record.sheet_id.ora_category_id.category=='travel':
+        if record.sheet_id.ora_category_id.has_vehicle=='optional':
             if kw.get('vehicle_name'): 
                 record.update({
                     'vehicle_name': kw.get('vehicle_name'),
                 })
+        if record.sheet_id.ora_category_id.has_reading=='optional':        
             if kw.get('meter_reading'): 
                 record.update({
                     'meter_reading': kw.get('meter_reading'),
                 })
-            if kw.get('attachment'):
-                Attachments = request.env['ir.attachment']
-                name = kw.get('attachment').filename
-                file = kw.get('attachment')
-                attachment_id = Attachments.sudo().create({
-                'name': name,
-                'type': 'binary',
-                'datas': base64.b64encode(file.read()),
-                'res_id': record.id,
-                'res_model': 'hr.expense', 
-                 'res_name': record.name,   
-                 })    
-        if record.sheet_id.ora_category_id.category=='medical': 
-            if kw.get('attachment'):
-                Attachments = request.env['ir.attachment']
-                name = kw.get('attachment').filename
-                file = kw.get('attachment')
-                attachment_id = Attachments.sudo().create({
-                'name': name,
-                'type': 'binary',
-                'datas': base64.b64encode(file.read()),
-                'res_id': record.id,
-                'res_model': 'hr.expense', 
-                 'res_name': record.name,   
-                 })     
+               
+       
+        if kw.get('attachment'):
+            Attachments = request.env['ir.attachment']
+            name = kw.get('attachment').filename
+            file = kw.get('attachment')
+            attachment_id = Attachments.sudo().create({
+            'name': name,
+            'type': 'binary',
+            'datas': base64.b64encode(file.read()),
+            'res_id': record.id,
+            'res_model': 'hr.expense', 
+             'res_name': record.name,   
+             })     
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     
     
@@ -418,12 +408,7 @@ class CustomerPortal(CustomerPortal):
     def portal_my_expense(self, expense_id, access_token=None, **kw):
         values = []
         active_user = http.request.env.context.get('uid')
-        expense_user = []
-        id = expense_id
-        try:
-            expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')        
+        expense_sudo = request.env['hr.expense.sheet'].sudo().search([('id','=',expense_id)])      
         values = self._expense_get_page_view_values(expense_sudo,access_token, **kw) 
         return request.render("de_portal_expence.portal_my_expense", values)
 
