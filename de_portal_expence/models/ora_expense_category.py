@@ -15,6 +15,6 @@ class OraExpenseCategory(models.Model):
     company_id  = fields.Many2one('res.company', string='Company')
     has_vehicle = fields.Selection(CATEGORY_SELECTION, string="Vehicle Name", default="no", required=True)
     has_reading = fields.Selection(CATEGORY_SELECTION, string="Vehicle Reading", default="no", required=True)
+    is_attachment = fields.Selection(CATEGORY_SELECTION, string="Attachment", default="no", required=True)
     is_special = fields.Boolean(string='Special')
-    
     

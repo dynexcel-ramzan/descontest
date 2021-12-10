@@ -15,6 +15,7 @@ from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.tools import groupby as groupbyelem
 from odoo.osv.expression import OR
+import base64
 
 def expense_page_content(flag = 0, expense=0):
     sheet = 0
@@ -53,7 +54,7 @@ def paging(data, flag1 = 0, flag2 = 0):
         
 class CreateApproval(http.Controller):
     @http.route('/expense/create/',type="http", website=True, auth='user')
-    def approvals_create_template(self, **kw):
+    def expense_claim_create_template(self, **kw):
         return request.render("de_portal_expence.create_expense",expense_page_content()) 
           
 
@@ -100,14 +101,14 @@ class CreateApproval(http.Controller):
             name = kw.get('attachment').filename
             file = kw.get('attachment')
             attachment_id = Attachments.sudo().create({
-            'name': name,
+            'name': 'test',
             'type': 'binary',
             'datas': base64.b64encode(file.read()),
             'res_id': record.id,
             'res_model': 'hr.expense', 
              'res_name': record.name,   
              })    
-             
+        record.action_check_attachment()     
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     
     
@@ -136,9 +137,7 @@ class CreateApproval(http.Controller):
             if kw.get('meter_reading'): 
                 record.update({
                     'meter_reading': kw.get('meter_reading'),
-                })
-               
-       
+                })        
         if kw.get('attachment'):
             Attachments = request.env['ir.attachment']
             name = kw.get('attachment').filename
@@ -150,7 +149,8 @@ class CreateApproval(http.Controller):
             'res_id': record.id,
             'res_model': 'hr.expense', 
              'res_name': record.name,   
-             })     
+             })  
+            
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     
     

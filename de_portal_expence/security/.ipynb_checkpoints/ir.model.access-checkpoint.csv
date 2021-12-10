@@ -10,3 +10,4 @@ access_mail_activity_type,access.mail.activity.type,model_mail_activity_type,,1,
 access_mail_activity,access.mail.activity,model_mail_activity,,1,1,1,1 
 access_ora_expense_category,access.ora.expense.category,model_ora_expense_category,,1,1,1,1
 access_vehicle_meter_detail,access.vehicle.meter.detail,model_vehicle_meter_detail,,1,1,1,1
+access_mail_message,access.mail.message,model_mail_message,,1,1,1,1

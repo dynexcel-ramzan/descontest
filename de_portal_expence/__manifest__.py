@@ -21,7 +21,15 @@
     'version': '14.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr_expense', 'hr','web','de_hr_portal_user','de_expense_enhancement','de_employee_family','de_employee_enhancement'],
+    'depends': [
+        'portal',
+        'rating',
+        'resource',
+        'web',
+        'web_tour',
+        'digest',
+        'base',
+        'hr_expense', 'hr','de_hr_portal_user','de_expense_enhancement','de_employee_family','de_employee_enhancement'],
 
     # always loaded
     'data': [
