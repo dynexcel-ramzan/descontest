@@ -283,21 +283,26 @@
                     <div class="container" style='box-shadow:3px;'>                      
                       <div class="row align-items-center">
                         <div class="col-lg-12 pt16 pb16 o_colored_level col-lg-12 border rounded shadow">
-                            <div data-snippet="s_share"  data-name="Share">
+                            <div data-snippet="s_share"  data-name="Share_header">
                                 <i class="pull-left">Expense# <t t-esc='sr_count'/> </i>
                                 <i class="badge badge-pill badge-info pull-right" ><t t-esc='line.product_id.name'/></i>            
                             </div>  
                             <br/>
                              <h2><t t-esc='line.name'/></h2>
                               <p class="o_default_snippet_text"><i class="badge badge-pill badge-info" ><t t-esc='line.member_id.name'/></i></p> 
-                                                
-                            <p class="o_default_snippet_text" style='text-color:#666666;'>Expense Date: <t t-esc='line.date.strftime("%d-%b-%Y")'/></p>
-                            <t t-if='line.reference'><p class="o_default_snippet_text">Bill Reference: <i class="badge badge-pill badge-info pull-right" ><t t-esc='line.reference'/></i></p></t>
-                            <t t-if='line.meter_reading>0.0'><p class="o_default_snippet_text"><t t-esc='line.vehicle_name'/></p>
-                            <p class="o_default_snippet_text"><t t-esc='line.meter_reading'/></p>
-                            </t>
+                           
+                            <div data-snippet="s_share"  data-name="Share_ref">
+                                <t t-if='line.reference'><p class="o_default_snippet_text">Bill Reference: <i class="badge badge-pill badge-info" ><t t-esc='line.reference'/></i></p></t>
+                                <p class="o_default_snippet_text pull-right" style='text-color:#666666;'>Expense Date: <t t-esc='line.date.strftime("%d-%b-%Y")'/></p>
+                            </div> 
+                             <div data-snippet="s_share"  data-name="Share_vehicle">    
+                                <t t-if='line.meter_reading>0.0'>
+                                  <p class="o_default_snippet_text">Vehicle Reading:<t t-esc='line.meter_reading'/></p>
+                                  <t t-if='line.vehicle_name'><p class="o_default_snippet_text">Vehicle Name:<t t-esc='line.vehicle_name'/></p> </t>  
+                                </t>
+                             </div>     
                             
-                            <p class='pull-left'><t t-esc='line.unit_amount'/></p>                                   
+                            <p class='o_default_snippet_text'>Amount: <t t-esc='line.unit_amount'/></p>                                   
                               <div>                                  
                                  <div data-snippet="s_share"  data-name="Share">
                                     <t t-if='line.sheet_id.state=="draft"'>
@@ -571,7 +576,7 @@
                                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_name">
-                                                <span class="s_website_form_label_content">Vehicle Name(If any)</span>
+                                                <span class="s_website_form_label_content">Vehicle Name</span>
                                                 <span class="s_website_form_mark"> </span>
                                             </label>
                                             <div class="col-sm">
@@ -584,7 +589,7 @@
                                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_reading">
-                                                <span class="s_website_form_label_content">Vehicle Reading(If any)</span>
+                                                <span class="s_website_form_label_content">Vehicle Reading</span>
                                                 <span class="s_website_form_mark"> </span>
                                             </label>
                                             <div class="col-sm">
@@ -807,7 +812,7 @@
                                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_name">
-                                                <span class="s_website_form_label_content">Vehicle Name(If any)</span>
+                                                <span class="s_website_form_label_content">Vehicle Name</span>
                                                 <span class="s_website_form_mark"> </span>
                                             </label>
                                             <div class="col-sm">
@@ -820,7 +825,7 @@
                                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="vehicle_reading">
-                                                <span class="s_website_form_label_content">Vehicle Reading(If any)</span>
+                                                <span class="s_website_form_label_content">Vehicle Reading</span>
                                                 <span class="s_website_form_mark"> </span>
                                             </label>
                                             <div class="col-sm">

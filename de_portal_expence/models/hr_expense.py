@@ -21,7 +21,7 @@ class HrExpense(models.Model):
             if line.sheet_id.ora_category_id.is_attachment=='required':
                 attachments=self.env['ir.attachment'].search([('res_id','=',line.id),('res_model','=','hr.expense')])
                 if not attachments:
-                     raise UserError(_('Please Add Attachment! You are not allow to submit Expense claim without attachment.'))    
+                     raise UserError(_('Please Add Attachment! You are not allow to submit '+str(line.sheet_id.ora_category_id.name)+ ' Expense claim without attachment.'))    
     
     
     @api.constrains('meter_reading')
@@ -30,10 +30,10 @@ class HrExpense(models.Model):
             if line.meter_reading > 0.0 and line.product_id.meter_reading>0.0:
                 if line.employee_id.opening_reading < line.meter_reading:
                     current_reading = line.meter_reading - line.employee_id.opening_reading    
-                    if current_reading > line.product_id.meter_reading:
+                    if current_reading >= line.product_id.meter_reading:
                         pass
                     else:
-                        raise UserError(_('You Vehicle meter reading does not reach to limit. Current Reading ' +str(current_reading)+' Difference with opening balance less than limit! '+str(line.employee_id.vehicle_id.meter_reading)+' your previous opening reading is '+str(line.employee_id.opening_reading)))
+                        raise UserError(_('Your Vehicle meter reading does not reach to limit. Current Reading ' +str(current_reading)+' Difference with opening balance less than limit! '+str(line.product_id.meter_reading)+' your previous opening reading is '+str(line.employee_id.opening_reading)))
                 else:
                     raise UserError(_('You are entering reading '+str(line.meter_reading)+' less than your previous opening reading is '+str(line.employee_id.opening_reading)))
                     

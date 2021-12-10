@@ -29,8 +29,12 @@ def expense_page_content(flag = 0, expense=0):
     products = request.env['product.product'].sudo().search([('ora_category_id','=',sheet_categ)])
     emp_members = request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    managers=employees.parent_id.name
+    if sheet!=0
+        managers=sheet.employee_id.parent_id.name
+        employees=sheet.employee_id
     return {
-        'managers': employees.parent_id.name,
+        'managers': managers,
         'employees' : employees,
         'products': products,
         'sheet': sheet if sheet!=0 else 0,
@@ -175,14 +179,14 @@ class CustomerPortal(CustomerPortal):
     @http.route(['/action/vc/approval/<int:expense_id>'], type='http', auth="public", website=True)
     def action_add_vc_approval(self,expense_id , access_token=None, **kw):
         recrd = request.env['hr.expense.sheet'].sudo().browse(expense_id)
-        if line.employee_id.company_id.chanceller_id:
-            if line.employee_id.company_id.chanceller_id.user_id:
+        if recrd.employee_id.company_id.chanceller_id:
+            if recrd.employee_id.company_id.chanceller_id.user_id:
                 vals ={
-                    'user_id': line.employee_id.company_id.chanceller_id.user_id.id,
-                    'request_id': approval_request_id.id,
+                    'user_id': recrd.employee_id.company_id.chanceller_id.user_id.id,
+                    'request_id': recrd.approval_request_id.id,
                     'status': 'new',
                 }
-                approvers=self.env['approval.approver'].sudo().create(vals)
+                approvers=request.env['approval.approver'].sudo().create(vals)
         try:
             expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
         except (AccessError, MissingError):
