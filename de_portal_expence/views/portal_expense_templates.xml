@@ -176,6 +176,16 @@
                              <button class="btn btn-primary pull-right">Refuse</button>
                            </a>
                         </t>
+                        <t t-if='expense.employee_id.parent_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/app/approval/accept/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Approve</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.parent_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/request/refuse/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Refuse</button>
+                           </a>
+                        </t>
                     
                        <t t-if='expense.employee_id.company_id.hr_id.user_id.id==uid'>
                            <p>Click the button below to add Vice-Chanceller Approval</p>
