@@ -16,12 +16,7 @@ class HrExpense(models.Model):
 #         sheet.action_check_attachment()
 #         return sheet
     
-    def action_check_attachment(self):
-        for line in self:
-            if line.sheet_id.ora_category_id.is_attachment=='required':
-                attachments=self.env['ir.attachment'].search([('res_id','=',line.id),('res_model','=','hr.expense')])
-                if not attachments:
-                     raise UserError(_('Please Add Attachment! You are not allow to submit '+str(line.sheet_id.ora_category_id.name)+ ' Expense claim without attachment.'))    
+    
     
     
     @api.constrains('meter_reading')

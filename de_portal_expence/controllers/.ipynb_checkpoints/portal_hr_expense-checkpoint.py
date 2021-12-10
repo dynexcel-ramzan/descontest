@@ -30,7 +30,7 @@ def expense_page_content(flag = 0, expense=0):
     emp_members = request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     managers=employees.parent_id.name
-    if sheet!=0
+    if sheet!=0:
         managers=sheet.employee_id.parent_id.name
         employees=sheet.employee_id
     return {
@@ -112,7 +112,7 @@ class CreateApproval(http.Controller):
             'res_model': 'hr.expense', 
              'res_name': record.name,   
              })    
-        record.action_check_attachment()     
+          
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     
     
@@ -213,6 +213,7 @@ class CustomerPortal(CustomerPortal):
     def action_expense_submit(self,expense_id , access_token=None, **kw):
         recrd = request.env['hr.expense.sheet'].sudo().browse(expense_id)
         recrd.action_submit_sheet()
+        recrd.action_check_attachment()
         try:
             expense_sudo = self._document_check_access('hr.expense.sheet', expense_id, access_token)
         except (AccessError, MissingError):

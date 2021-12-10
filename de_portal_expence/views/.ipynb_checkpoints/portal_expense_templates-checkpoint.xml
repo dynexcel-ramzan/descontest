@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    
-    
     <template id="portal_layout" name="Portal layout: expense menu entry" inherit_id="portal.portal_breadcrumbs" priority="25">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'expense' or expense" class="col-lg-2" t-attf-class="breadcrumb-item #{'active ' if not expense else ''}">
@@ -15,9 +13,6 @@
         </xpath>
     </template>
 
-    
-    
-    
     <template id="portal_my_home" name="Show expenses / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-call="portal.portal_docs_entry"  >
@@ -27,9 +22,6 @@
             </t>
         </xpath>  
     </template>
-    
-    
-    
 
     <template id="portal_my_expenses" name="My Expenses">
          <t t-set="foo" t-value="2 + 1"/>
@@ -134,6 +126,56 @@
                         </a>
                        </t>
                        </t>
+                      <t t-if='expense.employee_id.company_id.hr_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/app/approval/accept/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Approve</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.hr_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/request/refuse/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Refuse</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.finance_partner_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/app/approval/accept/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Approve</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.finance_partner_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/request/refuse/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Refuse</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.shared_finance_partner_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/app/approval/accept/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Approve</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.shared_finance_partner_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/request/refuse/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Refuse</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.chanceller_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/app/approval/accept/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Approve</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.chanceller_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/request/refuse/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Refuse</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.manager_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/app/approval/accept/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Approve</button>
+                           </a>
+                        </t>
+                        <t t-if='expense.employee_id.company_id.manager_id.user_id.id==uid'>
+                           <a class="mb-5" id="submit-object" t-attf-href="/request/refuse/#{expense.approval_request_id.id}?">
+                             <button class="btn btn-primary pull-right">Refuse</button>
+                           </a>
+                        </t>
                     
                        <t t-if='expense.employee_id.company_id.hr_id.user_id.id==uid'>
                            <p>Click the button below to add Vice-Chanceller Approval</p>
@@ -141,6 +183,7 @@
                              <button class="btn btn-primary pull-right">Vice-Chanceller</button>
                            </a>
                        </t>
+                        
                       
                  </div> 
                     <div class='pull-right'>
@@ -152,6 +195,7 @@
                            </t>
                        </t>
                      </div> 
+                <br/>
                 <br/>
                 <br/>
                 

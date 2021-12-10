@@ -7,6 +7,13 @@ class HrExpenseSheet(models.Model):
     
     ora_category_id = fields.Many2one('ora.expense.category', string='Expense Category')
     
+    def action_check_attachment(self):
+        for line in self:
+            if line.ora_category_id.is_attachment=='required':
+                attachments=self.env['ir.attachment'].search([('res_id','=',line.id),('res_model','=','hr.expense.sheet')])
+                if not attachments:
+                     raise UserError(_('Please Add Attachment! You are not allow to submit '+str(line.sheet_id.ora_category_id.name)+ ' Expense claim without attachment.'))    
+    
 
 class hr_expense(models.Model):
     _inherit = 'hr.expense'
