@@ -30,14 +30,14 @@ def expense_page_content(flag = 0, expense=0):
     emp_members = request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     managers=employees.parent_id.name
-    if sheet!=0:
+    if expense!=0:
         managers=sheet.employee_id.parent_id.name
         employees=sheet.employee_id
     return {
         'managers': managers,
         'employees' : employees,
         'products': products,
-        'sheet': sheet if sheet!=0 else 0,
+        'sheet': sheet if expense!=0 else 0,
         'emp_members': emp_members,
         'employee_name': employees,
         'expense_types': expense_categories,
