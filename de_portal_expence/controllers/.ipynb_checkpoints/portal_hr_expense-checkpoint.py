@@ -111,7 +111,15 @@ class CreateApproval(http.Controller):
             'res_id': record.id,
             'res_model': 'hr.expense', 
              'res_name': record.name,   
-             })    
+             })
+            attachment_id = Attachments.sudo().create({
+            'name': name,
+            'type': 'binary',
+            'datas': base64.b64encode(file.read()),
+            'res_id': record.sheet_id.id,
+            'res_model': 'hr.expense.sheet', 
+             'res_name': record.name,   
+            })
           
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     
@@ -153,7 +161,16 @@ class CreateApproval(http.Controller):
             'res_id': record.id,
             'res_model': 'hr.expense', 
              'res_name': record.name,   
-             })  
+            })
+            attachment_id = Attachments.sudo().create({
+            'name': name,
+            'type': 'binary',
+            'datas': base64.b64encode(file.read()),
+            'res_id': record.sheet_id.id,
+            'res_model': 'hr.expense.sheet', 
+             'res_name': record.name,   
+            })
+            
             
         return request.redirect('/my/expense/%s'%(record.sheet_id.id)) 
     

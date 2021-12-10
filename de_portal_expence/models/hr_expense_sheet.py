@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.exceptions import RedirectWarning, UserError, ValidationError, AccessError
+
 
 class HrExpenseSheet(models.Model):
     _inherit = 'hr.expense.sheet'
@@ -12,7 +14,7 @@ class HrExpenseSheet(models.Model):
             if line.ora_category_id.is_attachment=='required':
                 attachments=self.env['ir.attachment'].search([('res_id','=',line.id),('res_model','=','hr.expense.sheet')])
                 if not attachments:
-                     raise UserError(_('Please Add Attachment! You are not allow to submit '+str(line.sheet_id.ora_category_id.name)+ ' Expense claim without attachment.'))    
+                     raise UserError(_('Please Add Attachment! You are not allow to submit '+str(line.ora_category_id.name)+ ' Expense claim without attachment.'))    
     
 
 class hr_expense(models.Model):
