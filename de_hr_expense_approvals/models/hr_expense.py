@@ -48,29 +48,14 @@ class HrExpenseSheet(models.Model):
         request_list = []
         for line in self:            
             request_list.append({
-                'name': line.employee_id.name + ' Has Expense Request on ' + str(line.accounting_date),
+                'name': line.employee_id.name + ' Has Expense Request on ' + str(line.accounting_date.strftime('%d %B %y')),
                 'request_owner_id': line.employee_id.user_id.id,
                 'category_id': line.category_id.id,
                 'expense_id': line.id,
-                'reason': line.employee_id.name + ' Has Expense Request on ' + str(line.accounting_date)+ ' For Amount ' + str(line.total_amount) + ' Expense Category# ' +' ' + str(line.ora_category_id.name), 
+                'reason': line.employee_id.name + ' Has Expense Request on ' + str(line.accounting_date.strftime('%d %B %y'))+ ' For Amount ' + str(line.total_amount) + ' Expense Category# ' +' ' + str(line.ora_category_id.name), 
                 'request_status': 'new',
             })
             approval_request_id = self.env['approval.request'].create(request_list)
-            if line.employee_id.company_id.is_fbp_approval==True:
-                if line.employee_id.company_id.finance_partner_id.user_id:
-                    vals ={
-                        'user_id': line.employee_id.company_id.finance_partner_id.user_id.id,
-                        'request_id': approval_request_id.id,
-                        'status': 'new',
-                    }
-                    approvers=self.env['approval.approver'].sudo().create(vals)
-                if line.employee_id.company_id.finance_partner_id.user_id:
-                    vals ={
-                        'user_id': line.employee_id.company_id.shared_finance_partner_id.user_id.id,
-                        'request_id': approval_request_id.id,
-                        'status': 'new',
-                    }
-                    approvers=self.env['approval.approver'].sudo().create(vals) 
             if line.ora_category_id.is_special==True:
                 if line.employee_id.company_id.hr_id.user_id:
                     vals ={
@@ -93,6 +78,29 @@ class HrExpenseSheet(models.Model):
                         'status': 'new',
                     }
                     approvers=self.env['approval.approver'].sudo().create(vals)         
+            elif line.employee_id.company_id.is_fbp_approval==True:
+                if line.employee_id.company_id.finance_partner_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.finance_partner_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals)
+                if line.employee_id.company_id.shared_finance_partner_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.shared_finance_partner_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals) 
+            else:
+                if line.employee_id.company_id.shared_finance_partner_id.user_id:
+                    vals ={
+                        'user_id': line.employee_id.company_id.shared_finance_partner_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                        'status': 'new',
+                    }
+                    approvers=self.env['approval.approver'].sudo().create(vals)
                     
             approval_request_id._onchange_category_id()
             approval_request_id.action_confirm()
