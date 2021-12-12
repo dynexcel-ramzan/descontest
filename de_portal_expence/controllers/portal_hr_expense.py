@@ -328,102 +328,47 @@ class CustomerPortal(CustomerPortal):
         return self._get_page_view_values(expense, access_token, values, 'my_expenses_history', False, **kwargs)
 
     @http.route(['/my/expenses', '/my/expenses/page/<int:page>'], type='http', auth="user", website=True)
-    def portal_my_expenses(self, page=1, date_begin=None, date_end=None, sortby=None, filterby=None, search=None,
-                         search_in='content', groupby=None, **kw):
-        values = self._prepare_portal_layout_values()
+    def action_expense_managemment(self, page=1, sortby='name', search='', **kw):
+        # only website_designer should access the page Management
+        
+
+        expenses = request.env['hr.expense.sheet']
         searchbar_sortings = {
-            'id': {'label': _('Default'), 'order': 'id asc'},
-            'date': {'label': _('Newest'), 'order': 'create_date desc'},
-            'name': {'label': _('Name'), 'order': 'name desc' },
-            'update': {'label': _('Last Update'), 'order': 'write_date desc'},
+            'ora_category_id': {'label': _('Sort by Url'), 'order': 'ora_category_id'},
+            'name': {'label': _('Sort by Name'), 'order': 'name'},
+            'id': {'label': _('Sort by ID'), 'order': 'id'},
         }
-        
-        searchbar_filters = {
-            'all': {'label': _('All'), 'domain': [('state', 'in', ['draft', 'submit','approve','done','post','cancel'])]},
-            'draft': {'label': _('Draft'), 'domain': [('state', '=', 'draft')]},
-            'submit': {'label': _('Submitted'), 'domain': [('state', '=', 'submit')]},  
-            'approve': {'label': _('Approved'), 'domain': [('state', '=', 'approve')]},
-            'done': {'label': _('Posted'), 'domain': [('state', '=', 'done')]}, 
-            'post': {'label': _('Paid'), 'domain': [('state', '=', 'post')]},
-            'cancel': {'label': _('Cancel'), 'domain': [('state', '=', 'cancel')]},
-        }
-           
-        searchbar_inputs = {
-            'id': {'input': 'id', 'label': _('Search in No#')},
-            'name': {'input': 'name', 'label': _('Search in Name')},
-            'employee_id.name': {'input': 'employee_id.name', 'label': _('Search in Employee')}, 
-            'all': {'input': 'all', 'label': _('Search in All')},
-        }
-        
-        searchbar_groupby = {
-            'none': {'input': 'none', 'label': _('None')},
-        }
+        # default sortby order
+        sort_order = searchbar_sortings.get(sortby, 'id')
 
-        expense_groups = request.env['hr.expense.sheet'].search([])
+        domain = []
+        if search:
+            domain += ['|', ('name', 'ilike', search), ('ora_category_id', 'ilike', search)]
 
-        # default sort by value
-        if not sortby:
-            sortby = 'date'
-        order = searchbar_sortings[sortby]['order']
+        expenses = expenses.search(domain)
+        if sortby != 'ora_category_id':
+            expenses = expenses.filtered(expenses._is_most_specific_page)
+        expenses_count = len(pages)
 
-        # default filter by value
-        if not filterby:
-            filterby = 'all'
-        domain = searchbar_filters.get(filterby, searchbar_filters.get('all'))['domain']
-#         domain = []
-        if date_begin and date_end:
-            domain += [('create_date', '>', date_begin), ('create_date', '<=', date_end)]       
-
-        # search
-        if search and search_in:
-            search_domain = []
-            if search_in in ('name', 'all'):
-                search_domain = OR([search_domain, [('name', 'ilike', search)]])
-            if search_in in ('id', 'all'):
-                search_domain = OR([search_domain, [('id', 'ilike', search)]])
-            if search_in in ('employee_id.name', 'all'):
-                search_domain = OR([search_domain, [('employee_id.name', 'ilike', search)]])
-            if search_in in ('state', 'all'):
-                search_domain = OR([search_domain, [('state', 'ilike', search)]])
-            domain += search_domain
- 
-        expense_count = request.env['hr.expense.sheet'].search_count(domain)
-
+        step = 50
         pager = portal_pager(
             url="/my/expenses",
-            url_args={'date_begin': date_begin, 'date_end': date_end, 'sortby': sortby, 'filterby': filterby,
-                      'seissuesarch_in': search_in, 'search': search},
-            total=expense_count,
-            page=page,
-            step=self._items_per_page
+            url_args={'sortby': sortby},
+            total=expenses_count,
+            expenses=expenses,
+            step=step
         )
 
-        _expenses = request.env['hr.expense.sheet'].search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
-        request.session['my_expenses_history'] = _expenses.ids[:100]
+        pages = pages[(page - 1) * step:page * step]
 
-        grouped_expenses = [_expenses]
-                
-        paging(0,0,1)
-
-        paging(grouped_expenses)
-        company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
-        values.update({
-            'date': date_begin,
-            'date_end': date_end,
-            'grouped_expenses': grouped_expenses,
-            'page_name': 'expense',
-            'default_url': '/my/expenses',
+        values = {
             'pager': pager,
-            'company_info': company_info,
-            'searchbar_sortings': searchbar_sortings,
-            'searchbar_inputs': searchbar_inputs,
-            'search_in': search_in,
+            'pages': pages,
             'search': search,
             'sortby': sortby,
-            'groupby': groupby,
-            'searchbar_filters': OrderedDict(sorted(searchbar_filters.items())),
-        })
-        return request.render("de_portal_expence.portal_my_expenses", values)
+            'searchbar_sortings': searchbar_sortings,
+        }
+        return request.render("website.list_website_pages", values)
 
    
     @http.route(['/my/expense/<int:expense_id>'], type='http', auth="user", website=True)
