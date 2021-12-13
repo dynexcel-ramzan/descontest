@@ -16,6 +16,8 @@ from odoo.addons.portal.controllers.portal import CustomerPortal, pager as porta
 from odoo.tools import groupby as groupbyelem
 from odoo.osv.expression import OR
 import base64
+import ast
+
 
 def expense_page_content(flag = 0, expense=0):
     sheet = 0
@@ -26,7 +28,7 @@ def expense_page_content(flag = 0, expense=0):
     managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
     expense_categories = request.env['ora.expense.category'].sudo().search([])
-    products = request.env['product.product'].sudo().search([('ora_category_id','=',sheet_categ)])
+    products = request.env['product.product'].sudo().search([])
     emp_members = request.env['hr.employee.family'].sudo().search([('employee_id','=', employees.id)])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     managers=employees.parent_id.name
@@ -65,13 +67,30 @@ class CreateApproval(http.Controller):
     @http.route('/my/expense/save', type="http", auth="public", website=True)
     def create_expenses(self, **kw):
         expense_val = {
-            'name': kw.get('description'),
-            'ora_category_id': int(kw.get('cateory_id')),
+            'name': 'test',
             'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]).id,
             'accounting_date':  fields.date.today(),
         }
         record = request.env['hr.expense.sheet'].sudo().create(expense_val)
-        return request.render("de_portal_expence.create_expense_line", expense_page_content(expense=record.id) )
+        expense_vals_list = ast.literal_eval(kw.get('expense_line_vals'))
+        inncount = 0
+#         raise UserError(str(expense_vals_list))
+        for expense in expense_vals_list:
+            inncount += 1
+            if inncount > 1:
+                
+                product = request.env['product.product'].search([('name','=',expense['expense_type'])], limit=1)
+                expense_line = {
+                    'name': expense['expense_type'],
+                    'reference': expense['reference'],
+                    'sheet_id':  record.id,
+                    'unit_amount': float(expense['unit_amount'],),
+                    'product_id': int(product.id),
+                    'employee_id': request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))]).id,
+                    'date':  fields.date.today(),
+                }
+                record_line = request.env['hr.expense'].sudo().create(expense_line)
+        return request.render("de_portal_expence.expense_submited", {})
     
     @http.route('/my/expense/line/save', type="http", auth="public", website=True)
     def create_expense_line(self, **kw):

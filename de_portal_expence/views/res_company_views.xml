@@ -13,7 +13,6 @@
                   <field name="is_fbp_approval"/>
                   <field name="chanceller_id"/>
                   <field name="finance_partner_id"/>
-                  <field name="shared_finance_partner_id"/>
             </xpath>
         </field>
     </record>

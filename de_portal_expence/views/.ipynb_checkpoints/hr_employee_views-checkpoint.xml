@@ -11,6 +11,7 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='managers']" position="after">
                 <group string='Vehicle Meter'>
+                  <field name="vehicle_id" required='1'/>    
                   <field name="opening_reading"/>  
                 </group>    
             </xpath>

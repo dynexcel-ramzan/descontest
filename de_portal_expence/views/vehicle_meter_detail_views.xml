@@ -19,8 +19,7 @@
                         </div>
                         <group>
                             <group>
-                                <field name="meter_reading" />
-                                <field name="vehicle_name" />
+                                <field name="partner_id" string='Vehicle Company'/>
                             </group>
                             <group>
                                 <field name="company_id" />
@@ -40,20 +39,19 @@
             <field name="arch" type="xml">
                 <tree string="Vehicle Meter Detail">
                      <field name="name" />
-                     <field name="vehicle_name" />
-                     <field name="meter_reading" />
+                     <field name="partner_id" string='Vehicle Company'/>
                      <field name="company_id" />
                 </tree>
             </field>
         </record>
         
          <record id="vehicle_meter_detail_action" model="ir.actions.act_window">
-            <field name="name">vehicle Meter Detail</field>
+            <field name="name">vehicle Detail</field>
             <field name="res_model">vehicle.meter.detail</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                    Click to create new Vehicle Meter Detail.
+                    Click to create new Vehicle Detail.
                 </p>
             </field>
         </record>
