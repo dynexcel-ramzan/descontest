@@ -343,32 +343,28 @@ class CustomerPortal(CustomerPortal):
 
         domain = []
         if search:
-            domain += ['|', ('name', 'ilike', search), ('ora_category_id', 'ilike', search)]
+            domain += []
 
-        expenses = expenses.search(domain)
-        if sortby != 'ora_category_id':
-            expenses = expenses.filtered(expenses._is_most_specific_page)
-        expenses_count = len(pages)
-
+        expenses = request.env['hr.expense.sheet'].search([])        
+        expenses_count = len(expenses)
         step = 50
         pager = portal_pager(
             url="/my/expenses",
             url_args={'sortby': sortby},
             total=expenses_count,
-            expenses=expenses,
+            page=expenses,
             step=step
         )
-
-        pages = pages[(page - 1) * step:page * step]
-
+        pages = expenses
         values = {
             'pager': pager,
             'pages': pages,
+            'expenses': expenses,
             'search': search,
             'sortby': sortby,
             'searchbar_sortings': searchbar_sortings,
         }
-        return request.render("website.list_website_pages", values)
+        return request.render("de_portal_expence.portal_my_expenses", values)
 
    
     @http.route(['/my/expense/<int:expense_id>'], type='http', auth="user", website=True)
